@@ -1,6 +1,8 @@
-#include <iostream>
+#include "game.h"
 
-int main(int argc, char** argv){
-	std::cout << "Hello World" << std::endl;
+
+int main( int argc, char* args[] )
+{
+	Game game;
 	return 0;
 }
