@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 project(CC3K)
@@ -13,7 +14,11 @@ add_executable(CC3K
     player.cpp
     game.h
     game.cpp
-
+    map.cpp
+    map.h
+    goblin.cpp
+    goblin.h
+    entity.h
 )
 
 include_directories(CC3K ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})

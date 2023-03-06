@@ -1,25 +1,18 @@
-#ifndef PLAYER
-#define PLAYER
-
-
-#include <SDL.h>
+#ifndef GOBLIN_H
+#define GOBLIN_H
 
 #include "entity.h"
 
-class Player : public Entity {
+class Goblin : public Entity {
 public:
-    Player(int x, int y, int size);
-
+    Goblin(int x, int y);
     virtual void move(int dx, int dy);
     virtual int getX() const;
     virtual int getY() const;
-    virtual int getSize() const;
 
 private:
     int x;
     int y;
-    int size;
 };
-
 
 #endif

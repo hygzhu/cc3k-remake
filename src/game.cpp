@@ -3,6 +3,7 @@
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL_image.h>
 #include <stdio.h>
+#include <iostream>
 
 
 //Screen dimension constants
@@ -14,10 +15,12 @@ Game::Game(/* args */)
  
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window* window = SDL_CreateWindow("Move Square", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+    m_window = SDL_CreateWindow("CC3K", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
-    Player square(renderer, 320, 240, 50);
+    std::shared_ptr<Player> square = std::make_shared<Player>(320, 240, 50);
+
+    m_map.setEntity(0,0,square);
 
     bool quit = false;
     SDL_Event event;
@@ -31,35 +34,50 @@ Game::Game(/* args */)
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym) {
                 case SDLK_UP:
-                    square.move(0, -10);
+                    square->move(0, -10);
                     break;
                 case SDLK_DOWN:
-                    square.move(0, 10);
+                    square->move(0, 10);
                     break;
                 case SDLK_LEFT:
-                    square.move(-10, 0);
+                    square->move(-10, 0);
                     break;
                 case SDLK_RIGHT:
-                    square.move(10, 0);
+                    square->move(10, 0);
                     break;
                 }
                 break;
             }
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        render();
 
-        square.render();
-
-        SDL_RenderPresent(renderer);
     }
+}
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+void Game::render()
+{
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(m_renderer);
+    // Render all entities
+    for (const auto& row : m_map.getGrid()) {
+        std::cout << "Looking in the rows" << std::endl;
+        for (const auto& col : row) {
+            std::cout << "Looking in the cols" << std::endl;
+            for (const auto& entity : col) {
+                std::cout << "Found one" << std::endl;
+                SDL_Rect rect = { entity->getX(), entity->getY(), entity->getSize(), entity->getSize() };
+                SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+                SDL_RenderFillRect(m_renderer, &rect);
+            }
+        }
+    }
+    SDL_RenderPresent(m_renderer);
 }
 
 Game::~Game()
 {
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
+    SDL_Quit();
 }
