@@ -1,17 +1,14 @@
 #include "goblin.h"
+#include <iostream>
 
-Goblin::Goblin(int x, int y)
-    : x(x), y(y) {}
+Goblin::Goblin(int x, int y) : Entity(x, y, 1, { 0, 128, 0, 255 }) {}
 
 void Goblin::move(int dx, int dy) {
-    x += dx;
-    y += dy;
+    x_ += dx;
+    y_ += dy;
 }
 
-int Goblin::getX() const {
-    return x;
-}
 
-int Goblin::getY() const {
-    return y;
+void Goblin::printEntityType(){
+    //std::cout<<"Goblin" << std::endl;
 }

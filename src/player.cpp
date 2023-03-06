@@ -3,22 +3,14 @@
 #include <iostream>
 
 
-Player::Player(int x, int y, int size): x(x), y(y), size(size) {}
+Player::Player(int size, RGBA color): Entity(0, 0, size, color) {}
 
 
 void Player::move(int dx, int dy) {
-    x += dx;
-    y += dy;
+    x_ = dx;
+    y_ = dy;
 }
 
-
-int Player::getX() const {
-    return x;
-}
-
-int Player::getY() const {
-    return y;
-}
-int Player::getSize() const {
-    return size;
+void Player::printEntityType(){
+    std::cout<<"Player" << std::endl;
 }

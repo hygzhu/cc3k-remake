@@ -4,11 +4,16 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <iostream>
-
+#include <utility>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
+
+// Set up the timer and frame rate
+Uint32 lastFrameTime = SDL_GetTicks();
+const Uint32 frameInterval = 16; // 60 fps
+
 
 Game::Game(/* args */)
 {
@@ -18,14 +23,23 @@ Game::Game(/* args */)
     m_window = SDL_CreateWindow("CC3K", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
-    std::shared_ptr<Player> square = std::make_shared<Player>(320, 240, 50);
-
-    m_map.setEntity(0,0,square);
+    RGBA playerColor = { 255, 0, 0, 255 };
+    std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
+    m_map = std::make_shared<Map>(player);
 
     bool quit = false;
     SDL_Event event;
 
     while (!quit) {
+
+        // Calculate the time since the last frame
+        Uint32 currentFrameTime = SDL_GetTicks();
+        Uint32 timeSinceLastFrame = currentFrameTime - lastFrameTime;
+        lastFrameTime = currentFrameTime;
+
+        const int speed = 15;
+        std::pair<int,int> new_location;
+
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
             case SDL_QUIT:
@@ -34,16 +48,20 @@ Game::Game(/* args */)
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym) {
                 case SDLK_UP:
-                    square->move(0, -10);
+                    new_location = m_map->movableLocationCloseTo(0,-speed,player);
+                    player->move(new_location.first, new_location.second);
                     break;
                 case SDLK_DOWN:
-                    square->move(0, 10);
+                    new_location = m_map->movableLocationCloseTo(0,speed,player);
+                    player->move(new_location.first, new_location.second);
                     break;
                 case SDLK_LEFT:
-                    square->move(-10, 0);
+                    new_location = m_map->movableLocationCloseTo(-speed,0,player);
+                    player->move(new_location.first, new_location.second);
                     break;
                 case SDLK_RIGHT:
-                    square->move(10, 0);
+                    new_location = m_map->movableLocationCloseTo(speed,0,player);
+                    player->move(new_location.first, new_location.second);
                     break;
                 }
                 break;
@@ -52,26 +70,45 @@ Game::Game(/* args */)
 
         render();
 
+        // Delay until the next frame
+        Uint32 elapsedTime = SDL_GetTicks() - currentFrameTime;
+        if (elapsedTime < frameInterval)
+        {
+            SDL_Delay(frameInterval - elapsedTime);
+        }
+
     }
 }
 
 void Game::render()
 {
+
+    const int RENDER_WIDTH = 700;
+    const int RENDER_HEIGHT = 700;
+    const int RENDER_X = (SCREEN_WIDTH/2)- (RENDER_WIDTH/2);
+    const int RENDER_Y = (SCREEN_HEIGHT/2)- (RENDER_HEIGHT/2);
+    const float BLOCK_WIDTH = RENDER_WIDTH/ m_map->getWidth();
+    const float BLOCK_HEIGHT = RENDER_HEIGHT/ m_map->getHeight();
+
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
-    // Render all entities
-    for (const auto& row : m_map.getGrid()) {
-        std::cout << "Looking in the rows" << std::endl;
-        for (const auto& col : row) {
-            std::cout << "Looking in the cols" << std::endl;
-            for (const auto& entity : col) {
-                std::cout << "Found one" << std::endl;
-                SDL_Rect rect = { entity->getX(), entity->getY(), entity->getSize(), entity->getSize() };
-                SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
-                SDL_RenderFillRect(m_renderer, &rect);
-            }
-        }
+
+    BoundingRectangle viewbox = m_map->getViewBox();
+    const int realx = viewbox.getX();
+    const int realy = viewbox.getY();
+
+    // Render all entities in viewbox
+    for (const auto& entity : m_map->getViewboxEntities()) {
+        SDL_Rect rect = { 
+        static_cast<int>((entity->getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
+        static_cast<int>((entity->getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
+        static_cast<int>(entity->getSize()*BLOCK_WIDTH), 
+        static_cast<int>(entity->getSize()*BLOCK_HEIGHT)};
+        RGBA entityColor = entity->getColor();
+        SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
+        SDL_RenderFillRect(m_renderer, &rect);
     }
+
     SDL_RenderPresent(m_renderer);
 }
 

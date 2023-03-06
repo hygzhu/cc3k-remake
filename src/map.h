@@ -4,24 +4,34 @@
 #include <vector>
 #include <memory>
 #include "entity.h"
+#include <utility>
+
+#include "boundingrectangle.h"
 
 class Map {
 public:
-    Map();
-    Map(int width, int height);
+    Map(std::shared_ptr<Entity> player);
     ~Map();
-
-    int getWidth() const;
-    int getHeight() const;
-
-    std::vector<std::vector<std::vector<std::shared_ptr<Entity> > > >& getGrid();
-
-    void setEntity(int x, int y, std::shared_ptr<Entity> entity);
+    std::vector<std::shared_ptr<Entity> > & getEntities();
+    std::vector<std::shared_ptr<Entity> > getViewboxEntities();
+    int getWidth();
+    int getHeight();
+    bool canEntityMove(int x, int y, std::shared_ptr<Entity> entity);
+    std::pair<int,int> movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity);
+    bool doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity);
+    BoundingRectangle getViewBox();
 
 private:
+    std::vector<std::shared_ptr<Entity> > entities;
+    std::shared_ptr<Entity> player;
+    int x,y;
     int width;
     int height;
-    std::vector<std::vector<std::vector<std::shared_ptr<Entity> > > >grid;
+    int max_width;
+    int max_height;
+    int randomInt(int min, int max);
+    BoundingRectangle generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin);
+
 };
 
 #endif

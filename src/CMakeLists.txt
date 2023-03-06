@@ -19,6 +19,13 @@ add_executable(CC3K
     goblin.cpp
     goblin.h
     entity.h
+    entity.cpp
+    entityfactory.cpp
+    entityfactory.h
+    environment.h
+    environment.cpp
+    boundingrectangle.h
+    boundingrectangle.cpp
 )
 
 include_directories(CC3K ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
