@@ -10,6 +10,7 @@ class Game
 {
 public:
     Game(/* args */);
+    int start();
     ~Game();
 private:
     void render();

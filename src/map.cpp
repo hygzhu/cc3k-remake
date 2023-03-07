@@ -22,20 +22,22 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
     int attempts = 0;
     do {
         attempts += 1;
-        rect.setWidth(randomInt(400, bounds.getWidth() / 3));
-        rect.setHeight(randomInt(400, bounds.getWidth() / 3));
+        rect.setWidth(randomInt(250, 500));
+        rect.setHeight(randomInt(250, 500));
         rect.setX(randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
         rect.setY(randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
         
         // Check if the rectangle collides with any existing rectangles
         collides = false;
         for (const auto& r : rectangles) {
-            if (rect.isCollidingWith(r)) {
+
+            BoundingRectangle r_with_margin(r.getX()-margin,r.getY()-margin, r.getWidth()+ (2*margin), r.getHeight() + (2*margin));
+            if (rect.isCollidingWith(r_with_margin)) {
                 collides = true;
                 break;
             }
         }
-        if(attempts > 10)
+        if(attempts > 50)
         {
             BoundingRectangle invalid(0,0,0,0);
             return invalid;
@@ -61,18 +63,10 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
 
     const int starting_zone = 100;
 
-    // Generate starting box
-    for(int i = 0; i< starting_zone; i++)
-    {
-        for(int j = 0; j< starting_zone; j++)
-        {
-            if (i == 0 || j == 0 || i == starting_zone -1 || j == starting_zone -1)
-            {   
-                std::shared_ptr<Entity> environment = EntityFactory::createEntity("Environment", MAX_MAP_WIDTH/2 + i, MAX_MAP_HEIGHT/2 + j); 
-                entities.push_back(environment);
-            }
-        }
-    }
+    // Generate starting room
+    BoundingRectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
+    m_rooms.push_back(std::make_shared<Room>(startRect));
+
     player->setX(MAX_MAP_WIDTH/2 + starting_zone/2);
     player->setY(MAX_MAP_HEIGHT/2 + starting_zone/2);
     entities.push_back(player);
@@ -88,7 +82,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     //add starting area
     rectangles.push_back(existingRect);
 
-    int margin = 100;
+    int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
     while (numRectangles < 50) {
@@ -132,7 +126,8 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
     int entity_y = y;
     int entity_x2 = entity_x + entity->getSize()-1;
     int entity_y2 = entity_y + entity->getSize()-1;
-    for(const auto& otherEntity : entities)
+
+    for(const auto& otherEntity : getViewboxEntities())
     {
         if(otherEntity == entity)
         {
@@ -274,6 +269,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
 {
     std::vector<std::shared_ptr<Entity> > viewBoxEntities;
 
+    // Render rooms
     for(auto room : m_rooms)
     {
         if(room->getBounds().isCollidingWith(getViewBox())){
@@ -287,7 +283,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
         }
     }
     
-    //Add any entity that collides with this box
+    //Render misc entities
     for(auto entity : entities)
     {
         if(entity->getBoundingRectangle().isCollidingWith(getViewBox())){

@@ -19,14 +19,16 @@ Game::Game(/* args */)
 {
  
     SDL_Init(SDL_INIT_VIDEO);
-
     m_window = SDL_CreateWindow("CC3K", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+}
 
+
+int Game::start()
+{
     RGBA playerColor = { 255, 0, 0, 255 };
     std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
     m_map = std::make_shared<Map>(player);
-
     bool quit = false;
     SDL_Event event;
 
@@ -63,6 +65,9 @@ Game::Game(/* args */)
                     new_location = m_map->movableLocationCloseTo(speed,0,player);
                     player->move(new_location.first, new_location.second);
                     break;
+                case SDLK_r:
+                    return 1;
+                    break;
                 }
                 break;
             }
@@ -78,6 +83,7 @@ Game::Game(/* args */)
         }
 
     }
+    return 0;
 }
 
 void Game::render()
