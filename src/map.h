@@ -5,6 +5,7 @@
 #include <memory>
 #include "entity.h"
 #include <utility>
+#include "room.h"
 
 #include "boundingrectangle.h"
 
@@ -23,6 +24,8 @@ public:
 
 private:
     std::vector<std::shared_ptr<Entity> > entities;
+
+    std::vector<std::shared_ptr<Room> > m_rooms;
     std::shared_ptr<Entity> player;
     int x,y;
     int width;

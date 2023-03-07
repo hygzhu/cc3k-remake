@@ -97,27 +97,10 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
             break;
         }
-
-        //generate border for rectangle
-        for(int i = 0; i< rect.getWidth(); i++)
-        {
-            for(int j = 0; j< rect.getHeight(); j++)
-            {
-                if (i == 0 || j == 0 || i == rect.getWidth() -1 || j == rect.getHeight() -1)
-                {   
-                    std::shared_ptr<Entity> environment = EntityFactory::createEntity("Environment", rect.getX()+i, rect.getY()+j); 
-                    entities.push_back(environment);
-                }
-            }
-        }
+        
+        m_rooms.push_back(std::make_shared<Room>(rect));
 
         std::cout << "Rectangle " << numRectangles+1 << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
-
-        if (numRectangles == 1) {
-            margin = rect.getWidth() / 2;
-        } else {
-            margin = rect.getWidth() / 4;
-        }
         if (numRectangles >= maxAttempts) {
             std::cerr << "Unable to generate " << numRectangles << " non-colliding rectangles." << std::endl;
             return;
@@ -290,6 +273,19 @@ BoundingRectangle Map::getViewBox()
 std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
 {
     std::vector<std::shared_ptr<Entity> > viewBoxEntities;
+
+    for(auto room : m_rooms)
+    {
+        if(room->getBounds().isCollidingWith(getViewBox())){
+            for(const auto& roomEntity : room->getEntities())
+            {
+                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
+                {
+                    viewBoxEntities.push_back(roomEntity);
+                }
+            }
+        }
+    }
     
     //Add any entity that collides with this box
     for(auto entity : entities)
@@ -298,6 +294,8 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
             viewBoxEntities.push_back(entity);
         }
     }
+
+
     return viewBoxEntities;
 
 }
