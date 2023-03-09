@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <cstdlib>
 #include <random>
+#include <utility>
+#include <queue>
+#include <cmath>
 
 // Function to generate a random integer within a range
 int Map::randomInt(int min, int max) {
@@ -17,6 +20,7 @@ int Map::randomInt(int min, int max) {
 
 // Function to generate a random non-colliding rectangle within a larger rectangle
 BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin) {
+    
     BoundingRectangle rect(0,0,0,0);
     bool collides = false;
     int attempts = 0;
@@ -71,7 +75,6 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     player->setY(MAX_MAP_HEIGHT/2 + starting_zone/2);
     entities.push_back(player);
 
-
     // Generate rest of dungeon
     // Set up the bounds of the larger rectangle
     BoundingRectangle bounds = {0, 0, max_width, max_height};
@@ -100,6 +103,9 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
             return;
         }
     }
+
+    //paths
+    generateCorridors();
 }
 
 Map::~Map() {}
@@ -293,5 +299,116 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
 
 
     return viewBoxEntities;
+
+}
+
+void Map::generateCorridors()
+{
+    if(m_rooms.size() < 2){
+        return;
+    }
+    // get center coordinate of every room
+    std::vector<std::pair<int, int>> coordinates;
+    for(const auto room : m_rooms)
+    {   
+        coordinates.push_back(room->getBounds().getCenterPoint());
+    }
+    // get a minimum spanning tree with prims algorithm
+    std::vector<std::vector<std::pair<int, int>>> adjList;
+
+    int n = coordinates.size(); // number of coordinates
+
+    // for (auto coord: coordinates) {
+    //         std::cout << coord.first << " " << coord.second <<std::endl;
+
+    // }
+
+    // build adjacency list
+    adjList.resize(n);
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int dx = coordinates[i].first - coordinates[j].first;
+            int dy = coordinates[i].second - coordinates[j].second;
+            int dist = std::abs(std::sqrt(dx * dx + dy * dy)); // euclidean distance
+            adjList[i].push_back({j, dist});
+            adjList[j].push_back({i, dist});
+        }
+    }
+    // for (const auto& vec : adjList) {
+    //     for (const auto& elem : vec) {
+    //         std::cout << "(" << elem.first << ", " << elem.second << ") ";
+    //     }
+    //     std::cout << std::endl;
+    // }
+
+    // minimum spanning tree using Prim's algorithm
+    std::vector<bool> visited(n, false);
+    std::priority_queue<std::pair<int, int > , std::vector<std::pair<int, int > > , std::greater<std::pair<int, int > > > pq; // min-heap of pairs (weight, vertex)
+    std::vector<std::vector<std::pair<int, int > > >  mst; // minimum spanning tree
+    for (int curr_node = 0; curr_node < n; curr_node++) {
+        if (visited[curr_node]) continue;
+
+        pq.push({curr_node,0});
+
+        // std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq_copy = pq;
+        // std::cout << "Priorty :" ;
+        // while (!pq_copy.empty()) {
+        //     std::pair<int, int> element = pq_copy.top();
+        //     std::cout<< element.first << " " << element.second ;
+        //     pq_copy.pop();
+        // }
+        // std::cout << std::endl;
+
+        while (!pq.empty()) {
+            // std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq_copy = pq;
+            // std::cout << "Priorty :" ;
+            // while (!pq_copy.empty()) {
+            //     std::pair<int, int> element = pq_copy.top();
+            //     std::cout  << element.first << " " << element.second ;
+            //     pq_copy.pop();
+            // }
+            // std::cout << std::endl;
+
+            int node = pq.top().first;
+            int dist = pq.top().second;
+            pq.pop();
+            if (visited[node]) continue;
+            visited[node] = true;
+            if (node != curr_node){
+                std::vector<std::pair<int, int>> edge;
+                edge.push_back(coordinates[node]);
+                edge.push_back(coordinates[curr_node]);
+                // std::cout << node << " LOL " << curr_node << " "<< mst.size() << std::endl;
+                mst.push_back(edge);
+            }
+            for (int neighbour_index = 0; neighbour_index < adjList[node].size(); ++neighbour_index) {
+                if (!visited[neighbour_index]) {
+                    pq.push({neighbour_index, adjList[node][neighbour_index].second});
+                }
+            }
+            curr_node = node;
+        }
+    }
+    // print minimum spanning tree
+    for (auto pairs : mst) {
+        std::cout << "pairs: ";
+        for (auto coord : pairs) {
+            std::cout << "("<< coord.first << "," << coord.second  << ") ";
+        }
+        std::cout <<  std::endl;
+    }
+
+    // For each pair we want to construct a path to the side pair
+    // Get closest two points on a bounding rect to each pair, find closest wall n blocks away from both ends (now we have our door)
+    for(auto pairs : mst){
+        std::pair<int,int> pair1 = pairs[0];
+        std::pair<int,int> pair2 = pairs[1];
+
+        for(auto room:m_rooms){
+            if(room->getBounds().getCenterPoint() == pair1){
+                // BFS to get closest point in this room to point
+            }
+        }
+    }
 
 }

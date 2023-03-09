@@ -2,6 +2,8 @@
 #ifndef BOUNDINGRECTANGLE_H
 #define BOUNDINGRECTANGLE_H
 
+#include <utility>
+
 class BoundingRectangle {
 public:
     BoundingRectangle(int x, int y, int width, int height);
@@ -16,6 +18,10 @@ public:
     void setY(int y);
     void setWidth(int width);
     void setHeight(int height);
+    std::pair<int,int> getCenterPoint();
+    std::pair<int,int> getClosestPointTo(std::pair<int,int> startPoint);
+
+
 
 private:
     int m_x;

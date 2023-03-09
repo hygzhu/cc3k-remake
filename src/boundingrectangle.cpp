@@ -1,5 +1,6 @@
 #include "boundingrectangle.h"
 #include <algorithm>
+#include <utility>
 
 BoundingRectangle::BoundingRectangle(int x, int y, int width, int height) 
     : m_x(x), m_y(y), m_width(width), m_height(height) {}
@@ -53,4 +54,58 @@ void BoundingRectangle::setWidth(int width){
 }
 void BoundingRectangle::setHeight(int height){
     m_height = height;
+}
+
+
+std::pair<int,int> BoundingRectangle::getCenterPoint(){
+    std::pair<int,int> centerPoint;
+    centerpoint_first = m_x + (m_width/2);
+    centerpoint_second = m_y + (m_width/2);
+    return centerPoint;
+}
+
+
+std::pair<int,int> BoundingRectangle::getClosestPointTo(std::pair<int,int> startPoint){
+
+    int point_x = startpoint_first;
+    int point_y = startpoint_second;
+
+       // Find the closest point on the left edge of the rectangle
+    int closestX = m_x;
+    int closestY = point_y;
+    if (point_y < m_y) {
+        closestY = m_y;
+    } else if (point_y > m_y + m_height) {
+        closestY = m_y + m_height;
+    }
+
+    // Find the closest point on the right edge of the rectangle
+    if (point_x > m_x + m_width) {
+        closestX = m_x + m_width;
+    } else if (point_x > m_x) {
+        closestX = point_x;
+    }
+
+    // Find the closest point on the top edge of the rectangle
+    if (point_y < m_y) {
+        closestY = m_y;
+    } else if (point_y > m_y + m_height ) {
+        closestY = m_y + m_height;
+    }
+
+    // Find the closest point on the bottom edge of the rectangle
+    if (point_x < m_x) {
+        closestX = m_x;
+    } else if (point_x < m_x + m_width && point_y > m_y + m_height) {
+        closestY = m_y + m_height;
+    }
+
+    // Calculate the distance between the closest point and the given point
+    double distance = sqrt(pow(point_x - closestX, 2) + pow(point_y - closestY, 2));
+
+
+    // TODO: Logic for when point is inside box
+
+    // Return the closest point on the rectangle
+    return {closestX, closestY};
 }

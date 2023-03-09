@@ -34,6 +34,7 @@ private:
     int max_height;
     int randomInt(int min, int max);
     BoundingRectangle generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin);
+    void generateCorridors();
 
 };
 
