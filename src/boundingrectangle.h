@@ -3,6 +3,7 @@
 #define BOUNDINGRECTANGLE_H
 
 #include <utility>
+#include "point.h"
 
 class BoundingRectangle {
 public:
@@ -18,8 +19,9 @@ public:
     void setY(int y);
     void setWidth(int width);
     void setHeight(int height);
-    std::pair<int,int> getCenterPoint();
-    std::pair<int,int> getClosestPointTo(std::pair<int,int> startPoint);
+    Point getCenterPoint();
+    Point getClosestPointTo(Point startPoint);
+    void print() const; // new print method
 
 
 

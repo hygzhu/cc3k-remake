@@ -8,6 +8,7 @@
 #include <utility>
 #include <queue>
 #include <cmath>
+#include <unordered_map>
 
 // Function to generate a random integer within a range
 int Map::randomInt(int min, int max) {
@@ -311,7 +312,8 @@ void Map::generateCorridors()
     std::vector<std::pair<int, int>> coordinates;
     for(const auto room : m_rooms)
     {   
-        coordinates.push_back(room->getBounds().getCenterPoint());
+        Point point = room->getBounds().getCenterPoint();
+        coordinates.push_back({point.getX(), point.getY()});
     }
     // get a minimum spanning tree with prims algorithm
     std::vector<std::vector<std::pair<int, int>>> adjList;
@@ -404,11 +406,109 @@ void Map::generateCorridors()
         std::pair<int,int> pair1 = pairs[0];
         std::pair<int,int> pair2 = pairs[1];
 
-        for(auto room:m_rooms){
-            if(room->getBounds().getCenterPoint() == pair1){
-                // BFS to get closest point in this room to point
-            }
+        Point point1(pair1.first, pair1.second);
+        Point point2(pair2.first, pair2.second);
+        point1.print();
+        point2.print();
+
+        std::shared_ptr<Room> room1;
+        std::shared_ptr<Room> room2;
+
+        auto iter = std::find_if(m_rooms.begin(), m_rooms.end(), [point1](std::shared_ptr<Room> room) { return room->getBounds().getCenterPoint() == point1; });
+        if (iter != m_rooms.end())
+        {
+            room1 = *iter;
+            //std::cout << "Found room 1 " << std::endl;
         }
+        iter = std::find_if(m_rooms.begin(), m_rooms.end(), [point2](std::shared_ptr<Room> room) { return room->getBounds().getCenterPoint() == point2; });
+        if (iter != m_rooms.end())
+        {
+            room2 = *iter;
+            //std::cout << "Found room 2" << std::endl;
+        }
+
+        // // Construct path from room1 to room2
+        // // start point in room1
+        auto start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
+        auto end = room2->getBounds().getClosestPointTo(room1->getBounds().getCenterPoint());
+        std::cout << "Start " << start<< " End "<< end << std::endl;
+
+        auto comp = [end]( Point a, Point b ) { return a.distanceTo(end) > b.distanceTo(end); };
+        auto rooms = m_rooms;
+
+        // TODO: weird case where nothing is valid and a* terminates early, also sometimes when it goes forever????
+        auto isValid = [rooms](Point p){
+            for(auto room : rooms){
+                if(room->getBounds().getClosestPointTo(p) == p){
+                    return false;
+                }
+            }
+            return true;
+        };
+        // Run A* to get path from start to end 
+        std::priority_queue<Point, std::vector<Point>, decltype( comp )> priority_queue(comp);
+        std::vector<Point> path;
+        std::unordered_map<std::string,std::string> seen;
+        priority_queue.push(start);
+        while(!priority_queue.empty())
+        {
+            Point curr = priority_queue.top();
+            priority_queue.pop();
+            std::cout << "curr: ";
+            curr.print();
+            std::cout << "end: ";
+            end.print();
+            path.push_back(curr);
+
+            seen.emplace(curr.toString(), curr.toString());
+
+            if(curr == end){
+                break;
+            }
+
+
+            std::vector<Point> neighbours;
+            int x = curr.getX(), y = curr.getY();
+            neighbours.push_back(Point(x, y+1)); // up
+            neighbours.push_back(Point(x, y-1)); // down
+            neighbours.push_back(Point(x-1, y)); // left
+            neighbours.push_back(Point(x+1, y)); // right
+            neighbours.push_back(Point(x+1, y+1));
+            neighbours.push_back(Point(x+1, y-1));
+            neighbours.push_back(Point(x-1, y+1));
+            neighbours.push_back(Point(x-1, y-1));
+            for(Point neighbour : neighbours)
+            {
+                auto search = seen.find(neighbour.toString());
+                if(isValid(neighbour) || neighbour == end){
+                    if(search == seen.end()){
+                        std::cout << neighbour.toString();
+
+                        seen.emplace(neighbour.toString(), neighbour.toString());
+                        priority_queue.push(neighbour);
+                    }
+                }
+            }
+            std::cout << std::endl;
+            // if(priority_queue.size() >= 10)
+            // {
+            // break;
+            // }else
+            // {
+            //     // auto pq(priority_queue);
+            //     // while (!pq.empty()) {
+            //     // Point p = pq.top();
+            //     // pq.pop();
+            //     // std::cout << "(" << p.getX() << ", " << p.getY() << ") ";
+            //     // }
+            //     // std::cout <<  std::endl;
+            // }
+        }
+        std::cout << "Path len " << path.size() << std::endl;
+        break;
+        
+
+
     }
 
 }

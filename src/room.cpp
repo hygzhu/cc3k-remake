@@ -28,3 +28,7 @@ BoundingRectangle Room::getBounds()
 const std::vector<std::shared_ptr<Entity> >& Room::getEntities(){
     return m_entities;
 }
+
+void Room::print(){
+    m_bounds.print();
+}

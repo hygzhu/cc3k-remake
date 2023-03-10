@@ -10,6 +10,7 @@ public:
     Room(BoundingRectangle rect);
     BoundingRectangle getBounds();
     const std::vector<std::shared_ptr<Entity> >& getEntities();
+    void print();
 private:
     BoundingRectangle m_bounds;
     std::vector<std::shared_ptr<Entity> > m_entities;
