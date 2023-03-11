@@ -9,6 +9,7 @@
 #include <queue>
 #include <cmath>
 #include <unordered_map>
+#include <tuple>
 
 // Function to generate a random integer within a range
 int Map::randomInt(int min, int max) {
@@ -89,8 +90,8 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    while (numRectangles < 50) {
-        numRectangles++;
+    int maxRectangles = 2;
+    while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
             break;
@@ -98,11 +99,13 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
         
         m_rooms.push_back(std::make_shared<Room>(rect));
 
-        std::cout << "Rectangle " << numRectangles+1 << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
+        std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
         if (numRectangles >= maxAttempts) {
             std::cerr << "Unable to generate " << numRectangles << " non-colliding rectangles." << std::endl;
             return;
         }
+
+        numRectangles++;
     }
 
     //paths
@@ -128,6 +131,7 @@ int Map::getHeight()
 
 bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 {
+    return false;
     //Entity hit box
     int entity_x = x;
     int entity_y = y;
@@ -153,7 +157,7 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             //Collides
             //std::cout <<  "Curr " << entity_x << " " << entity_y << " " << entity_x2 << " " << entity_y2 <<std::endl;
             //std::cout << "Other "  << other_entity_x << " " << other_entity_y << " " << other_entity_x2 << " " << other_entity_y2 <<std::endl;
-            otherEntity->printEntityType();
+            //otherEntity->printEntityType();
             return true;
         }
     }
@@ -289,6 +293,18 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
             }
         }
     }
+
+    // Render corridors
+    for(auto corridor : m_corridors)
+    {
+        for(const auto& wall : corridor->getEntities())
+        {
+            if(wall->getBoundingRectangle().isCollidingWith(getViewBox()))
+            {
+                viewBoxEntities.push_back(wall);
+            }
+        }
+    }
     
     //Render misc entities
     for(auto entity : entities)
@@ -326,71 +342,105 @@ void Map::generateCorridors()
     // }
 
     // build adjacency list
-    adjList.resize(n);
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
+        std::vector<std::pair<int, int>> partial;
+        for (int j = 0; j < n; j++) {
             int dx = coordinates[i].first - coordinates[j].first;
             int dy = coordinates[i].second - coordinates[j].second;
-            int dist = std::abs(std::sqrt(dx * dx + dy * dy)); // euclidean distance
-            adjList[i].push_back({j, dist});
-            adjList[j].push_back({i, dist});
+            int dist = std::sqrt(dx * dx + dy * dy); // euclidean distance
+            partial.push_back({j, dist});
         }
+        adjList.push_back(partial);
     }
-    // for (const auto& vec : adjList) {
-    //     for (const auto& elem : vec) {
-    //         std::cout << "(" << elem.first << ", " << elem.second << ") ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+
+    for (const auto& vec : adjList) {
+        for (const auto& elem : vec) {
+            std::cout << "(" << elem.first << ", " << elem.second << ") ";
+        }
+        std::cout << std::endl;
+    }
 
     // minimum spanning tree using Prim's algorithm
     std::vector<bool> visited(n, false);
-    std::priority_queue<std::pair<int, int > , std::vector<std::pair<int, int > > , std::greater<std::pair<int, int > > > pq; // min-heap of pairs (weight, vertex)
+
+    auto cmp = [](std::tuple<int, int, int> left,std::tuple<int, int, int> right) {
+        return std::get<0>(left) > std::get<0>(right); // order elements by the values of their second components, in asc order
+    };
+    std::priority_queue<std::tuple<int, int, int > , std::vector<std::tuple<int, int, int > > , decltype(cmp) > pq(cmp); // min-heap of pairs (weight, vertex)
     std::vector<std::vector<std::pair<int, int > > >  mst; // minimum spanning tree
-    for (int curr_node = 0; curr_node < n; curr_node++) {
-        if (visited[curr_node]) continue;
 
-        pq.push({curr_node,0});
-
-        // std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq_copy = pq;
-        // std::cout << "Priorty :" ;
-        // while (!pq_copy.empty()) {
-        //     std::pair<int, int> element = pq_copy.top();
-        //     std::cout<< element.first << " " << element.second ;
-        //     pq_copy.pop();
-        // }
-        // std::cout << std::endl;
+        pq.push(std::make_tuple<int,int,int>(0, 0, 0));
 
         while (!pq.empty()) {
-            // std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq_copy = pq;
-            // std::cout << "Priorty :" ;
-            // while (!pq_copy.empty()) {
-            //     std::pair<int, int> element = pq_copy.top();
-            //     std::cout  << element.first << " " << element.second ;
-            //     pq_copy.pop();
-            // }
-            // std::cout << std::endl;
 
-            int node = pq.top().first;
-            int dist = pq.top().second;
+
+            // print out all the elements in the copy of the priority queue
+            std::cout << "PQ:\n";
+            std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>,  decltype(cmp)> pq_copy = pq;
+            while (!pq_copy.empty()) {
+                std::tuple<int, int, int> element = pq_copy.top();
+                pq_copy.pop();
+                std::cout << "(" << std::get<0>(element) << ", " << std::get<1>(element) << ", " << std::get<2>(element) << ")";
+            }
+            std::cout << "\n";
+
+            int node = std::get<1>(pq.top());
+            int neighbour = std::get<2>(pq.top());
+            int dist = std::get<0>(pq.top());
             pq.pop();
-            if (visited[node]) continue;
+            if (visited[neighbour]) continue;
+
             visited[node] = true;
-            if (node != curr_node){
+            if (node != neighbour){
                 std::vector<std::pair<int, int>> edge;
                 edge.push_back(coordinates[node]);
-                edge.push_back(coordinates[curr_node]);
+                edge.push_back(coordinates[neighbour]);
                 // std::cout << node << " LOL " << curr_node << " "<< mst.size() << std::endl;
                 mst.push_back(edge);
+                visited[neighbour] = true;
             }
-            for (int neighbour_index = 0; neighbour_index < adjList[node].size(); ++neighbour_index) {
-                if (!visited[neighbour_index]) {
-                    pq.push({neighbour_index, adjList[node][neighbour_index].second});
+            
+            for (int neighbour_index = 0; neighbour_index < coordinates.size(); ++neighbour_index) {
+                
+                // skip if our edges overlap with any exising edges in MST
+                bool overlaps = false;
+                Point a(coordinates[neighbour].first, coordinates[neighbour].second);
+                Point b(coordinates[neighbour_index].first, coordinates[neighbour_index].second);
+                for(auto edge : mst)
+                {
+                    Point c(edge[0].first, edge[0].second);
+                    Point d(edge[1].first, edge[1].second);
+                    bool intersect = Point::doLinesIntersect(a,b,c,d);
+                    if(intersect)
+                    {
+                        Point intersection = Point::findIntersection(a,b,c,d);
+                        if(!(a==intersection || b==intersection || c == intersection || d == intersection))
+                        {
+                            a.print();
+                            b.print();
+                            c.print();
+                            d.print();
+                            intersection.print();
+                            overlaps = true;
+                        }
+                    }
+                    if(overlaps){
+                        std::cout << "OVERLAPS " << std::endl;
+                        break;
+                    }
+                }
+                //std::cout <<"neighbour_index " << neighbour_index << " !visited[neighbour_index] " << !visited[neighbour_index]  <<" !overlaps " <<!overlaps << std::endl;
+                if (!visited[neighbour_index] and !overlaps) {
+                    int new_dist = adjList[node][neighbour_index].second;
+                    auto tup= std::make_tuple<int,int,int>(0,0,0);
+                    std::get<0>(tup) = new_dist;
+                    std::get<1>(tup) = neighbour;
+                    std::get<2>(tup) = neighbour_index;
+                    pq.push(tup);
                 }
             }
-            curr_node = node;
         }
-    }
+    
     // print minimum spanning tree
     for (auto pairs : mst) {
         std::cout << "pairs: ";
@@ -408,8 +458,8 @@ void Map::generateCorridors()
 
         Point point1(pair1.first, pair1.second);
         Point point2(pair2.first, pair2.second);
-        point1.print();
-        point2.print();
+        // point1.print();
+        // point2.print();
 
         std::shared_ptr<Room> room1;
         std::shared_ptr<Room> room2;
@@ -432,15 +482,68 @@ void Map::generateCorridors()
         auto start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
         auto end = room2->getBounds().getClosestPointTo(room1->getBounds().getCenterPoint());
         std::cout << "Start " << start<< " End "<< end << std::endl;
+        // room1->print();
+        // room2->print();
 
         auto comp = [end]( Point a, Point b ) { return a.distanceTo(end) > b.distanceTo(end); };
         auto rooms = m_rooms;
+        int buffer = 50; // How wide our path needs to be
+    
 
-        // TODO: weird case where nothing is valid and a* terminates early, also sometimes when it goes forever????
-        auto isValid = [rooms](Point p){
+        auto isValid = [rooms, buffer, room1, room2](Point p){
+
+            // Buffer (TODO: Optimize this by expanding existing rectangles instead of area around current point)
+            std::vector<Point> bufferPoints;
+            std::unordered_map<std::string, bool> seen;
+            std::queue<Point> queue;
+            queue.push(p);
+            for(int i =0; i < buffer; i++){
+                Point curr = queue.front();
+                queue.pop();
+                seen.emplace(curr.toString(), true);
+                bufferPoints.push_back(curr);
+                std::vector<Point> neighbours;
+                int x = curr.getX(), y = curr.getY();
+                neighbours.push_back(Point(x, y+1)); // up
+                neighbours.push_back(Point(x, y-1)); // down
+                neighbours.push_back(Point(x-1, y)); // left
+                neighbours.push_back(Point(x+1, y)); // right
+                neighbours.push_back(Point(x+1, y+1));
+                neighbours.push_back(Point(x+1, y-1));
+                neighbours.push_back(Point(x-1, y+1));
+                neighbours.push_back(Point(x-1, y-1));
+                for(Point neighbour : neighbours)
+                {
+                    auto search = seen.find(neighbour.toString());
+                    if(search == seen.end()){
+                        seen.emplace(neighbour.toString(), true);
+                        queue.push(neighbour);
+                    }
+                    
+                }
+            }
+
+            // check for collisions
             for(auto room : rooms){
-                if(room->getBounds().getClosestPointTo(p) == p){
+
+                // main path collides with room
+                BoundingRectangle pointRect(p.getX(), p.getY(), 1,1);
+                if(room->getBounds().isCollidingWith(pointRect)){
+                    //room->print();
+                    //p.print();
                     return false;
+                }
+
+                //check if buffer collides with anyroom that isn't the start or end room
+                if(room != room1 && room != room2){
+                    //check if all points in buffer valid
+                    for(Point temp: bufferPoints){
+                        BoundingRectangle pointRect(temp.getX(), temp.getY(), 1,1);
+                        // main path collides with room
+                        if(room->getBounds().isCollidingWith(pointRect)){
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -450,14 +553,21 @@ void Map::generateCorridors()
         std::vector<Point> path;
         std::unordered_map<std::string,std::string> seen;
         priority_queue.push(start);
+        int visitedBlocks = 0;
+
         while(!priority_queue.empty())
         {
+            if(visitedBlocks > max_height*max_width){
+                std::cout << "Could not find path" << std::endl;
+                break;
+            }
+
             Point curr = priority_queue.top();
             priority_queue.pop();
-            std::cout << "curr: ";
-            curr.print();
-            std::cout << "end: ";
-            end.print();
+            //std::cout << "curr: ";
+            //curr.print();
+            //std::cout << "end: ";
+            //end.print();
             path.push_back(curr);
 
             seen.emplace(curr.toString(), curr.toString());
@@ -482,14 +592,14 @@ void Map::generateCorridors()
                 auto search = seen.find(neighbour.toString());
                 if(isValid(neighbour) || neighbour == end){
                     if(search == seen.end()){
-                        std::cout << neighbour.toString();
+                        //std::cout << neighbour.toString();
 
                         seen.emplace(neighbour.toString(), neighbour.toString());
                         priority_queue.push(neighbour);
                     }
                 }
             }
-            std::cout << std::endl;
+            //std::cout << std::endl;
             // if(priority_queue.size() >= 10)
             // {
             // break;
@@ -505,7 +615,77 @@ void Map::generateCorridors()
             // }
         }
         std::cout << "Path len " << path.size() << std::endl;
-        break;
+
+
+        if(path.size()==0){
+
+            std::cout << "Path len is 0, skipping"  << std::endl;
+            break;
+        }
+
+        // Need to construct a path along this
+
+        // std::unordered_map<std::string, std::pair<Point, int>> seenPoints;
+        // std::vector<Point> borderPoints = path[0].allPointsInEuclidianDistanceAway(buffer);
+        // for (Point p : borderPoints)
+        // {   
+        //     auto search = seenPoints.find(p.toString());
+        //     if(search == seenPoints.end()){
+        //         std::pair<Point, int> point_occurances = std::make_pair(p,1);
+        //         seenPoints.emplace(p.toString(), point_occurances);
+        //     }
+        // }
+        // Point prevPoint = path[0];
+
+        // std::cout << "initial border points = " << borderPoints.size() << std::endl;
+        // for(int i = 1; i < path.size();++i){
+        //     int dx = path[i].getX() - prevPoint.getX();
+        //     int dy = path[i].getY() - prevPoint.getY();
+
+        //     std::vector<Point> borderPointsCopy(borderPoints);
+
+        //     for (Point& p : borderPointsCopy)
+        //     {   
+        //         p.setX(p.getX()+dx);
+        //         p.setY(p.getY()+dy);
+        //     }
+        //     for (Point& p : borderPointsCopy)
+        //     {   
+        //         auto search = seenPoints.find(p.toString());
+        //         if(search != seenPoints.end()){
+        //             //Exists in seen
+        //             auto count = search->second.second +1;
+        //             std::pair<Point, int> point_occurances = std::make_pair(p,count);
+        //             seenPoints[p.toString()] =  point_occurances;
+        //         }else{
+        //             //does not exist in seen
+        //             std::pair<Point, int> point_occurances = std::make_pair(p,1);
+        //             seenPoints.emplace(p.toString(), point_occurances);
+        //         }
+        //     }
+        //     borderPoints = borderPointsCopy;
+        // }
+
+
+        std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>();
+        for(auto point : path)
+        {
+            corridor->addWall(point);
+        }
+
+        // for (const auto& kv : seenPoints) {
+        //     const std::string& key = kv.first;
+        //     const Point& point = kv.second.first;
+        //     const int& count = kv.second.second;
+        //     if(count > 1){
+        //         //std::cout << "Key: " << key << ", Point: (" << point.getX() << ", " << point.getY() << "), Count: " << count << std::endl;
+        //         corridor->addWall(point);
+        //     }
+
+        // }
+
+        m_corridors.push_back(corridor);
+
         
 
 

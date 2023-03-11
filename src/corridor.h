@@ -1,0 +1,19 @@
+#ifndef CORRIDOR_H
+#define CORRIDOR_H
+
+#include "entity.h"
+#include <vector>
+#include <memory>
+#include "point.h"
+
+class Corridor {
+public:
+    Corridor();
+    std::vector<std::shared_ptr<Entity>>& getEntities();
+    void addWall(Point p);
+    void print();
+private:
+    std::vector<std::shared_ptr<Entity>> m_entities;
+};
+
+#endif

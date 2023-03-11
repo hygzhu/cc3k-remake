@@ -8,6 +8,7 @@
 #include "room.h"
 
 #include "boundingrectangle.h"
+#include "corridor.h"
 
 class Map {
 public:
@@ -26,6 +27,7 @@ private:
     std::vector<std::shared_ptr<Entity> > entities;
 
     std::vector<std::shared_ptr<Room> > m_rooms;
+    std::vector<std::shared_ptr<Corridor> > m_corridors;
     std::shared_ptr<Entity> player;
     int x,y;
     int width;

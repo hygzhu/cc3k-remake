@@ -39,7 +39,7 @@ int Game::start()
         Uint32 timeSinceLastFrame = currentFrameTime - lastFrameTime;
         lastFrameTime = currentFrameTime;
 
-        const int speed = 15;
+        const int speed = 50;
         std::pair<int,int> new_location;
 
         while (SDL_PollEvent(&event)) {

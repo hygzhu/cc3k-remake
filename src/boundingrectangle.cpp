@@ -70,8 +70,8 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
     int p_x = startPoint.getX();
     int p_y = startPoint.getY();
 
-    bool insideX = m_x + m_width < p_x && p_x < m_x;
-    bool insideY = m_y + m_height < p_y && p_y < m_y;
+    bool insideX = m_x + m_width <= p_x && p_x <= m_x;
+    bool insideY = m_y + m_height <= p_y && p_y <= m_y;
     bool pointInsideRectangle = insideX && insideY;
 
     int closestX = 0;
@@ -80,7 +80,7 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
     if (!pointInsideRectangle){ 
         //Outside
         closestX = std::max(m_x, std::min(p_x, m_x + m_width));
-        closestY = std::max(m_y, std::min(p_y, m_y + m_width));
+        closestY = std::max(m_y, std::min(p_y, m_y + m_height));
     }
     else 
     { 

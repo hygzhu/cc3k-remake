@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 class Point {
 public:
@@ -18,7 +19,17 @@ public:
     void print() const; // print method
     double distanceTo(const Point& other) const;
     std::string toString();
+    std::vector<Point> allPointsInManhattanDistanceAway(int n);
+    std::vector<Point> allPointsInEuclidianDistanceAway(int n);
+    int manhattanDistanceFrom(Point b);
+
+
+    static bool doLinesIntersect(Point p1, Point p2, Point q1, Point q2);
+    static Point findIntersection(Point p1, Point p2, Point p3, Point p4);
 private:
+
+    static void getSlopeIntercept(Point p1, Point p2, double& slope, double& y_intercept);
+
     int m_x;
     int m_y;
 };
