@@ -2,13 +2,20 @@
 #include <algorithm>
 #include <utility>
 #include <cmath>
+#include <iostream>
 
 BoundingRectangle::BoundingRectangle(int x, int y, int width, int height) 
     : m_x(x), m_y(y), m_width(width), m_height(height) {}
 
 bool BoundingRectangle::isCollidingWith(const BoundingRectangle& other) const {
-    return (m_x + m_width > other.m_x && m_x < other.m_x + other.m_width &&
+    return (m_x + m_width  > other.m_x && m_x < other.m_x + other.m_width &&
             m_y + m_height > other.m_y && m_y < other.m_y + other.m_height);
+}
+
+
+bool BoundingRectangle::isCollidingWithPoint(const Point& p) const{
+    return (m_x + m_width  >= p.getX() && m_x <= p.getX() &&
+            m_y + m_height >= p.getY() && m_y <= p.getY());
 }
 
 BoundingRectangle BoundingRectangle::getIntersection(const BoundingRectangle& other) const {
@@ -70,14 +77,16 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
     int p_x = startPoint.getX();
     int p_y = startPoint.getY();
 
-    bool insideX = m_x + m_width <= p_x && p_x <= m_x;
-    bool insideY = m_y + m_height <= p_y && p_y <= m_y;
+    bool insideX = m_x + m_width >= p_x && p_x >= m_x;
+    bool insideY = m_y + m_height >= p_y && p_y >= m_y;
     bool pointInsideRectangle = insideX && insideY;
 
     int closestX = 0;
     int closestY = 0;
 
     if (!pointInsideRectangle){ 
+
+        // std::cerr << "OUTSIDE" <<std::endl;
         //Outside
         closestX = std::max(m_x, std::min(p_x, m_x + m_width));
         closestY = std::max(m_y, std::min(p_y, m_y + m_height));
@@ -85,10 +94,16 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
     else 
     { 
         //Inside
-        int upDistance = p_y - m_y;
-        int downDistance = m_y + m_height - p_y;
-        int leftDistance = p_x - m_x;
-        int rightDistance = m_x + m_width - p_x;
+        // std::cerr << "INSIDE" <<std::endl;
+        int upDistance = std::abs(p_y - m_y);
+        int downDistance = std::abs(m_y + m_height - p_y);
+        int leftDistance = std::abs(p_x - m_x);
+        int rightDistance = std::abs(m_x + m_width - p_x);
+
+        // std::cerr << upDistance <<std::endl;
+        // std::cerr << downDistance <<std::endl;
+        // std::cerr << leftDistance <<std::endl;
+        // std::cerr << rightDistance <<std::endl;
 
         Point  upPoint(p_x, m_y);
         Point  downPoint(p_x, m_y+m_height);
@@ -99,6 +114,11 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
         int upRightDistance = std::sqrt((upDistance*upDistance) + (rightDistance*rightDistance));
         int downLeftDistance = std::sqrt((downDistance*downDistance) + (leftDistance*leftDistance));
         int downRightDistance = std::sqrt((downDistance*downDistance) + (rightDistance*rightDistance));
+
+        // std::cerr << upLeftDistance <<std::endl;
+        // std::cerr << upRightDistance <<std::endl;
+        // std::cerr << downLeftDistance <<std::endl;
+        // std::cerr << downRightDistance <<std::endl;
 
         if (upLeftDistance <= upRightDistance && upLeftDistance <= downLeftDistance && upLeftDistance <= downRightDistance)
         {
@@ -118,18 +138,18 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
         }
         else if (downLeftDistance <= downRightDistance)
         {
-            if(downDistance <= rightDistance){
-                return downPoint;
-            }else{
-                return rightPoint;
-            }
-        }
-        else
-        {
             if(downDistance <= leftDistance){
                 return downPoint;
             }else{
                 return leftPoint;
+            }
+        }
+        else
+        {
+            if(downDistance <= rightDistance){
+                return downPoint;
+            }else{
+                return rightPoint;
             }
         }
     }
@@ -139,4 +159,9 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
 
 void BoundingRectangle::print() const {
     std::cout << "( x:" << m_x << ", y: " << m_y << ", w: "<< m_width << ", h: "<<m_height<< ")" << std::endl;
+}
+
+
+std::string BoundingRectangle::toString(){
+    return "( x:" + std::to_string(m_x) + ", y: " + std::to_string(m_y) + ", w: " + std::to_string(m_width) + ", h: " + std::to_string(m_height) + ")" ;
 }

@@ -3,12 +3,14 @@
 #define BOUNDINGRECTANGLE_H
 
 #include <utility>
+#include <string>
 #include "point.h"
 
 class BoundingRectangle {
 public:
     BoundingRectangle(int x, int y, int width, int height);
     bool isCollidingWith(const BoundingRectangle& other) const;
+    bool isCollidingWithPoint(const Point& point) const;
     BoundingRectangle getIntersection(const BoundingRectangle& other) const;
 
     int getX() const;
@@ -22,6 +24,7 @@ public:
     Point getCenterPoint();
     Point getClosestPointTo(Point startPoint);
     void print() const; // new print method
+    std::string toString();
 
 
 

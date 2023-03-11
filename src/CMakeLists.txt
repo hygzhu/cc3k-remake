@@ -34,5 +34,14 @@ add_executable(CC3K
     corridor.cpp
 )
 
+add_library(CC3K_lib
+    boundingrectangle.h
+    boundingrectangle.cpp
+    point.h
+    point.cpp
+)
+# Set include directories for this library
+target_include_directories(CC3K_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 include_directories(CC3K ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 target_link_libraries(CC3K ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})

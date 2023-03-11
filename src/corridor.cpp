@@ -18,7 +18,7 @@ Corridor::Corridor(std::vector<Point> points, int size)
         mqueue.push_back(p);
         seen.insert(p.toString());
     }
-    std::cout << "Size of corridor before expansion " << points.size() << std::endl; 
+    //std::cout << "Size of corridor before expansion " << points.size() << std::endl; 
     for(int i =0; i< size; i++){
         int curr_size = mqueue.size();
         for(int j = 0; j < curr_size; ++j){
@@ -41,7 +41,7 @@ Corridor::Corridor(std::vector<Point> points, int size)
         mqueue.pop_front();
     }
 
-    std::cout << "Size of corridor after expansion " << vec.size() << std::endl; 
+    //std::cout << "Size of corridor after expansion " << vec.size() << std::endl; 
 
 
 

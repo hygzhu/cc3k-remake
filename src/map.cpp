@@ -90,7 +90,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    int maxRectangles = 5;
+    int maxRectangles = 8;
     while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
@@ -131,7 +131,6 @@ int Map::getHeight()
 
 bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 {
-    return false;
     //Entity hit box
     int entity_x = x;
     int entity_y = y;
@@ -498,7 +497,7 @@ void Map::generateCorridors()
         int buffer = 50; // How wide our path needs to be
     
 
-        auto isValid = [rooms, buffer, room1, room2](Point p){
+        auto isValid = [&](Point p){
 
             // Buffer (TODO: Optimize this by expanding existing rectangles instead of area around current point)
             std::vector<Point> bufferPoints;
@@ -531,9 +530,8 @@ void Map::generateCorridors()
                 }
             }
 
-            // check for collisions
+            // check for collisions with rooms
             for(auto room : rooms){
-
                 // main path collides with room
                 BoundingRectangle pointRect(p.getX(), p.getY(), 1,1);
                 if(room->getBounds().isCollidingWith(pointRect)){
@@ -541,7 +539,6 @@ void Map::generateCorridors()
                     //p.print();
                     return false;
                 }
-
                 //check if buffer collides with anyroom that isn't the start or end room
                 if(room != room1 && room != room2){
                     //check if all points in buffer valid
@@ -549,6 +546,20 @@ void Map::generateCorridors()
                         BoundingRectangle pointRect(temp.getX(), temp.getY(), 1,1);
                         // main path collides with room
                         if(room->getBounds().isCollidingWith(pointRect)){
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            // check for collisions with existing corridors
+            for(auto corridor : m_corridors){
+                for(auto corridorEntity : corridor->getEntities()){
+                    //check if all points in buffer valid
+                    for(Point temp: bufferPoints){
+                        BoundingRectangle pointRect(temp.getX(), temp.getY(), 1,1);
+                        // main path collides with room
+                        if(corridorEntity->getBoundingRectangle().isCollidingWith(pointRect)){
                             return false;
                         }
                     }
@@ -644,8 +655,6 @@ void Map::generateCorridors()
         room->generateDoors(m_corridors, allDoorCenters);
     }
     
-
-
     for(auto corridor : m_corridors)
     {
         corridor->removeEntitiesInRooms(m_rooms);

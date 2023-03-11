@@ -12,6 +12,7 @@ public:
     Point(int x, int y);
     Point(const Point& other); // copy constructor
     bool operator==(const Point& other) const; // equality operator
+    bool operator!=(const Point& other) const; // equality operator
     int getX() const;
     int getY() const;
     void setX(int x);
