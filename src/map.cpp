@@ -56,8 +56,8 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
 }
 
 
-Map::Map(std::shared_ptr<Entity> player): player(player){
-
+Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corridorWidth): player(player){
+    std::cout << "Generating map with at most " << numRooms << " Rooms" << std::endl;
     const int MAP_HEIGHT = 700;
     const int MAP_WIDTH = 700;
     const int MAX_MAP_HEIGHT = 2000;
@@ -70,6 +70,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     const int starting_zone = 100;
 
     // Generate starting room
+    std::cout << "Generating rooms" << std::endl;
     BoundingRectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
     m_rooms.push_back(std::make_shared<Room>(startRect));
 
@@ -87,10 +88,10 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     //add starting area
     rectangles.push_back(existingRect);
 
-    int margin = 50;
+    int margin = roomMargin;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    int maxRectangles = 2;
+    int maxRectangles = numRooms;
     while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
@@ -109,7 +110,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     }
 
     //paths
-    generateCorridors();
+    generateCorridors(corridorWidth);
 }
 
 Map::~Map() {}
@@ -210,9 +211,49 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
     // non diagonal movements only
     //std::cout << x << " " << y << std::endl;
     if(x!=0 && y != 0)
-    {
-        return moveable_location;
-
+    {   
+        //even diagonal movements only
+        if(std::abs(x)!= std::abs(y)){
+            return moveable_location;
+        }
+        for(int i =0; i<=std::abs(x); ++i){
+            if(x > 0 && y > 0){
+                if(doesEntityCollideAt(oldx+i,oldy+i,entity))
+                {
+                    return moveable_location;
+                }else{
+                    moveable_location.first = oldx+i;
+                    moveable_location.second = oldy+i;
+                }
+            }
+            if(x < 0 && y < 0){
+                if(doesEntityCollideAt(oldx-i,oldy-i,entity))
+                {
+                    return moveable_location;
+                }else{
+                    moveable_location.first = oldx-i;
+                    moveable_location.second = oldy-i;
+                }
+            }
+            if(x > 0 && y < 0){
+                if(doesEntityCollideAt(oldx+i,oldy-i,entity))
+                {
+                    return moveable_location;
+                }else{
+                    moveable_location.first = oldx+i;
+                    moveable_location.second = oldy-i;
+                }
+            }
+            if(x < 0 && y > 0){
+                if(doesEntityCollideAt(oldx-i,oldy+i,entity))
+                {
+                    return moveable_location;
+                }else{
+                    moveable_location.first = oldx-i;
+                    moveable_location.second = oldy+i;
+                }
+            }
+        }
     }
 
     if(x!=0){
@@ -318,8 +359,10 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
 
 }
 
-void Map::generateCorridors()
+void Map::generateCorridors(int corridorWidth)
 {
+
+    std::cout << "Generating corridors" << std::endl;
     if(m_rooms.size() < 2){
         return;
     }
@@ -643,13 +686,16 @@ void Map::generateCorridors()
         }
 
         // Need to construct a path along this
-        int corridor_width = 25;
+        int corridor_width = corridorWidth;
         std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>(path, corridor_width);
 
         m_corridors.push_back(corridor);
     }
     std::vector<std::shared_ptr<Entity>> entitiesInRooms;
     
+
+
+    std::cout << "Generating Doors" << std::endl;
     for(auto room : m_rooms)
     {
         room->generateDoors(m_corridors, allDoorCenters);

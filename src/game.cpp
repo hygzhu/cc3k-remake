@@ -28,60 +28,105 @@ int Game::start()
 {
     RGBA playerColor = { 255, 0, 0, 255 };
     std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
-    m_map = std::make_shared<Map>(player);
+    m_map = std::make_shared<Map>(player,2,40,25);
     bool quit = false;
     SDL_Event event;
 
+    const int fps = 60;
+    const int frameDelay = 1000 / fps;
+    Uint32 frameStart;
+    int frameTime;
+
+    bool downKeys[SDL_NUM_SCANCODES] = { false };
     while (!quit) {
 
-        // Calculate the time since the last frame
-        Uint32 currentFrameTime = SDL_GetTicks();
-        Uint32 timeSinceLastFrame = currentFrameTime - lastFrameTime;
-        lastFrameTime = currentFrameTime;
+        frameStart = SDL_GetTicks();
 
-        const int speed = 50;
+        const int speed = 250;
         std::pair<int,int> new_location;
-
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
-            case SDL_QUIT:
-                quit = true;
-                break;
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym) {
-                case SDLK_UP:
-                    new_location = m_map->movableLocationCloseTo(0,-speed,player);
-                    player->move(new_location.first, new_location.second);
+                case SDL_QUIT:
+                    quit = true;
                     break;
-                case SDLK_DOWN:
-                    new_location = m_map->movableLocationCloseTo(0,speed,player);
-                    player->move(new_location.first, new_location.second);
+                case SDL_KEYDOWN:
+                    std::cout << "DOWN" << std::endl;
+                    downKeys[event.key.keysym.scancode] = true;
                     break;
-                case SDLK_LEFT:
-                    new_location = m_map->movableLocationCloseTo(-speed,0,player);
-                    player->move(new_location.first, new_location.second);
+                case SDL_KEYUP:
+                    std::cout << "UP" << std::endl;
+                    downKeys[event.key.keysym.scancode] = false;
                     break;
-                case SDLK_RIGHT:
-                    new_location = m_map->movableLocationCloseTo(speed,0,player);
-                    player->move(new_location.first, new_location.second);
-                    break;
-                case SDLK_r:
-                    return 1;
-                    break;
-                }
-                break;
             }
         }
 
-        render();
 
-        // Delay until the next frame
-        Uint32 elapsedTime = SDL_GetTicks() - currentFrameTime;
-        if (elapsedTime < frameInterval)
+        if (downKeys[SDL_SCANCODE_LEFT])
         {
-            SDL_Delay(frameInterval - elapsedTime);
+            player->getAccelX() = -speed;
+        }
+        if (downKeys[SDL_SCANCODE_RIGHT])
+        {
+            
+            player->getAccelX() = speed;
+        }
+        if((!downKeys[SDL_SCANCODE_RIGHT] && !downKeys[SDL_SCANCODE_LEFT])|| downKeys[SDL_SCANCODE_RIGHT] && downKeys[SDL_SCANCODE_LEFT]){
+            player->getAccelX() = 0;
         }
 
+        if (downKeys[SDL_SCANCODE_UP])
+        {
+            player->getAccelY() = -speed;
+        }
+        if (downKeys[SDL_SCANCODE_DOWN])
+        {
+            // Move player down
+
+            player->getAccelY() = speed;
+        }
+        if((!downKeys[SDL_SCANCODE_UP] && !downKeys[SDL_SCANCODE_DOWN])||downKeys[SDL_SCANCODE_UP] && downKeys[SDL_SCANCODE_DOWN]){
+            player->getAccelY() = 0;
+        }
+
+
+        // if (upKeys[SDL_SCANCODE_LEFT])
+        // {
+        //     std::cout << "LEFT up" <<std::endl;
+        // }
+
+        // if (upKeys[SDL_SCANCODE_RIGHT])
+        // {
+            
+        //     std::cout << "right up" <<std::endl;
+        // }
+
+        // if (upKeys[SDL_SCANCODE_UP])
+        // {
+        //     std::cout << "up down" <<std::endl;
+        // }
+
+        // if (upKeys[SDL_SCANCODE_DOWN])
+        // {
+        //     // Move player down
+        // }
+
+        // Update player position
+        int playerVelX = player->getAccelX() * frameDelay / 1000;
+        int playerVelY = player->getAccelY() * frameDelay / 1000;
+        if(playerVelX != 0 || playerVelY != 0 ){
+            new_location = m_map->movableLocationCloseTo(playerVelX,playerVelY,player);
+            player->move(new_location.first, new_location.second);
+        }
+        
+
+        render();
+
+        // Control game loop timing
+        frameTime = SDL_GetTicks() - frameStart;
+        if (frameDelay > frameTime)
+        {
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
     return 0;
 }

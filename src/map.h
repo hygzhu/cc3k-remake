@@ -12,7 +12,7 @@
 
 class Map {
 public:
-    Map(std::shared_ptr<Entity> player);
+    Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corridorWidth);
     ~Map();
     std::vector<std::shared_ptr<Entity> > & getEntities();
     std::vector<std::shared_ptr<Entity> > getViewboxEntities();
@@ -25,7 +25,6 @@ public:
 
 private:
     std::vector<std::shared_ptr<Entity> > entities;
-
     std::vector<std::shared_ptr<Room> > m_rooms;
     std::vector<std::shared_ptr<Corridor> > m_corridors;
     std::shared_ptr<Entity> player;
@@ -36,7 +35,7 @@ private:
     int max_height;
     int randomInt(int min, int max);
     BoundingRectangle generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin);
-    void generateCorridors();
+    void generateCorridors(int corridorWidth);
 
 };
 
