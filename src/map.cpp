@@ -90,7 +90,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    int maxRectangles = 3;
+    int maxRectangles = 5;
     while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
@@ -480,7 +480,7 @@ void Map::generateCorridors()
         // // Construct path from room1 to room2
         // // start point in room1
         auto start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
-        auto end = room2->getBounds().getClosestPointTo(room1->getBounds().getCenterPoint());
+        auto end = room2->getBounds().getClosestPointTo(start);
         std::cout << "Start " << start<< " End "<< end << std::endl;
         // room1->print();
         // room2->print();
