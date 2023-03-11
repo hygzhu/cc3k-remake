@@ -60,3 +60,24 @@ void Corridor::addWall(Point p)
     std::shared_ptr<Entity> environment = EntityFactory::createEntity("Environment", p.getX(), p.getY()); 
     m_entities.push_back(environment);
 }
+
+void Corridor::removeEntitiesInRooms(std::vector<std::shared_ptr<Room>> rooms)
+{
+    //std::vector<std::shared_ptr<Entity>> filtered_out;
+
+    auto isInRoom = [&](std::shared_ptr<Entity> entity) { 
+        for(std::shared_ptr<Room> room : rooms){
+            if(room->getBounds().isCollidingWith(entity->getBoundingRectangle())){
+                return true;
+            }
+        }
+        return false;
+    };
+
+    //std::remove_copy_if(m_entities.begin(), m_entities.end(), std::back_inserter(filtered_out), isInRoom);
+
+    auto newEnd = std::remove_if(m_entities.begin(), m_entities.end(), isInRoom);
+    m_entities.erase(newEnd, m_entities.end());
+
+    //return filtered_out;
+}

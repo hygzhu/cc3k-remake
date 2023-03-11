@@ -26,10 +26,10 @@ add_executable(CC3K
     environment.cpp
     boundingrectangle.h
     boundingrectangle.cpp
-    room.h
-    room.cpp
     point.h
     point.cpp
+    room.h
+    room.cpp
     corridor.h
     corridor.cpp
 )

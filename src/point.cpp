@@ -161,3 +161,14 @@ std::vector<Point> Point::getSurroundingPoints()
     neighbours.push_back(Point(x-1, y-1));
     return neighbours;
 }
+
+std::vector<Point> Point::getCompassSurroundingPoints()
+{
+    std::vector<Point> neighbours;
+    int x = m_x, y = m_y;
+    neighbours.push_back(Point(x, y+1)); // up
+    neighbours.push_back(Point(x, y-1)); // down
+    neighbours.push_back(Point(x-1, y)); // left
+    neighbours.push_back(Point(x+1, y)); // right
+    return neighbours;
+}

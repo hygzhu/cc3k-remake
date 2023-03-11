@@ -28,8 +28,8 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
     int attempts = 0;
     do {
         attempts += 1;
-        rect.setWidth(randomInt(250, 500));
-        rect.setHeight(randomInt(250, 500));
+        rect.setWidth(randomInt(250, 750));
+        rect.setHeight(randomInt(250, 750));
         rect.setX(randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
         rect.setY(randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
         
@@ -450,6 +450,9 @@ void Map::generateCorridors()
         std::cout <<  std::endl;
     }
 
+
+    std::vector<Point> allDoorCenters;
+
     // For each pair we want to construct a path to the side pair
     // Get closest two points on a bounding rect to each pair, find closest wall n blocks away from both ends (now we have our door)
     for(auto pairs : mst){
@@ -479,9 +482,14 @@ void Map::generateCorridors()
 
         // // Construct path from room1 to room2
         // // start point in room1
-        auto start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
-        auto end = room2->getBounds().getClosestPointTo(start);
+        Point start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
+        Point end = room2->getBounds().getClosestPointTo(start);
         std::cout << "Start " << start<< " End "<< end << std::endl;
+        allDoorCenters.push_back(start);
+        allDoorCenters.push_back(end);
+
+
+
         // room1->print();
         // room2->print();
 
@@ -624,24 +632,23 @@ void Map::generateCorridors()
         }
 
         // Need to construct a path along this
-        std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>(path, 25);
-
-        // for (const auto& kv : seenPoints) {
-        //     const std::string& key = kv.first;
-        //     const Point& point = kv.second.first;
-        //     const int& count = kv.second.second;
-        //     if(count > 1){
-        //         //std::cout << "Key: " << key << ", Point: (" << point.getX() << ", " << point.getY() << "), Count: " << count << std::endl;
-        //         corridor->addWall(point);
-        //     }
-
-        // }
+        int corridor_width = 25;
+        std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>(path, corridor_width);
 
         m_corridors.push_back(corridor);
+    }
+    std::vector<std::shared_ptr<Entity>> entitiesInRooms;
+    
+    for(auto room : m_rooms)
+    {
+        room->generateDoors(m_corridors, allDoorCenters);
+    }
+    
 
-        
 
-
+    for(auto corridor : m_corridors)
+    {
+        corridor->removeEntitiesInRooms(m_rooms);
     }
 
 }

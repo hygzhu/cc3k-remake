@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <functional>
 
 class Point {
 public:
@@ -23,7 +24,17 @@ public:
     std::vector<Point> allPointsInEuclidianDistanceAway(int n);
     int manhattanDistanceFrom(Point b);
     std::vector<Point> getSurroundingPoints();
+    std::vector<Point> getCompassSurroundingPoints();
 
+    struct HashFunction
+    {
+        size_t operator()(const Point& point) const
+        {
+        size_t xHash = std::hash<int>()(point.getX());
+        size_t yHash = std::hash<int>()(point.getY()) << 1;
+        return xHash ^ yHash;
+        }
+    };
 
     static bool doLinesIntersect(Point p1, Point p2, Point q1, Point q2);
     static Point findIntersection(Point p1, Point p2, Point p3, Point p4);
@@ -33,6 +44,8 @@ private:
 
     int m_x;
     int m_y;
+
+
 };
 
 #endif
