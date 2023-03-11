@@ -40,7 +40,7 @@ void Room::print(){
 
 void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters){
 
-    std::cout << "Size of room entities before doors: " << m_entities.size() << std::endl;
+    //std::cout << "Size of room entities before doors: " << m_entities.size() << std::endl;
     std::vector<std::shared_ptr<Entity>> filtered_out;
 
     //Remove two points on each side of door touching corridor
@@ -60,13 +60,13 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
     m_entities.erase(newEnd, m_entities.end());
 
     // Run BFS to remove door from center spreading 
-    std::cout << "Filtered out items: " << filtered_out.size() << std::endl;
+    //std::cout << "Filtered out items: " << filtered_out.size() << std::endl;
 
     std::vector<Point> entityPoints;
     for(auto entity :filtered_out){
         Point entityPoint(entity->getX(), entity->getY());
         entityPoints.push_back(entityPoint);
-        entityPoint.print();
+        //entityPoint.print();
     }
 
 
@@ -75,7 +75,7 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
 
         if(m_bounds.isCollidingWithPoint(doorCenter)){
 
-            std::cout << "Found colliding room! " << std::endl;
+            //std::cout << "Found colliding room! " << std::endl;
             // m_bounds.print();
             // doorCenter.print();
             //BFS
@@ -123,7 +123,7 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
                 }
             }
 
-            std::cout << "Door tiles " << seen.size() << std::endl;
+            //std::cout << "Door tiles " << seen.size() << std::endl;
             // Delete all room entities in door points
             auto entityIsDoor = [&](std::shared_ptr<Entity> entity) { 
                 return seen.count(Point(entity->getX(), entity->getY())) > 0;
@@ -135,5 +135,5 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
 
 
 
-    std::cout << "Size of room entities after doors: " << m_entities.size() << std::endl;
+    //std::cout << "Size of room entities after doors: " << m_entities.size() << std::endl;
 }

@@ -90,7 +90,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    int maxRectangles = 8;
+    int maxRectangles = 2;
     while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
@@ -99,7 +99,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
         
         m_rooms.push_back(std::make_shared<Room>(rect));
 
-        std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
+        //std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
         if (numRectangles >= maxAttempts) {
             std::cerr << "Unable to generate " << numRectangles << " non-colliding rectangles." << std::endl;
             return;
@@ -170,7 +170,7 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
     int oldy = entity->getY();
 
     // non diagonal movements only
-    std::cout << x << " " << y << std::endl;
+    //std::cout << x << " " << y << std::endl;
     if(x!=0 && y != 0)
     {
         return false;
@@ -352,12 +352,12 @@ void Map::generateCorridors()
         adjList.push_back(partial);
     }
 
-    for (const auto& vec : adjList) {
-        for (const auto& elem : vec) {
-            std::cout << "(" << elem.first << ", " << elem.second << ") ";
-        }
-        std::cout << std::endl;
-    }
+    // for (const auto& vec : adjList) {
+    //     for (const auto& elem : vec) {
+    //         std::cout << "(" << elem.first << ", " << elem.second << ") ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     // minimum spanning tree using Prim's algorithm
     std::vector<bool> visited(n, false);
@@ -441,13 +441,13 @@ void Map::generateCorridors()
         }
     
     // print minimum spanning tree
-    for (auto pairs : mst) {
-        std::cout << "pairs: ";
-        for (auto coord : pairs) {
-            std::cout << "("<< coord.first << "," << coord.second  << ") ";
-        }
-        std::cout <<  std::endl;
-    }
+    // for (auto pairs : mst) {
+    //     std::cout << "pairs: ";
+    //     for (auto coord : pairs) {
+    //         std::cout << "("<< coord.first << "," << coord.second  << ") ";
+    //     }
+    //     std::cout <<  std::endl;
+    // }
 
 
     std::vector<Point> allDoorCenters;
@@ -483,7 +483,7 @@ void Map::generateCorridors()
         // // start point in room1
         Point start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
         Point end = room2->getBounds().getClosestPointTo(start);
-        std::cout << "Start " << start<< " End "<< end << std::endl;
+        //std::cout << "Start " << start<< " End "<< end << std::endl;
         allDoorCenters.push_back(start);
         allDoorCenters.push_back(end);
 
@@ -577,7 +577,7 @@ void Map::generateCorridors()
         while(!priority_queue.empty())
         {
             if(visitedBlocks > max_height*max_width){
-                std::cout << "Could not find path" << std::endl;
+                //std::cout << "Could not find path" << std::endl;
                 break;
             }
 
@@ -633,12 +633,12 @@ void Map::generateCorridors()
             //     // std::cout <<  std::endl;
             // }
         }
-        std::cout << "Path len " << path.size() << std::endl;
+        //std::cout << "Path len " << path.size() << std::endl;
 
 
         if(path.size()==0){
 
-            std::cout << "Path len is 0, skipping"  << std::endl;
+            //std::cout << "Path len is 0, skipping"  << std::endl;
             break;
         }
 
