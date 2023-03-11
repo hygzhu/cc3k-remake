@@ -141,7 +141,7 @@ Point Point::findIntersection(Point p1, Point p2, Point p3, Point p4) {
     else {
         double x_int = (y_intercept2 - y_intercept1) / (slope1 - slope2);
         double y_int = slope1 * x_int + y_intercept1;
-        std::cout << x_int << " AND " << y_int << std::endl;
+        //std::cout << x_int << " AND " << y_int << std::endl;
         return Point(x_int, y_int);
     }
 }

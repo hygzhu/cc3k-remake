@@ -90,7 +90,7 @@ Map::Map(std::shared_ptr<Entity> player): player(player){
     int margin = 50;
     int maxAttempts = 1000; // Maximum number of attempts to generate a non-colliding rectangle
     int numRectangles = 0;
-    int maxRectangles = 2;
+    int maxRectangles = 3;
     while (numRectangles < maxRectangles) {
         BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
@@ -431,7 +431,7 @@ void Map::generateCorridors()
                 }
                 //std::cout <<"neighbour_index " << neighbour_index << " !visited[neighbour_index] " << !visited[neighbour_index]  <<" !overlaps " <<!overlaps << std::endl;
                 if (!visited[neighbour_index] and !overlaps) {
-                    int new_dist = adjList[node][neighbour_index].second;
+                    int new_dist = adjList[neighbour][neighbour_index].second;
                     auto tup= std::make_tuple<int,int,int>(0,0,0);
                     std::get<0>(tup) = new_dist;
                     std::get<1>(tup) = neighbour;
