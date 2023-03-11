@@ -9,6 +9,7 @@
 class Corridor {
 public:
     Corridor();
+    Corridor(std::vector<Point> points, int size);
     std::vector<std::shared_ptr<Entity>>& getEntities();
     void addWall(Point p);
     void print();

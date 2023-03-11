@@ -375,14 +375,14 @@ void Map::generateCorridors()
 
 
             // print out all the elements in the copy of the priority queue
-            std::cout << "PQ:\n";
-            std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>,  decltype(cmp)> pq_copy = pq;
-            while (!pq_copy.empty()) {
-                std::tuple<int, int, int> element = pq_copy.top();
-                pq_copy.pop();
-                std::cout << "(" << std::get<0>(element) << ", " << std::get<1>(element) << ", " << std::get<2>(element) << ")";
-            }
-            std::cout << "\n";
+            // std::cout << "PQ:\n";
+            // std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>,  decltype(cmp)> pq_copy = pq;
+            // while (!pq_copy.empty()) {
+            //     std::tuple<int, int, int> element = pq_copy.top();
+            //     pq_copy.pop();
+            //     std::cout << "(" << std::get<0>(element) << ", " << std::get<1>(element) << ", " << std::get<2>(element) << ")";
+            // }
+            // std::cout << "\n";
 
             int node = std::get<1>(pq.top());
             int neighbour = std::get<2>(pq.top());
@@ -416,16 +416,16 @@ void Map::generateCorridors()
                         Point intersection = Point::findIntersection(a,b,c,d);
                         if(!(a==intersection || b==intersection || c == intersection || d == intersection))
                         {
-                            a.print();
-                            b.print();
-                            c.print();
-                            d.print();
-                            intersection.print();
+                            // a.print();
+                            // b.print();
+                            // c.print();
+                            // d.print();
+                            // intersection.print();
                             overlaps = true;
                         }
                     }
                     if(overlaps){
-                        std::cout << "OVERLAPS " << std::endl;
+                        // std::cout << "OVERLAPS " << std::endl;
                         break;
                     }
                 }
@@ -624,54 +624,7 @@ void Map::generateCorridors()
         }
 
         // Need to construct a path along this
-
-        // std::unordered_map<std::string, std::pair<Point, int>> seenPoints;
-        // std::vector<Point> borderPoints = path[0].allPointsInEuclidianDistanceAway(buffer);
-        // for (Point p : borderPoints)
-        // {   
-        //     auto search = seenPoints.find(p.toString());
-        //     if(search == seenPoints.end()){
-        //         std::pair<Point, int> point_occurances = std::make_pair(p,1);
-        //         seenPoints.emplace(p.toString(), point_occurances);
-        //     }
-        // }
-        // Point prevPoint = path[0];
-
-        // std::cout << "initial border points = " << borderPoints.size() << std::endl;
-        // for(int i = 1; i < path.size();++i){
-        //     int dx = path[i].getX() - prevPoint.getX();
-        //     int dy = path[i].getY() - prevPoint.getY();
-
-        //     std::vector<Point> borderPointsCopy(borderPoints);
-
-        //     for (Point& p : borderPointsCopy)
-        //     {   
-        //         p.setX(p.getX()+dx);
-        //         p.setY(p.getY()+dy);
-        //     }
-        //     for (Point& p : borderPointsCopy)
-        //     {   
-        //         auto search = seenPoints.find(p.toString());
-        //         if(search != seenPoints.end()){
-        //             //Exists in seen
-        //             auto count = search->second.second +1;
-        //             std::pair<Point, int> point_occurances = std::make_pair(p,count);
-        //             seenPoints[p.toString()] =  point_occurances;
-        //         }else{
-        //             //does not exist in seen
-        //             std::pair<Point, int> point_occurances = std::make_pair(p,1);
-        //             seenPoints.emplace(p.toString(), point_occurances);
-        //         }
-        //     }
-        //     borderPoints = borderPointsCopy;
-        // }
-
-
-        std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>();
-        for(auto point : path)
-        {
-            corridor->addWall(point);
-        }
+        std::shared_ptr<Corridor> corridor = std::make_shared<Corridor>(path, 25);
 
         // for (const auto& kv : seenPoints) {
         //     const std::string& key = kv.first;

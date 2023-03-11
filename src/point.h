@@ -22,6 +22,7 @@ public:
     std::vector<Point> allPointsInManhattanDistanceAway(int n);
     std::vector<Point> allPointsInEuclidianDistanceAway(int n);
     int manhattanDistanceFrom(Point b);
+    std::vector<Point> getSurroundingPoints();
 
 
     static bool doLinesIntersect(Point p1, Point p2, Point q1, Point q2);

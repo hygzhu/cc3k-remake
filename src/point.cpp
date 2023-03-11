@@ -145,3 +145,19 @@ Point Point::findIntersection(Point p1, Point p2, Point p3, Point p4) {
         return Point(x_int, y_int);
     }
 }
+
+
+std::vector<Point> Point::getSurroundingPoints()
+{
+    std::vector<Point> neighbours;
+    int x = m_x, y = m_y;
+    neighbours.push_back(Point(x, y+1)); // up
+    neighbours.push_back(Point(x, y-1)); // down
+    neighbours.push_back(Point(x-1, y)); // left
+    neighbours.push_back(Point(x+1, y)); // right
+    neighbours.push_back(Point(x+1, y+1));
+    neighbours.push_back(Point(x+1, y-1));
+    neighbours.push_back(Point(x-1, y+1));
+    neighbours.push_back(Point(x-1, y-1));
+    return neighbours;
+}
