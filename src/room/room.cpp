@@ -15,7 +15,7 @@ Room::Room(BoundingRectangle rect) :m_bounds(rect)
         {
             if (i == 0 || j == 0 || i == rect.getWidth()  || j == rect.getHeight() )
             {   
-                std::shared_ptr<Entity> environment = EntityFactory::createEntity("Environment", rect.getX()+i, rect.getY()+j); 
+                std::shared_ptr<Entity> environment = EntityFactory::createEntity(EntityFactory::EntityType::WALL, rect.getX()+i, rect.getY()+j); 
                 m_entities.push_back(environment);
             }
         }

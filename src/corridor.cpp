@@ -57,7 +57,7 @@ std::vector<std::shared_ptr<Entity> >& Corridor::getEntities(){
 
 void Corridor::addWall(Point p)
 {
-    std::shared_ptr<Entity> environment = EntityFactory::createEntity("Environment", p.getX(), p.getY()); 
+    std::shared_ptr<Entity> environment = EntityFactory::createEntity(EntityFactory::EntityType::WALL, p.getX(), p.getY()); 
     m_entities.push_back(environment);
 }
 

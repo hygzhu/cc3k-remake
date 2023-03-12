@@ -1,5 +1,6 @@
 #include "map.h"
 #include "entity/entityfactory.h"
+#include "room/roomfactory.h"
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -100,7 +101,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
             break;
         }
         
-        m_rooms.push_back(std::make_shared<Room>(rect));
+        m_rooms.push_back(RoomFactory::createRoom(RoomFactory::RoomType::COMMON, rect));
 
         //std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ", " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight() << ")" << std::endl;
         if (numRectangles >= maxAttempts) {

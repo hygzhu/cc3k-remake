@@ -8,7 +8,8 @@
 
 class EntityFactory {
 public:
-    static std::shared_ptr<Entity> createEntity(const std::string& entityType, int x, int y);
+    enum EntityType { WALL = 0, GOBLIN = 1};
+    static std::shared_ptr<Entity> createEntity(EntityType entitytype, int x, int y);
 };
 
 #endif
