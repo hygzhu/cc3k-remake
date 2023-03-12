@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "boundingrectangle.h"
+#include "../geometry/boundingrectangle.h"
 
 struct RGBA {
     unsigned char red;

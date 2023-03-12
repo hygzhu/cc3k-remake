@@ -1,5 +1,5 @@
 #include "game.h"
-#include "player.h"
+#include "entity/player.h"
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL_image.h>
 #include <stdio.h>
@@ -50,16 +50,13 @@ int Game::start()
                     quit = true;
                     break;
                 case SDL_KEYDOWN:
-                    std::cout << "DOWN" << std::endl;
                     downKeys[event.key.keysym.scancode] = true;
                     break;
                 case SDL_KEYUP:
-                    std::cout << "UP" << std::endl;
                     downKeys[event.key.keysym.scancode] = false;
                     break;
             }
         }
-
 
         if (downKeys[SDL_SCANCODE_LEFT])
         {
@@ -87,28 +84,6 @@ int Game::start()
         if((!downKeys[SDL_SCANCODE_UP] && !downKeys[SDL_SCANCODE_DOWN])||downKeys[SDL_SCANCODE_UP] && downKeys[SDL_SCANCODE_DOWN]){
             player->getAccelY() = 0;
         }
-
-
-        // if (upKeys[SDL_SCANCODE_LEFT])
-        // {
-        //     std::cout << "LEFT up" <<std::endl;
-        // }
-
-        // if (upKeys[SDL_SCANCODE_RIGHT])
-        // {
-            
-        //     std::cout << "right up" <<std::endl;
-        // }
-
-        // if (upKeys[SDL_SCANCODE_UP])
-        // {
-        //     std::cout << "up down" <<std::endl;
-        // }
-
-        // if (upKeys[SDL_SCANCODE_DOWN])
-        // {
-        //     // Move player down
-        // }
 
         // Update player position
         int playerVelX = player->getAccelX() * frameDelay / 1000;

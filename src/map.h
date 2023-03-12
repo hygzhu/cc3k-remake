@@ -3,11 +3,11 @@
 
 #include <vector>
 #include <memory>
-#include "entity.h"
+#include "entity/entity.h"
 #include <utility>
-#include "room.h"
+#include "room/room.h"
 
-#include "boundingrectangle.h"
+#include "geometry/boundingrectangle.h"
 #include "corridor.h"
 
 class Map {

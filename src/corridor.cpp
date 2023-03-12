@@ -1,6 +1,6 @@
 #include "corridor.h"
 #include <string>
-#include "entityfactory.h"
+#include "entity/entityfactory.h"
 #include <deque>
 #include <unordered_set>
 #include <iostream>

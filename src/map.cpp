@@ -1,5 +1,5 @@
 #include "map.h"
-#include "entityfactory.h"
+#include "entity/entityfactory.h"
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -57,7 +57,9 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
 
 
 Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corridorWidth): player(player){
+
     std::cout << "Generating map with at most " << numRooms << " Rooms" << std::endl;
+
     const int MAP_HEIGHT = 700;
     const int MAP_WIDTH = 700;
     const int MAX_MAP_HEIGHT = 2000;

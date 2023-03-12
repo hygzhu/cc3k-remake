@@ -1,12 +1,12 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include "corridor.h"
-#include "boundingrectangle.h"
-#include "entity.h"
+#include "../corridor.h"
+#include "../geometry/boundingrectangle.h"
+#include "../entity/entity.h"
 #include <vector>
 #include <memory>
-#include "point.h"
+#include "../geometry/point.h"
 
 class Corridor;
 

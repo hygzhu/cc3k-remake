@@ -1,6 +1,6 @@
 #include "room.h"
 #include <string>
-#include "entityfactory.h"
+#include "../entity/entityfactory.h"
 #include <iostream>
 #include <unordered_set>
 #include <deque>
@@ -100,6 +100,12 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
                 Point curr = queue.front();
                 queue.pop_front();
                 seen.insert(curr);
+
+                // STUPID hack to break out of BFS in case something goes wrong (It might?)
+                if(seen.size() > m_entities.size())
+                {
+                    break;
+                }
 
                 for(Point neighbour : curr.getCompassSurroundingPoints()){
                     bool notSeenBefore = !(seen.count(neighbour) > 0);

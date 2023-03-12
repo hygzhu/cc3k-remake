@@ -8,40 +8,19 @@ project(CC3K)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
+# Generate a list of all the source files in your project directory and its subdirectories
+file(GLOB_RECURSE SOURCES "*.cpp" "*.h")
+
 add_executable(CC3K 
-    main.cpp
-    player.h
-    player.cpp
-    game.h
-    game.cpp
-    map.cpp
-    map.h
-    goblin.cpp
-    goblin.h
-    entity.h
-    entity.cpp
-    entityfactory.cpp
-    entityfactory.h
-    environment.h
-    environment.cpp
-    boundingrectangle.h
-    boundingrectangle.cpp
-    point.h
-    point.cpp
-    room.h
-    room.cpp
-    corridor.h
-    corridor.cpp
+    ${SOURCES}
 )
 
-add_library(CC3K_lib
-    boundingrectangle.h
-    boundingrectangle.cpp
-    point.h
-    point.cpp
-)
-# Set include directories for this library
-target_include_directories(CC3K_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+add_subdirectory(entity)
+add_subdirectory(geometry)
+add_subdirectory(room)
+
 
 include_directories(CC3K ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 target_link_libraries(CC3K ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})

@@ -1,11 +1,11 @@
 #ifndef CORRIDOR_H
 #define CORRIDOR_H
 
-#include "room.h"
-#include "entity.h"
+#include "room/room.h"
+#include "entity/entity.h"
 #include <vector>
 #include <memory>
-#include "point.h"
+#include "geometry/point.h"
 
 class Room;
 
