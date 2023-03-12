@@ -14,10 +14,12 @@ class Room{
 public:
     Room(BoundingRectangle rect);
     BoundingRectangle getBounds();
-    const std::vector<std::shared_ptr<Entity> >& getEntities();
+
+    virtual std::vector<std::shared_ptr<Entity> >& getEntities() = 0;
+
     void generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters);
     void print();
-private:
+protected:
     BoundingRectangle m_bounds;
     std::vector<std::shared_ptr<Entity> > m_entities;
 

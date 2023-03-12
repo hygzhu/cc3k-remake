@@ -5,20 +5,12 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
-#include <random>
 #include <utility>
 #include <queue>
 #include <cmath>
 #include <unordered_map>
 #include <tuple>
-
-// Function to generate a random integer within a range
-int Map::randomInt(int min, int max) {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(min, max);
-    return distrib(gen);
-}
+#include "utils/random.h"
 
 
 // Function to generate a random non-colliding rectangle within a larger rectangle
@@ -29,10 +21,10 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
     int attempts = 0;
     do {
         attempts += 1;
-        rect.setWidth(randomInt(250, 750));
-        rect.setHeight(randomInt(250, 750));
-        rect.setX(randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
-        rect.setY(randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
+        rect.setWidth(Random::randomInt(250, 750));
+        rect.setHeight(Random::randomInt(250, 750));
+        rect.setX(Random::randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
+        rect.setY(Random::randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
         
         // Check if the rectangle collides with any existing rectangles
         collides = false;
@@ -75,7 +67,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     // Generate starting room
     std::cout << "Generating rooms" << std::endl;
     BoundingRectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
-    m_rooms.push_back(std::make_shared<Room>(startRect));
+    m_rooms.push_back(RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect));
 
     player->setX(MAX_MAP_WIDTH/2 + starting_zone/2);
     player->setY(MAX_MAP_HEIGHT/2 + starting_zone/2);

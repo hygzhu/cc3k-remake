@@ -1,5 +1,6 @@
 #include "roomfactory.h"
 #include "commonroom.h"
+#include "startingroom.h"
 
 std::shared_ptr<Room> RoomFactory::createRoom(RoomType roomtype, BoundingRectangle bounds) {
 
@@ -7,7 +8,9 @@ std::shared_ptr<Room> RoomFactory::createRoom(RoomType roomtype, BoundingRectang
         return std::make_shared<CommonRoom>(bounds);
     } else if (roomtype == RoomType::UNCOMMON) {
         return nullptr;
-    } else {
+    } else if (roomtype == RoomType::STARTING) {
+        return std::make_shared<StartingRoom>(bounds);
+    }else {
         return nullptr;
     }
 }

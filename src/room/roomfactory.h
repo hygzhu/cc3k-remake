@@ -7,7 +7,7 @@
 
 class RoomFactory {
 public:
-    enum RoomType{ COMMON = 0, UNCOMMON = 1};
+    enum RoomType{ STARTING = 0, COMMON = 1, UNCOMMON = 2};
     static std::shared_ptr<Room> createRoom(RoomType roomType, BoundingRectangle bounds);
 };
 

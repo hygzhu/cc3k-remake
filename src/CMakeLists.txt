@@ -15,11 +15,10 @@ add_executable(CC3K
     ${SOURCES}
 )
 
-
-
 add_subdirectory(entity)
 add_subdirectory(geometry)
 add_subdirectory(room)
+add_subdirectory(utils)
 
 
 include_directories(CC3K ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})

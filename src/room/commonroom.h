@@ -7,6 +7,7 @@ class CommonRoom : public Room {
 public:
     CommonRoom(BoundingRectangle rect);
     
+    virtual std::vector<std::shared_ptr<Entity> >& getEntities();
 
 private:
 };
