@@ -22,6 +22,9 @@ Room::Room(BoundingRectangle rect) :m_bounds(rect)
     }
 }
 
+std::vector<std::shared_ptr<Entity> >& Room::getEntities(){
+    return m_entities;
+}
 
 BoundingRectangle Room::getBounds()
 {
@@ -138,4 +141,10 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
 
 
     //std::cout << "Size of room entities after doors: " << m_entities.size() << std::endl;
+}
+
+
+std::vector<std::shared_ptr<Entity> > Room::getMovingEntities(){
+    std::vector<std::shared_ptr<Entity> > ret;
+    return ret;
 }

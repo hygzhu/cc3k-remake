@@ -28,7 +28,7 @@ int Game::start()
 {
     RGBA playerColor = { 255, 0, 0, 255 };
     std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
-    m_map = std::make_shared<Map>(player,2,40,25);
+    m_map = std::make_shared<Map>(player,1,40,25);
     bool quit = false;
     SDL_Event event;
 
@@ -85,14 +85,9 @@ int Game::start()
             player->getAccelY() = 0;
         }
 
-        // Update player position
-        int playerVelX = player->getAccelX() * frameDelay / 1000;
-        int playerVelY = player->getAccelY() * frameDelay / 1000;
-        if(playerVelX != 0 || playerVelY != 0 ){
-            new_location = m_map->movableLocationCloseTo(playerVelX,playerVelY,player);
-            player->move(new_location.first, new_location.second);
-        }
-        
+        // Update all movable entity location
+        double frame_delay = static_cast<double>(frameDelay) / 1000;
+        m_map->updateAllMovableEntityLocations(frame_delay);
 
         render();
 

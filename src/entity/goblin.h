@@ -8,6 +8,7 @@ public:
     Goblin(int x, int y);
     virtual void move(int dx, int dy);
     
+    void setMovement();
     virtual void printEntityType();
 };
 

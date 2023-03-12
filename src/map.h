@@ -16,12 +16,15 @@ public:
     ~Map();
     std::vector<std::shared_ptr<Entity> > & getEntities();
     std::vector<std::shared_ptr<Entity> > getViewboxEntities();
+    std::vector<std::shared_ptr<Entity> > getMovingEntities();
     int getWidth();
     int getHeight();
     bool canEntityMove(int x, int y, std::shared_ptr<Entity> entity);
     std::pair<int,int> movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity);
     bool doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity);
     BoundingRectangle getViewBox();
+
+    void updateAllMovableEntityLocations(double time);
 
 private:
     std::vector<std::shared_ptr<Entity> > entities;

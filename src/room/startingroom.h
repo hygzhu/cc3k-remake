@@ -6,7 +6,7 @@
 class StartingRoom : public Room {
 public:
     StartingRoom(BoundingRectangle rect);
-    std::vector<std::shared_ptr<Entity> >& getEntities();
+    std::vector<std::shared_ptr<Entity> > getEntitiesToBeRendered();
 
 private:
 };

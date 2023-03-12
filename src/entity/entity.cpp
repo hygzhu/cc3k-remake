@@ -7,3 +7,7 @@ BoundingRectangle Entity::getBoundingRectangle()
 {
     return BoundingRectangle(x_,y_,size_,size_);
 }
+
+void Entity::setMovement(){
+    //Do nothing if not overidden
+}

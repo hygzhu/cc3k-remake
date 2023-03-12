@@ -16,15 +16,16 @@ public:
     virtual ~Entity() {}
     virtual void move(int x, int y) = 0;
     virtual void printEntityType() = 0;
+    virtual void setMovement();
     int getX() const { return x_; }
     int getY() const { return y_; }
     void setX(int x) { x_ = x; }
     void setY(int y) { y_ = y; }
     BoundingRectangle getBoundingRectangle();
+
+
     int & getAccelX(){ return m_accelx;}
     int & getAccelY(){return m_accely;}
-    int & getVelX(){return m_velx;}
-    int & getVelY(){return m_vely;}
 
 
     int getSize() const {return size_;}
@@ -34,8 +35,6 @@ protected:
     int y_;
     int m_accelx;
     int m_accely;
-    int m_velx;
-    int m_vely;
     int size_;
     RGBA color_;
 };

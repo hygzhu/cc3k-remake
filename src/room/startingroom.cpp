@@ -5,6 +5,6 @@ StartingRoom::StartingRoom(BoundingRectangle rect): Room(rect){
 }
 
 
-std::vector<std::shared_ptr<Entity> >& StartingRoom::getEntities(){
+std::vector<std::shared_ptr<Entity> > StartingRoom::getEntitiesToBeRendered(){
     return m_entities;
 }

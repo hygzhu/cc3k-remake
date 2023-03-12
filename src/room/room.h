@@ -15,7 +15,11 @@ public:
     Room(BoundingRectangle rect);
     BoundingRectangle getBounds();
 
-    virtual std::vector<std::shared_ptr<Entity> >& getEntities() = 0;
+    std::vector<std::shared_ptr<Entity> >& getEntities();
+
+    virtual std::vector<std::shared_ptr<Entity> > getMovingEntities();
+
+    virtual std::vector<std::shared_ptr<Entity> > getEntitiesToBeRendered() = 0;
 
     void generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters);
     void print();

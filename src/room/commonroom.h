@@ -7,9 +7,12 @@ class CommonRoom : public Room {
 public:
     CommonRoom(BoundingRectangle rect);
     
-    virtual std::vector<std::shared_ptr<Entity> >& getEntities();
+    std::vector<std::shared_ptr<Entity> > getEntitiesToBeRendered();
+
+    std::vector<std::shared_ptr<Entity> > getMovingEntities();
 
 private:
+    std::vector<std::shared_ptr<Entity> > m_enemies;
 };
 
 #endif

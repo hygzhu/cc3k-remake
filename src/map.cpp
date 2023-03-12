@@ -67,7 +67,8 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     // Generate starting room
     std::cout << "Generating rooms" << std::endl;
     BoundingRectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
-    m_rooms.push_back(RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect));
+    std::shared_ptr<Room> room = RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect);
+    m_rooms.push_back(room);
 
     player->setX(MAX_MAP_WIDTH/2 + starting_zone/2);
     player->setY(MAX_MAP_HEIGHT/2 + starting_zone/2);
@@ -319,7 +320,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
     for(auto room : m_rooms)
     {
         if(room->getBounds().isCollidingWith(getViewBox())){
-            for(const auto& roomEntity : room->getEntities())
+            for(const auto& roomEntity : room->getEntitiesToBeRendered())
             {
                 if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
                 {
@@ -701,4 +702,40 @@ void Map::generateCorridors(int corridorWidth)
         corridor->removeEntitiesInRooms(m_rooms);
     }
 
+}
+
+
+void Map::updateAllMovableEntityLocations(double time){
+
+    for(std::shared_ptr<Entity> movingEntity : getMovingEntities()){
+
+        movingEntity->setMovement();
+        int entityVelX = movingEntity->getAccelX() * time;
+        int entityVelY = movingEntity->getAccelY() * time;
+
+        // std::cout << time << " "<< entityVelX << " " <<  entityVelY << std::endl;
+        if(entityVelX != 0 || entityVelY != 0 ){
+
+
+            // std::cout << "OLD LOCATION AT "<< movingEntity->getX() << " " <<  movingEntity->getY() << std::endl;
+            std::pair<int,int> new_location = movableLocationCloseTo(entityVelX,entityVelY,movingEntity);
+
+            //  std::cout << "MOVING TO "<< new_location.first << " " <<  new_location.second << std::endl;
+            movingEntity->move(new_location.first, new_location.second);
+        }
+
+    }
+}
+
+
+std::vector<std::shared_ptr<Entity> > Map::getMovingEntities()
+{
+    std::vector<std::shared_ptr<Entity>> result;
+    result.push_back(player);
+    for(std::shared_ptr<Room> room : m_rooms){
+        for(auto entity : room->getMovingEntities()){
+            result.push_back(entity);
+        }
+    }
+    return result;
 }
