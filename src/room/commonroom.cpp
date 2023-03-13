@@ -12,7 +12,7 @@ CommonRoom::CommonRoom(BoundingRectangle rect): Room(rect){
     const int num_enemies = Random::randomInt(min_entities, max_entities);
 
     const int wall_buffer = 10;
-    rect.print();
+    //rect.print();
 
     for(int i = 0; i< num_enemies; ++i){
 
@@ -20,7 +20,7 @@ CommonRoom::CommonRoom(BoundingRectangle rect): Room(rect){
         const int y = Random::randomInt(rect.getY()+wall_buffer, rect.getY() + rect.getHeight() - wall_buffer);
         m_enemies.push_back(EntityFactory::createEntity(EntityFactory::EntityType::GOBLIN, x, y));
     }
-    std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
+    // std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
 }
 
 

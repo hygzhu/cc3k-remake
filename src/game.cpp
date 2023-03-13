@@ -36,6 +36,7 @@ int Game::start()
     const int frameDelay = 1000 / fps;
     Uint32 frameStart;
     int frameTime;
+    int ticks = 0;
 
     bool downKeys[SDL_NUM_SCANCODES] = { false };
     while (!quit) {
@@ -93,9 +94,16 @@ int Game::start()
 
         // Control game loop timing
         frameTime = SDL_GetTicks() - frameStart;
+    
         if (frameDelay > frameTime)
-        {
+        {   
+            ticks++;
             SDL_Delay(frameDelay - frameTime);
+        }
+
+        if(ticks == fps){
+            ticks =0;
+            std::cout << "Map entities " << m_map->getAllEntities().size() << std::endl;
         }
     }
     return 0;
