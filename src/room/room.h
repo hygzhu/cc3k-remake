@@ -15,7 +15,7 @@ public:
     Room(BoundingRectangle rect);
     BoundingRectangle getBounds();
 
-    std::vector<std::shared_ptr<Entity> >& getEntities();
+    virtual std::vector<std::shared_ptr<Entity> >& getEntities();
 
     virtual std::vector<std::shared_ptr<Entity> > getMovingEntities();
 

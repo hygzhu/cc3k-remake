@@ -14,7 +14,7 @@ CommonRoom::CommonRoom(BoundingRectangle rect): Room(rect){
     const int wall_buffer = 10;
     //rect.print();
 
-    for(int i = 0; i< num_enemies; ++i){
+    for(int i = 0; i<num_enemies; ++i){
 
         const int x = Random::randomInt(rect.getX()+wall_buffer, rect.getX() + rect.getWidth() - wall_buffer);
         const int y = Random::randomInt(rect.getY()+wall_buffer, rect.getY() + rect.getHeight() - wall_buffer);

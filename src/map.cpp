@@ -106,7 +106,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     }
 
     //paths
-    generateCorridors(corridorWidth);
+    //generateCorridors(corridorWidth);
 }
 
 Map::~Map() {}
@@ -134,8 +134,11 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
     int entity_x2 = entity_x + entity->getSize()-1;
     int entity_y2 = entity_y + entity->getSize()-1;
 
+    bool collidableEntityFound = false;
+
     for(const auto& otherEntity : getAllEntities())
     {
+
         if(otherEntity == entity)
         {
             continue;
@@ -154,10 +157,26 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             //std::cout <<  "Curr " << entity_x << " " << entity_y << " " << entity_x2 << " " << entity_y2 <<std::endl;
             //std::cout << "Other "  << other_entity_x << " " << other_entity_y << " " << other_entity_x2 << " " << other_entity_y2 <<std::endl;
             //otherEntity->printEntityType();
-            return true;
+
+            if(otherEntity->collidable()){
+                //std::cout << "collidableEntityFound" << std::endl;
+                //otherEntity->printEntityType();
+                collidableEntityFound = true;
+            }else{
+                //std::cout << "noncollidableEntityFound" << std::endl;
+                //otherEntity->printEntityType();
+                return true;
+            }
         }
     }
-    return false;
+
+    //std::cout << "collidableEntityFound" << std::endl;
+    if(collidableEntityFound){
+        //std::cout << "can collid is true" << std::endl;
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -320,7 +339,12 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
     // Render rooms
     for(auto room : m_rooms)
     {
+
+
+        //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
+        //std::cout << "total entities " << room->getEntities().size() << std::endl;
         if(room->getBounds().isCollidingWith(getViewBox())){
+
             for(const auto& roomEntity : room->getEntitiesToBeRendered())
             {
                 if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))

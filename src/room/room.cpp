@@ -8,18 +8,25 @@
 
 Room::Room(BoundingRectangle rect) :m_bounds(rect)
 {
+    // generate floor
+    std::shared_ptr<Entity> floor = EntityFactory::createRectangularEntity(EntityFactory::EntityType::FLOOR, rect); 
+    m_entities.push_back(floor);
+
+    //std::cout << "Entities size " << m_entities.size() << std::endl;
+
+
     //generate border for rectangle
-    for(int i = 0; i<= rect.getWidth(); i++)
-    {
-        for(int j = 0; j<= rect.getHeight(); j++)
-        {
-            if (i == 0 || j == 0 || i == rect.getWidth()  || j == rect.getHeight() )
-            {   
-                std::shared_ptr<Entity> environment = EntityFactory::createEntity(EntityFactory::EntityType::WALL, rect.getX()+i, rect.getY()+j); 
-                m_entities.push_back(environment);
-            }
-        }
-    }
+    // for(int i = 0; i<= rect.getWidth(); i++)
+    // {
+    //     for(int j = 0; j<= rect.getHeight(); j++)
+    //     {
+    //         if (i == 0 || j == 0 || i == rect.getWidth()  || j == rect.getHeight() )
+    //         {   
+    //             std::shared_ptr<Entity> environment = EntityFactory::createEntity(EntityFactory::EntityType::WALL, rect.getX()+i, rect.getY()+j); 
+    //             m_entities.push_back(environment);
+    //         }
+    //     }
+    // }
 }
 
 std::vector<std::shared_ptr<Entity> >& Room::getEntities(){

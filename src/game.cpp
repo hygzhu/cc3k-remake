@@ -131,11 +131,12 @@ void Game::render()
         SDL_Rect rect = { 
         static_cast<int>((entity->getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
         static_cast<int>((entity->getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
-        static_cast<int>(entity->getSize()*BLOCK_WIDTH), 
-        static_cast<int>(entity->getSize()*BLOCK_HEIGHT)};
+        static_cast<int>(entity->getWidth()*BLOCK_WIDTH), 
+        static_cast<int>(entity->getHeight()*BLOCK_HEIGHT)};
         RGBA entityColor = entity->getColor();
         SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
         SDL_RenderFillRect(m_renderer, &rect);
+        // entity->printEntityType();
     }
 
     SDL_RenderPresent(m_renderer);
