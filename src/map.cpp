@@ -133,6 +133,8 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
     int entity_y = y;
     int entity_x2 = entity_x + entity->getSize()-1;
     int entity_y2 = entity_y + entity->getSize()-1;
+    int width = entity->getWidth();
+    int height = entity->getHeight();
 
     bool collidableEntityFound = false;
 
@@ -158,10 +160,13 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             //std::cout << "Other "  << other_entity_x << " " << other_entity_y << " " << other_entity_x2 << " " << other_entity_y2 <<std::endl;
             //otherEntity->printEntityType();
 
-            if(otherEntity->collidable()){
+            if(otherEntity->collidable() && otherEntity->getBoundingRectangle().surrounds(BoundingRectangle(x,y,width,height))){
                 //std::cout << "collidableEntityFound" << std::endl;
                 //otherEntity->printEntityType();
+
+                // check if it surrounds
                 collidableEntityFound = true;
+
             }else{
                 //std::cout << "noncollidableEntityFound" << std::endl;
                 //otherEntity->printEntityType();

@@ -10,6 +10,7 @@ class BoundingRectangle {
 public:
     BoundingRectangle(int x, int y, int width, int height);
     bool isCollidingWith(const BoundingRectangle& other) const;
+    bool surrounds(const BoundingRectangle& other) const;
     bool isCollidingWithPoint(const Point& point) const;
     BoundingRectangle getIntersection(const BoundingRectangle& other) const;
 

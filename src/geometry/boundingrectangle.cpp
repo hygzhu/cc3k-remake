@@ -165,3 +165,12 @@ void BoundingRectangle::print() const {
 std::string BoundingRectangle::toString(){
     return "( x:" + std::to_string(m_x) + ", y: " + std::to_string(m_y) + ", w: " + std::to_string(m_width) + ", h: " + std::to_string(m_height) + ")" ;
 }
+
+bool BoundingRectangle::surrounds(const BoundingRectangle& other) const{
+    if (m_x <= other.getX() &&  other.getX() + other.getWidth() <= m_x+m_width &&
+    m_y <= other.getY() &&  other.getY() + other.getHeight() <= m_y+m_height
+    ){
+        return true;
+    }
+    return false;
+}
