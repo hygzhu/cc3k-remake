@@ -134,7 +134,7 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
     int entity_x2 = entity_x + entity->getSize()-1;
     int entity_y2 = entity_y + entity->getSize()-1;
 
-    for(const auto& otherEntity : getViewboxEntities())
+    for(const auto& otherEntity : getAllEntities())
     {
         if(otherEntity == entity)
         {
@@ -209,7 +209,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
     if(x!=0 && y != 0)
     {   
         //even diagonal movements only
-        if(std::abs(x)!= std::abs(y)){
+        if(std::abs(x) !=  std::abs(y)){
             return moveable_location;
         }
         for(int i =0; i<=std::abs(x); ++i){
@@ -250,6 +250,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
                 }
             }
         }
+        return moveable_location;
     }
 
     if(x!=0){
@@ -737,5 +738,39 @@ std::vector<std::shared_ptr<Entity> > Map::getMovingEntities()
             result.push_back(entity);
         }
     }
+    return result;
+}
+
+
+std::vector<std::shared_ptr<Entity> > Map::getAllEntities(){
+    std::vector<std::shared_ptr<Entity>> result;
+
+    result.push_back(player);
+    //Rooms
+    for(auto room : m_rooms)
+    {
+        for(const auto& roomEntity : room->getEntitiesToBeRendered())
+        {
+            result.push_back(roomEntity);
+        }
+        
+    }
+
+    // corridors
+    for(auto corridor : m_corridors)
+    {
+        for(const auto& wall : corridor->getEntities())
+        {
+            result.push_back(wall);
+        }
+    }
+    
+    //Render misc entities
+    for(auto entity : entities)
+    {
+        result.push_back(entity);
+    }
+
+
     return result;
 }

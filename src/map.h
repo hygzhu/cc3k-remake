@@ -17,6 +17,7 @@ public:
     std::vector<std::shared_ptr<Entity> > & getEntities();
     std::vector<std::shared_ptr<Entity> > getViewboxEntities();
     std::vector<std::shared_ptr<Entity> > getMovingEntities();
+    std::vector<std::shared_ptr<Entity> > getAllEntities();
     int getWidth();
     int getHeight();
     bool canEntityMove(int x, int y, std::shared_ptr<Entity> entity);

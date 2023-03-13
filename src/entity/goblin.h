@@ -10,6 +10,8 @@ public:
     
     void setMovement();
     virtual void printEntityType();
+private:
+    int m_inMovement;
 };
 
 #endif
