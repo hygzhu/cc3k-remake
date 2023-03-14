@@ -18,8 +18,9 @@ public:
     virtual std::vector<std::shared_ptr<Entity> >& getEntities();
 
     virtual std::vector<std::shared_ptr<Entity> > getMovingEntities();
+    virtual std::vector<std::shared_ptr<Entity> > getNonMovingEntities();
 
-    virtual std::vector<std::shared_ptr<Entity> > getEntitiesToBeRendered() = 0;
+    virtual std::vector<std::shared_ptr<Entity> > getAllEntities() = 0;
 
     void generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters);
     void print();

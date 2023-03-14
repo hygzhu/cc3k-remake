@@ -4,16 +4,25 @@
 #include "goblin.h"
 #include "environment.h"
 #include "floor.h"
+#include "rat.h"
 
 std::shared_ptr<Entity> EntityFactory::createEntity(EntityType entitytype, int x, int y) {
-    if (entitytype == EntityType::GOBLIN ) {
+
+    return nullptr;
+
+}
+
+
+std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x, int y) {
+    if (enemyType == EnemyType::GOBLIN ) {
         return std::make_shared<Goblin>(x, y);
-    } else if (entitytype == EntityType::WALL ) {
-        return std::make_shared<Environment>(x, y);
+    } else if (enemyType == EnemyType::RAT ) {
+        return std::make_shared<Rat>(x, y);
     } else {
         return nullptr;
     }
 }
+
 
 
 

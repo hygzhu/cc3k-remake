@@ -16,7 +16,6 @@ public:
     Corridor(std::vector<Point> points, int size);
     std::vector<std::shared_ptr<Entity>>& getEntities();
     void removeEntitiesInRooms(std::vector<std::shared_ptr<Room>> rooms);
-    void addWall(Point p);
     void addFloor(BoundingRectangle rect);
     void print();
 private:

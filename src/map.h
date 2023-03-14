@@ -15,7 +15,8 @@ public:
     Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corridorWidth);
     ~Map();
     std::vector<std::shared_ptr<Entity> > & getEntities();
-    std::vector<std::shared_ptr<Entity> > getViewboxEntities();
+    std::vector<std::shared_ptr<Entity> > getViewboxStaticEntities();
+    std::vector<std::shared_ptr<Entity> > getViewboxMovingEntities();
     std::vector<std::shared_ptr<Entity> > getMovingEntities();
     std::vector<std::shared_ptr<Entity> > getAllEntities();
     int getWidth();

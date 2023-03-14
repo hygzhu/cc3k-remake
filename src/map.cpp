@@ -335,28 +335,11 @@ BoundingRectangle Map::getViewBox()
     return viewbox;
 }
 
-std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
+std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
 {
     std::vector<std::shared_ptr<Entity> > viewBoxEntities;
 
-    // Render rooms first
-    for(auto room : m_rooms)
-    {
-        //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
-        //std::cout << "total entities " << room->getEntities().size() << std::endl;
-        if(room->getBounds().isCollidingWith(getViewBox())){
-
-            for(const auto& roomEntity : room->getEntitiesToBeRendered())
-            {
-                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
-                {
-                    viewBoxEntities.push_back(roomEntity);
-                }
-            }
-        }
-    }
-
-    // Render corridors second
+    // Render corridors first
     for(auto corridor : m_corridors)
     {
         for(const auto& wall : corridor->getEntities())
@@ -367,6 +350,50 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
             }
         }
     }
+
+    // Render rooms
+    for(auto room : m_rooms)
+    {
+        //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
+        //std::cout << "total entities " << room->getEntities().size() << std::endl;
+        if(room->getBounds().isCollidingWith(getViewBox())){
+
+            for(const auto& roomEntity : room->getNonMovingEntities())
+            {
+                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
+                {
+                    viewBoxEntities.push_back(roomEntity);
+                }
+            }
+        }
+    }
+
+    return viewBoxEntities;
+
+}
+
+
+std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
+{
+    std::vector<std::shared_ptr<Entity> > viewBoxEntities;
+
+    //render moving entities in rooms
+    for(auto room : m_rooms)
+    {
+        //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
+        //std::cout << "total entities " << room->getEntities().size() << std::endl;
+        if(room->getBounds().isCollidingWith(getViewBox())){
+
+            for(const auto& roomEntity : room->getMovingEntities())
+            {
+                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
+                {
+                    viewBoxEntities.push_back(roomEntity);
+                }
+            }
+        }
+    }
+
     
     //Render misc entities
     for(auto entity : entities)
@@ -516,78 +543,6 @@ void Map::generateCorridors(int corridorWidth)
         auto rooms = m_rooms;
         int buffer = 50; // How wide our path needs to be
     
-
-        auto isValid = [&](Point p){
-
-            // Buffer (TODO: Optimize this by expanding existing rectangles instead of area around current point)
-            std::vector<Point> bufferPoints;
-            std::unordered_map<std::string, bool> seen;
-            std::queue<Point> queue;
-            queue.push(p);
-            for(int i =0; i < buffer; i++){
-                Point curr = queue.front();
-                queue.pop();
-                seen.emplace(curr.toString(), true);
-                bufferPoints.push_back(curr);
-                std::vector<Point> neighbours;
-                int x = curr.getX(), y = curr.getY();
-                neighbours.push_back(Point(x, y+1)); // up
-                neighbours.push_back(Point(x, y-1)); // down
-                neighbours.push_back(Point(x-1, y)); // left
-                neighbours.push_back(Point(x+1, y)); // right
-                neighbours.push_back(Point(x+1, y+1));
-                neighbours.push_back(Point(x+1, y-1));
-                neighbours.push_back(Point(x-1, y+1));
-                neighbours.push_back(Point(x-1, y-1));
-                for(Point neighbour : neighbours)
-                {
-                    auto search = seen.find(neighbour.toString());
-                    if(search == seen.end()){
-                        seen.emplace(neighbour.toString(), true);
-                        queue.push(neighbour);
-                    }
-                    
-                }
-            }
-
-            // check for collisions with rooms
-            for(auto room : rooms){
-                // main path collides with room
-                BoundingRectangle pointRect(p.getX(), p.getY(), 1,1);
-                if(room->getBounds().isCollidingWith(pointRect)){
-                    //room->print();
-                    //p.print();
-                    return false;
-                }
-                //check if buffer collides with anyroom that isn't the start or end room
-                if(room != room1 && room != room2){
-                    //check if all points in buffer valid
-                    for(Point temp: bufferPoints){
-                        BoundingRectangle pointRect(temp.getX(), temp.getY(), 1,1);
-                        // main path collides with room
-                        if(room->getBounds().isCollidingWith(pointRect)){
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // check for collisions with existing corridors
-            for(auto corridor : m_corridors){
-                for(auto corridorEntity : corridor->getEntities()){
-                    //check if all points in buffer valid
-                    for(Point temp: bufferPoints){
-                        BoundingRectangle pointRect(temp.getX(), temp.getY(), 1,1);
-                        // main path collides with room
-                        if(corridorEntity->getBoundingRectangle().isCollidingWith(pointRect)){
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        };
-
         // Run A* to get path from start to end 
         std::priority_queue<Point, std::vector<Point>, decltype( comp )> priority_queue(comp);
         std::vector<Point> path;
@@ -628,13 +583,11 @@ void Map::generateCorridors(int corridorWidth)
             for(Point neighbour : neighbours)
             {
                 auto search = seen.find(neighbour.toString());
-                if(isValid(neighbour) || neighbour == end){
-                    if(search == seen.end()){
-                        //std::cout << neighbour.toString();
+                if(search == seen.end()){
+                    //std::cout << neighbour.toString();
 
-                        seen.emplace(neighbour.toString(), neighbour.toString());
-                        priority_queue.push(neighbour);
-                    }
+                    seen.emplace(neighbour.toString(), neighbour.toString());
+                    priority_queue.push(neighbour);
                 }
             }
 
@@ -704,7 +657,7 @@ std::vector<std::shared_ptr<Entity> > Map::getAllEntities(){
     //Rooms
     for(auto room : m_rooms)
     {
-        for(const auto& roomEntity : room->getEntitiesToBeRendered())
+        for(const auto& roomEntity : room->getAllEntities())
         {
             result.push_back(roomEntity);
         }

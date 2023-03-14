@@ -12,20 +12,21 @@ CommonRoom::CommonRoom(BoundingRectangle rect): Room(rect){
     const int num_enemies = Random::randomInt(min_entities, max_entities);
 
     const int wall_buffer = 10;
-    //rect.print();
 
     for(int i = 0; i<num_enemies; ++i){
 
+        int entityType = Random::randomInt(EntityFactory::EnemyType::GOBLIN, EntityFactory::EnemyType::RAT);
+
         const int x = Random::randomInt(rect.getX()+wall_buffer, rect.getX() + rect.getWidth() - wall_buffer);
         const int y = Random::randomInt(rect.getY()+wall_buffer, rect.getY() + rect.getHeight() - wall_buffer);
-        m_enemies.push_back(EntityFactory::createEntity(EntityFactory::EntityType::GOBLIN, x, y));
+        m_enemies.push_back(EntityFactory::createEnemy(static_cast<EntityFactory::EnemyType>(entityType), x, y));
     }
     // std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
 }
 
 
 
-std::vector<std::shared_ptr<Entity> > CommonRoom::getEntitiesToBeRendered(){
+std::vector<std::shared_ptr<Entity> > CommonRoom::getAllEntities(){
 
     std::vector<std::shared_ptr<Entity> > result;
     for(auto entity : m_entities){
@@ -39,4 +40,9 @@ std::vector<std::shared_ptr<Entity> > CommonRoom::getEntitiesToBeRendered(){
 
 std::vector<std::shared_ptr<Entity> > CommonRoom::getMovingEntities(){
     return m_enemies;
+}
+
+
+std::vector<std::shared_ptr<Entity> > CommonRoom::getNonMovingEntities(){
+    return m_entities;
 }

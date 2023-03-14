@@ -26,9 +26,12 @@ Game::Game(/* args */)
 
 int Game::start()
 {
+
+
     RGBA playerColor = { 255, 0, 0, 255 };
     std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
-    m_map = std::make_shared<Map>(player,20,40,35);
+    int max_rooms = 20;
+    m_map = std::make_shared<Map>(player,max_rooms,40,35);
     bool quit = false;
     SDL_Event event;
 
@@ -127,9 +130,22 @@ void Game::render()
     const int realy = viewbox.getY();
 
     // Render all entities in viewbox
-    for (const auto& entity : m_map->getViewboxEntities()) {
+    for (const auto& entity : m_map->getViewboxStaticEntities()) {
+        // We need to render the part of the entity in the viewbox
+        BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
 
+        SDL_Rect rect = { 
+        static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
+        static_cast<int>((entityRect.getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
+        static_cast<int>(entityRect.getWidth()*BLOCK_WIDTH), 
+        static_cast<int>(entityRect.getHeight()*BLOCK_HEIGHT)};
+        RGBA entityColor = entity->getColor();
+        SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
+        SDL_RenderFillRect(m_renderer, &rect);
+        // entity->printEntityType();
+    }
 
+        for (const auto& entity : m_map->getViewboxMovingEntities()) {
         // We need to render the part of the entity in the viewbox
         BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
 

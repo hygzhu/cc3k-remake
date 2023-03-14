@@ -20,9 +20,9 @@ void Goblin::setMovement(){
 
     if(!m_inMovement){
         int base_acceleration = 100;
-        int rand = Random::randomInt(-1,1);
+        int rand = Random::randomInt(0,1);
         m_accelx = base_acceleration*rand;
-        rand = Random::randomInt(-1,1);
+        rand = Random::randomInt(0,1);
         m_accely = base_acceleration*rand;
 
         m_inMovement = 60;

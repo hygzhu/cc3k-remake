@@ -155,3 +155,9 @@ std::vector<std::shared_ptr<Entity> > Room::getMovingEntities(){
     std::vector<std::shared_ptr<Entity> > ret;
     return ret;
 }
+
+
+std::vector<std::shared_ptr<Entity> > Room::getNonMovingEntities(){
+    
+    return m_entities;
+}
