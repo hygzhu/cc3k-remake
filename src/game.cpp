@@ -28,7 +28,7 @@ int Game::start()
 {
     RGBA playerColor = { 255, 0, 0, 255 };
     std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
-    m_map = std::make_shared<Map>(player,20,40,25);
+    m_map = std::make_shared<Map>(player,20,40,35);
     bool quit = false;
     SDL_Event event;
 

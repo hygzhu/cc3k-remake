@@ -12,11 +12,9 @@ Corridor::Corridor()
 Corridor::Corridor(std::vector<Point> points, int size)
 {
     for(int i = 0; i < points.size(); i++){
-        if(i % size == 0 || i == points.size()-1){
-            Point curr = points[i];
-            BoundingRectangle rect(curr.getX()-size, curr.getY()-size, size*2, size*2);
-            addFloor(rect);
-        }
+        Point curr = points[i];
+        BoundingRectangle rect(curr.getX()-size, curr.getY()-size, size*2, size*2);
+        addFloor(rect);
     }
 }
 

@@ -649,12 +649,13 @@ void Map::generateCorridors(int corridorWidth)
             }
 
             Point curr = priority_queue.top();
+            int distLeft = curr.distanceTo(end);
             priority_queue.pop();
-            //std::cout << "curr: ";
-            //curr.print();
-            //std::cout << "end: ";
-            //end.print();
-            path.push_back(curr);
+
+            //only add to path if long enough
+            if(distLeft >= corridorWidth/2 || distLeft == 0){
+                path.push_back(curr);
+            }
 
             seen.emplace(curr.toString(), curr.toString());
 
@@ -664,15 +665,12 @@ void Map::generateCorridors(int corridorWidth)
 
 
             std::vector<Point> neighbours;
-            int x = curr.getX(), y = curr.getY();
-            neighbours.push_back(Point(x, y+1)); // up
-            neighbours.push_back(Point(x, y-1)); // down
-            neighbours.push_back(Point(x-1, y)); // left
-            neighbours.push_back(Point(x+1, y)); // right
-            neighbours.push_back(Point(x+1, y+1));
-            neighbours.push_back(Point(x+1, y-1));
-            neighbours.push_back(Point(x-1, y+1));
-            neighbours.push_back(Point(x-1, y-1));
+            if(distLeft > corridorWidth/2){
+                neighbours = curr.getSurroundingPointsNAway(corridorWidth/2);
+            }else{
+                neighbours = curr.getSurroundingPoints();
+            }
+
             for(Point neighbour : neighbours)
             {
                 auto search = seen.find(neighbour.toString());
