@@ -151,8 +151,8 @@ void Game::render()
         SDL_RenderFillRect(m_renderer, &rect);
         // entity->printEntityType();
     }
-
-        for (const auto& entity : m_map->getViewboxMovingEntities()) {
+    std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
+    for (const auto& entity : m_map->getViewboxMovingEntities()) {
         // We need to render the part of the entity in the viewbox
         BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
 

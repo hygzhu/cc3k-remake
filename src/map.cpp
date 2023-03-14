@@ -404,16 +404,16 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
     {
         //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
         //std::cout << "total entities " << room->getEntities().size() << std::endl;
-        if(room->getBounds().isCollidingWith(getViewBox())){
 
-            for(const auto& roomEntity : room->getMovingEntities())
+        // NOTE: Some entities will leave room, so we cannot render rooms that collide with viewbox
+        for(const auto& roomEntity : room->getMovingEntities())
+        {
+            if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
             {
-                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
-                {
-                    viewBoxEntities.push_back(roomEntity);
-                }
+                viewBoxEntities.push_back(roomEntity);
             }
         }
+        
     }
 
     
