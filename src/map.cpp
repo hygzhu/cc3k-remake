@@ -147,20 +147,11 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
         // Check if either rectangle not overlapping
         if (otherEntity->getBoundingRectangle().isCollidingWith(newRect)) {
             //Collides
-            // std::cout << "collides" <<std::endl;
-            // entity->printEntityType();
-            // otherEntity->printEntityType();
-
-            // std::cout << otherEntity->collidable() <<std::endl;
-            // std::cout << otherEntity->getBoundingRectangle().surrounds(newRect) <<std::endl;
 
             // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
             if(otherEntity->collidable() && otherEntity->getBoundingRectangle().surrounds(newRect)){
-                // std::cout << "collidableEntityFound" << std::endl;
-                //otherEntity->printEntityType();
                 // check if it surrounds
                 collidableEntityFound = true;
-
                 // std::cout << collidableEntityFound <<std::endl;
             }
             
@@ -183,13 +174,14 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 }
 
 
+
 bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 {
     int oldx = entity->getX();
     int oldy = entity->getY();
 
+
     // non diagonal movements only
-    //std::cout << x << " " << y << std::endl;
     if(x!=0 && y != 0)
     {
         return false;
@@ -230,6 +222,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
     //std::cout << x << " " << y << std::endl;
     if(x!=0 && y != 0)
     {   
+        //std::cout << "Try diag"<< std::endl;
         //even diagonal movements only
         if(std::abs(x) !=  std::abs(y)){
             return moveable_location;
@@ -238,7 +231,8 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
             if(x > 0 && y > 0){
                 if(doesEntityCollideAt(oldx+i,oldy+i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx+i;
                     moveable_location.second = oldy+i;
@@ -247,7 +241,8 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
             if(x < 0 && y < 0){
                 if(doesEntityCollideAt(oldx-i,oldy-i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx-i;
                     moveable_location.second = oldy-i;
@@ -256,7 +251,8 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
             if(x > 0 && y < 0){
                 if(doesEntityCollideAt(oldx+i,oldy-i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx+i;
                     moveable_location.second = oldy-i;
@@ -265,51 +261,77 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
             if(x < 0 && y > 0){
                 if(doesEntityCollideAt(oldx-i,oldy+i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx-i;
                     moveable_location.second = oldy+i;
                 }
             }
         }
+        // return moveable_location;
+    }
+    
+    if(Point(oldx,oldy).distanceTo(Point(moveable_location.first, moveable_location.second))!=0){
+        //std::cout << "Distance isnt zero" << std::endl;
         return moveable_location;
     }
 
-    if(x!=0){
-        y = entity->getY();
+    moveable_location.first = oldx;
+    moveable_location.second = oldy;
+
+    // Try horizontal if diagonal dont work
+
+    if((x!=0 && y == 0) || (x!=0 && y != 0)){
+        std::cout << "Try hor"<< std::endl;
         for(int i =0; i<=std::abs(x); ++i){
-            //std::cout <<"Checking if it collides at " << std::min(oldx+x, oldx)+i << " " << y << std::endl;
             if(x>0){
-                if(doesEntityCollideAt(oldx+i,y,entity))
+                if(doesEntityCollideAt(oldx+i,oldy,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx+i;
                 }
             }else{
-                if(doesEntityCollideAt(oldx-i,y,entity))
+                if(doesEntityCollideAt(oldx-i,oldy,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.first = oldx-i;
                 }
             }
         }
-    } else if(y!=0){
-        x = entity->getX();
+    }
+
+    if(Point(oldx,oldy).distanceTo(Point(moveable_location.first, moveable_location.second))!=0){
+        //std::cout << " hori Distance isnt zero" << std::endl;
+        return moveable_location;
+    }
+
+
+    moveable_location.first = oldx;
+    moveable_location.second = oldy;
+
+
+    // Try vertical if diagonal dont work
+    if((y!=0 && x == 0) || (x!=0 && y != 0)){
+        //std::cout << "Try vert"<< std::endl;
         for(int i =0; i<=std::abs(y); ++i){
-            //std::cout <<"Checking if it collides at " << x << " " << std::min(oldy+y, oldy)+i << std::endl;
             if(y>0){
-                if(doesEntityCollideAt(x,oldy+i,entity))
+                if(doesEntityCollideAt(oldx,oldy+i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.second = oldy+i;
                 }
             }else{
-                if(doesEntityCollideAt(x,oldy-i,entity))
+                if(doesEntityCollideAt(oldx,oldy-i,entity))
                 {
-                    return moveable_location;
+                    // return moveable_location;
+                    break;
                 }else{
                     moveable_location.second = oldy-i;
                 }

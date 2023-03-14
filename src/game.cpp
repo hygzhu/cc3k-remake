@@ -46,7 +46,7 @@ int Game::start()
 
         frameStart = SDL_GetTicks();
 
-        const int speed = 250;
+        const int speed = 160;
         std::pair<int,int> new_location;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -62,30 +62,37 @@ int Game::start()
             }
         }
 
-        if (downKeys[SDL_SCANCODE_LEFT])
+        if(downKeys[SDL_SCANCODE_R]){
+            return true;
+        }
+
+
+        if (downKeys[SDL_SCANCODE_A])
         {
             player->getAccelX() = -speed;
         }
-        if (downKeys[SDL_SCANCODE_RIGHT])
+        if (downKeys[SDL_SCANCODE_D])
         {
             
             player->getAccelX() = speed;
         }
-        if((!downKeys[SDL_SCANCODE_RIGHT] && !downKeys[SDL_SCANCODE_LEFT])|| downKeys[SDL_SCANCODE_RIGHT] && downKeys[SDL_SCANCODE_LEFT]){
+        if((!downKeys[SDL_SCANCODE_D] && !downKeys[SDL_SCANCODE_A])
+        || downKeys[SDL_SCANCODE_D] && downKeys[SDL_SCANCODE_A]){
             player->getAccelX() = 0;
         }
 
-        if (downKeys[SDL_SCANCODE_UP])
+        if (downKeys[SDL_SCANCODE_W])
         {
             player->getAccelY() = -speed;
         }
-        if (downKeys[SDL_SCANCODE_DOWN])
+        if (downKeys[SDL_SCANCODE_S])
         {
             // Move player down
 
             player->getAccelY() = speed;
         }
-        if((!downKeys[SDL_SCANCODE_UP] && !downKeys[SDL_SCANCODE_DOWN])||downKeys[SDL_SCANCODE_UP] && downKeys[SDL_SCANCODE_DOWN]){
+        if((!downKeys[SDL_SCANCODE_W] && !downKeys[SDL_SCANCODE_S])
+        ||downKeys[SDL_SCANCODE_W] && downKeys[SDL_SCANCODE_S]){
             player->getAccelY() = 0;
         }
 
