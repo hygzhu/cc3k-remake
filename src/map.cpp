@@ -106,7 +106,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     }
 
     //paths
-    //generateCorridors(corridorWidth);
+    generateCorridors(corridorWidth);
 }
 
 Map::~Map() {}
@@ -128,14 +128,12 @@ int Map::getHeight()
 
 bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 {
-    //Entity hit box
-    int entity_x = x;
-    int entity_y = y;
-    int entity_x2 = entity_x + entity->getSize()-1;
-    int entity_y2 = entity_y + entity->getSize()-1;
-    int width = entity->getWidth();
-    int height = entity->getHeight();
 
+    // std::cout << "CHECKING IF IT COLLIDES" <<std::endl;
+    //Entity hit box
+    BoundingRectangle newRect = entity->getBoundingRectangle();
+    newRect.setX(x);
+    newRect.setY(y);
     bool collidableEntityFound = false;
 
     for(const auto& otherEntity : getAllEntities())
@@ -145,42 +143,41 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
         {
             continue;
         }
-        int other_entity_x = otherEntity->getX();
-        int other_entity_y = otherEntity->getY();
-        int other_entity_x2 = other_entity_x + otherEntity->getSize()-1;
-        int other_entity_y2 = other_entity_y + otherEntity->getSize()-1;
-
         // Check if either rectangle not overlapping
-        if (!(
-            (entity_x2 < other_entity_x || other_entity_x2 < entity_x) 
-            || (entity_y2 < other_entity_y || other_entity_y2 < entity_y)
-            )) {
+        if (otherEntity->getBoundingRectangle().isCollidingWith(newRect)) {
             //Collides
-            //std::cout <<  "Curr " << entity_x << " " << entity_y << " " << entity_x2 << " " << entity_y2 <<std::endl;
-            //std::cout << "Other "  << other_entity_x << " " << other_entity_y << " " << other_entity_x2 << " " << other_entity_y2 <<std::endl;
-            //otherEntity->printEntityType();
+            // std::cout << "collides" <<std::endl;
+            // entity->printEntityType();
+            // otherEntity->printEntityType();
 
-            if(otherEntity->collidable() && otherEntity->getBoundingRectangle().surrounds(BoundingRectangle(x,y,width,height))){
-                //std::cout << "collidableEntityFound" << std::endl;
+            // std::cout << otherEntity->collidable() <<std::endl;
+            // std::cout << otherEntity->getBoundingRectangle().surrounds(newRect) <<std::endl;
+
+            // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
+            if(otherEntity->collidable() && otherEntity->getBoundingRectangle().surrounds(newRect)){
+                // std::cout << "collidableEntityFound" << std::endl;
                 //otherEntity->printEntityType();
-
                 // check if it surrounds
                 collidableEntityFound = true;
 
-            }else{
-                //std::cout << "noncollidableEntityFound" << std::endl;
-                //otherEntity->printEntityType();
+                // std::cout << collidableEntityFound <<std::endl;
+            }
+            
+            if(!otherEntity->collidable()){
+                // std::cout << "noncollidableEntityFound" << std::endl;
+                // otherEntity->printEntityType();
                 return true;
             }
         }
     }
 
-    //std::cout << "collidableEntityFound" << std::endl;
+    // std::cout << "THE END" << std::endl;
+    //std::cout << collidableEntityFound <<std::endl;
     if(collidableEntityFound){
         //std::cout << "can collid is true" << std::endl;
         return false;
     }
-
+    //std::cout << "cannot move" << std::endl;
     return true;
 }
 
@@ -717,20 +714,18 @@ void Map::generateCorridors(int corridorWidth)
 
         m_corridors.push_back(corridor);
     }
-    std::vector<std::shared_ptr<Entity>> entitiesInRooms;
-    
 
-
-    std::cout << "Generating Doors" << std::endl;
-    for(auto room : m_rooms)
-    {
-        room->generateDoors(m_corridors, allDoorCenters);
-    }
+    //std::vector<std::shared_ptr<Entity>> entitiesInRooms;
+    // std::cout << "Generating Doors" << std::endl;
+    // for(auto room : m_rooms)
+    // {
+    //     room->generateDoors(m_corridors, allDoorCenters);
+    // }
     
-    for(auto corridor : m_corridors)
-    {
-        corridor->removeEntitiesInRooms(m_rooms);
-    }
+    // for(auto corridor : m_corridors)
+    // {
+    //     corridor->removeEntitiesInRooms(m_rooms);
+    // }
 
 }
 

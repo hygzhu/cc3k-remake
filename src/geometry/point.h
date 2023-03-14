@@ -25,6 +25,7 @@ public:
     std::vector<Point> allPointsInEuclidianDistanceAway(int n);
     int manhattanDistanceFrom(Point b);
     std::vector<Point> getSurroundingPoints();
+    std::vector<Point> getSurroundingPointsNAway(int n);
     std::vector<Point> getCompassSurroundingPoints();
 
     struct HashFunction
