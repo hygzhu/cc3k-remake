@@ -339,7 +339,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
 {
     std::vector<std::shared_ptr<Entity> > viewBoxEntities;
 
-    // Render rooms
+    // Render rooms first
     for(auto room : m_rooms)
     {
         //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
@@ -356,7 +356,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
         }
     }
 
-    // Render corridors
+    // Render corridors second
     for(auto corridor : m_corridors)
     {
         for(const auto& wall : corridor->getEntities())
@@ -400,11 +400,6 @@ void Map::generateCorridors(int corridorWidth)
 
     int n = coordinates.size(); // number of coordinates
 
-    // for (auto coord: coordinates) {
-    //         std::cout << coord.first << " " << coord.second <<std::endl;
-
-    // }
-
     // build adjacency list
     for (int i = 0; i < n; i++) {
         std::vector<std::pair<int, int>> partial;
@@ -416,13 +411,6 @@ void Map::generateCorridors(int corridorWidth)
         }
         adjList.push_back(partial);
     }
-
-    // for (const auto& vec : adjList) {
-    //     for (const auto& elem : vec) {
-    //         std::cout << "(" << elem.first << ", " << elem.second << ") ";
-    //     }
-    //     std::cout << std::endl;
-    // }
 
     // minimum spanning tree using Prim's algorithm
     std::vector<bool> visited(n, false);
@@ -436,17 +424,6 @@ void Map::generateCorridors(int corridorWidth)
         pq.push(std::make_tuple<int,int,int>(0, 0, 0));
 
         while (!pq.empty()) {
-
-
-            // print out all the elements in the copy of the priority queue
-            // std::cout << "PQ:\n";
-            // std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>,  decltype(cmp)> pq_copy = pq;
-            // while (!pq_copy.empty()) {
-            //     std::tuple<int, int, int> element = pq_copy.top();
-            //     pq_copy.pop();
-            //     std::cout << "(" << std::get<0>(element) << ", " << std::get<1>(element) << ", " << std::get<2>(element) << ")";
-            // }
-            // std::cout << "\n";
 
             int node = std::get<1>(pq.top());
             int neighbour = std::get<2>(pq.top());
@@ -480,16 +457,10 @@ void Map::generateCorridors(int corridorWidth)
                         Point intersection = Point::findIntersection(a,b,c,d);
                         if(!(a==intersection || b==intersection || c == intersection || d == intersection))
                         {
-                            // a.print();
-                            // b.print();
-                            // c.print();
-                            // d.print();
-                            // intersection.print();
                             overlaps = true;
                         }
                     }
                     if(overlaps){
-                        // std::cout << "OVERLAPS " << std::endl;
                         break;
                     }
                 }
@@ -505,16 +476,6 @@ void Map::generateCorridors(int corridorWidth)
             }
         }
     
-    // print minimum spanning tree
-    // for (auto pairs : mst) {
-    //     std::cout << "pairs: ";
-    //     for (auto coord : pairs) {
-    //         std::cout << "("<< coord.first << "," << coord.second  << ") ";
-    //     }
-    //     std::cout <<  std::endl;
-    // }
-
-
     std::vector<Point> allDoorCenters;
 
     // For each pair we want to construct a path to the side pair
@@ -525,8 +486,6 @@ void Map::generateCorridors(int corridorWidth)
 
         Point point1(pair1.first, pair1.second);
         Point point2(pair2.first, pair2.second);
-        // point1.print();
-        // point2.print();
 
         std::shared_ptr<Room> room1;
         std::shared_ptr<Room> room2;
@@ -552,10 +511,6 @@ void Map::generateCorridors(int corridorWidth)
         allDoorCenters.push_back(start);
         allDoorCenters.push_back(end);
 
-
-
-        // room1->print();
-        // room2->print();
 
         auto comp = [end]( Point a, Point b ) { return a.distanceTo(end) > b.distanceTo(end); };
         auto rooms = m_rooms;
@@ -633,7 +588,6 @@ void Map::generateCorridors(int corridorWidth)
             return true;
         };
 
-        // TODO: This is super inefficient to go block by block since we already generate a MST, there should be no collisions
         // Run A* to get path from start to end 
         std::priority_queue<Point, std::vector<Point>, decltype( comp )> priority_queue(comp);
         std::vector<Point> path;
@@ -653,7 +607,7 @@ void Map::generateCorridors(int corridorWidth)
             priority_queue.pop();
 
             //only add to path if long enough
-            if(distLeft >= corridorWidth/2 || distLeft == 0){
+            if(distLeft >= corridorWidth/4 || distLeft == 0){
                 path.push_back(curr);
             }
 
@@ -665,8 +619,8 @@ void Map::generateCorridors(int corridorWidth)
 
 
             std::vector<Point> neighbours;
-            if(distLeft > corridorWidth/2){
-                neighbours = curr.getSurroundingPointsNAway(corridorWidth/2);
+            if(distLeft > corridorWidth/4){
+                neighbours = curr.getSurroundingPointsNAway(corridorWidth/4);
             }else{
                 neighbours = curr.getSurroundingPoints();
             }
