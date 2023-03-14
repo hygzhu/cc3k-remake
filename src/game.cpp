@@ -128,11 +128,16 @@ void Game::render()
 
     // Render all entities in viewbox
     for (const auto& entity : m_map->getViewboxEntities()) {
+
+
+        // We need to render the part of the entity in the viewbox
+        BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
+
         SDL_Rect rect = { 
-        static_cast<int>((entity->getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
-        static_cast<int>((entity->getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
-        static_cast<int>(entity->getWidth()*BLOCK_WIDTH), 
-        static_cast<int>(entity->getHeight()*BLOCK_HEIGHT)};
+        static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
+        static_cast<int>((entityRect.getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
+        static_cast<int>(entityRect.getWidth()*BLOCK_WIDTH), 
+        static_cast<int>(entityRect.getHeight()*BLOCK_HEIGHT)};
         RGBA entityColor = entity->getColor();
         SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
         SDL_RenderFillRect(m_renderer, &rect);

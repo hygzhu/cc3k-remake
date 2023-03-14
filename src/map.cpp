@@ -13,52 +13,17 @@
 #include "utils/random.h"
 
 
-// Function to generate a random non-colliding rectangle within a larger rectangle
-BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin) {
-    
-    BoundingRectangle rect(0,0,0,0);
-    bool collides = false;
-    int attempts = 0;
-    do {
-        attempts += 1;
-        rect.setWidth(Random::randomInt(250, 750));
-        rect.setHeight(Random::randomInt(250, 750));
-        rect.setX(Random::randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
-        rect.setY(Random::randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
-        
-        // Check if the rectangle collides with any existing rectangles
-        collides = false;
-        for (const auto& r : rectangles) {
-
-            BoundingRectangle r_with_margin(r.getX()-margin,r.getY()-margin, r.getWidth()+ (2*margin), r.getHeight() + (2*margin));
-            if (rect.isCollidingWith(r_with_margin)) {
-                collides = true;
-                break;
-            }
-        }
-        if(attempts > 50)
-        {
-            BoundingRectangle invalid(0,0,0,0);
-            return invalid;
-        }
-    } while (collides);
-    
-    // Add the new rectangle to the vector of existing rectangles
-    rectangles.push_back(rect);
-    return rect;
-}
-
 
 Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corridorWidth): player(player){
 
     std::cout << "Generating map with at most " << numRooms << " Rooms" << std::endl;
 
-    const int MAP_HEIGHT = 700;
-    const int MAP_WIDTH = 700;
+    const int VIEW_HEIGHT = 700;
+    const int VIEW_WIDTH = 700;
     const int MAX_MAP_HEIGHT = 2000;
     const int MAX_MAP_WIDTH = 2000;
-    width = MAP_WIDTH;
-    height = MAP_HEIGHT;
+    width = VIEW_WIDTH;
+    height = VIEW_HEIGHT;
     max_width = MAX_MAP_WIDTH;
     max_height = MAX_MAP_HEIGHT;
 
@@ -110,6 +75,42 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
 }
 
 Map::~Map() {}
+
+
+// Function to generate a random non-colliding rectangle within a larger rectangle
+BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin) {
+    
+    BoundingRectangle rect(0,0,0,0);
+    bool collides = false;
+    int attempts = 0;
+    do {
+        attempts += 1;
+        rect.setWidth(Random::randomInt(250, 750));
+        rect.setHeight(Random::randomInt(250, 750));
+        rect.setX(Random::randomInt(bounds.getX() + margin, bounds.getX() + bounds.getWidth() - margin - rect.getWidth()));
+        rect.setY(Random::randomInt(bounds.getY() + margin, bounds.getY() + bounds.getHeight() - margin - rect.getHeight()));
+        
+        // Check if the rectangle collides with any existing rectangles
+        collides = false;
+        for (const auto& r : rectangles) {
+
+            BoundingRectangle r_with_margin(r.getX()-margin,r.getY()-margin, r.getWidth()+ (2*margin), r.getHeight() + (2*margin));
+            if (rect.isCollidingWith(r_with_margin)) {
+                collides = true;
+                break;
+            }
+        }
+        if(attempts > 50)
+        {
+            BoundingRectangle invalid(0,0,0,0);
+            return invalid;
+        }
+    } while (collides);
+    
+    // Add the new rectangle to the vector of existing rectangles
+    rectangles.push_back(rect);
+    return rect;
+}
 
 
 std::vector<std::shared_ptr<Entity> > & Map::getEntities()
@@ -341,8 +342,6 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxEntities()
     // Render rooms
     for(auto room : m_rooms)
     {
-
-
         //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
         //std::cout << "total entities " << room->getEntities().size() << std::endl;
         if(room->getBounds().isCollidingWith(getViewBox())){
@@ -633,6 +632,8 @@ void Map::generateCorridors(int corridorWidth)
             }
             return true;
         };
+
+        // TODO: This is super inefficient to go block by block since we already generate a MST, there should be no collisions
         // Run A* to get path from start to end 
         std::priority_queue<Point, std::vector<Point>, decltype( comp )> priority_queue(comp);
         std::vector<Point> path;
@@ -684,19 +685,7 @@ void Map::generateCorridors(int corridorWidth)
                     }
                 }
             }
-            //std::cout << std::endl;
-            // if(priority_queue.size() >= 10)
-            // {
-            // break;
-            // }else
-            // {
-            //     // auto pq(priority_queue);
-            //     // while (!pq.empty()) {
-            //     // Point p = pq.top();
-            //     // pq.pop();
-            //     // std::cout << "(" << p.getX() << ", " << p.getY() << ") ";
-            //     // }
-            //     // std::cout <<  std::endl;
+
             // }
         }
         //std::cout << "Path len " << path.size() << std::endl;
@@ -715,17 +704,7 @@ void Map::generateCorridors(int corridorWidth)
         m_corridors.push_back(corridor);
     }
 
-    //std::vector<std::shared_ptr<Entity>> entitiesInRooms;
-    // std::cout << "Generating Doors" << std::endl;
-    // for(auto room : m_rooms)
-    // {
-    //     room->generateDoors(m_corridors, allDoorCenters);
-    // }
-    
-    // for(auto corridor : m_corridors)
-    // {
-    //     corridor->removeEntitiesInRooms(m_rooms);
-    // }
+
 
 }
 
