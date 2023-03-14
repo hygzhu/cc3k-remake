@@ -283,7 +283,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
     // Try horizontal if diagonal dont work
 
     if((x!=0 && y == 0) || (x!=0 && y != 0)){
-        std::cout << "Try hor"<< std::endl;
+        //std::cout << "Try hor"<< std::endl;
         for(int i =0; i<=std::abs(x); ++i){
             if(x>0){
                 if(doesEntityCollideAt(oldx+i,oldy,entity))
