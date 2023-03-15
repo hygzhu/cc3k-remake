@@ -5,7 +5,7 @@
 
 class Floor : public Entity{
 public:
-    Floor(BoundingRectangle rect);
+    Floor(Rectangle rect);
 
     virtual bool collidable();
     virtual void printEntityType();

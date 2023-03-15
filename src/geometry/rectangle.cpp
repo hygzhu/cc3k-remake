@@ -1,24 +1,24 @@
-#include "boundingrectangle.h"
+#include "rectangle.h"
 #include <algorithm>
 #include <utility>
 #include <cmath>
 #include <iostream>
 
-BoundingRectangle::BoundingRectangle(int x, int y, int width, int height) 
+Rectangle::Rectangle(int x, int y, int width, int height) 
     : m_x(x), m_y(y), m_width(width), m_height(height) {}
 
-bool BoundingRectangle::isCollidingWith(const BoundingRectangle& other) const {
+bool Rectangle::isCollidingWith(const Rectangle& other) const {
     return (m_x + m_width  > other.m_x && m_x < other.m_x + other.m_width &&
             m_y + m_height > other.m_y && m_y < other.m_y + other.m_height);
 }
 
 
-bool BoundingRectangle::isCollidingWithPoint(const Point& p) const{
+bool Rectangle::isCollidingWithPoint(const Point& p) const{
     return (m_x + m_width  >= p.getX() && m_x <= p.getX() &&
             m_y + m_height >= p.getY() && m_y <= p.getY());
 }
 
-BoundingRectangle BoundingRectangle::getIntersection(const BoundingRectangle& other) const {
+Rectangle Rectangle::getIntersection(const Rectangle& other) const {
     int x1 = std::max(m_x, other.m_x);
     int y1 = std::max(m_y, other.m_y);
     int x2 = std::min(m_x + m_width, other.m_x + other.m_width);
@@ -26,46 +26,46 @@ BoundingRectangle BoundingRectangle::getIntersection(const BoundingRectangle& ot
     int width = x2 - x1;
     int height = y2 - y1;
     if (width > 0 && height > 0) {
-        return BoundingRectangle(x1, y1, width, height);
+        return Rectangle(x1, y1, width, height);
     }
     else {
         // The two rectangles do not intersect
-        return BoundingRectangle(0, 0, 0, 0);
+        return Rectangle(0, 0, 0, 0);
     }
 }
 
-int BoundingRectangle::getX() const {
+int Rectangle::getX() const {
     return m_x;
 }
 
-int BoundingRectangle::getY() const {
+int Rectangle::getY() const {
     return m_y;
 }
 
-int BoundingRectangle::getWidth() const {
+int Rectangle::getWidth() const {
     return m_width;
 }
 
-int BoundingRectangle::getHeight() const {
+int Rectangle::getHeight() const {
     return m_height;
 }
 
 
-void BoundingRectangle::setX(int x){
+void Rectangle::setX(int x){
     m_x = x;
 }
-void BoundingRectangle::setY(int y){
+void Rectangle::setY(int y){
     m_y = y;
 }
-void BoundingRectangle::setWidth(int width){
+void Rectangle::setWidth(int width){
     m_width = width;
 }
-void BoundingRectangle::setHeight(int height){
+void Rectangle::setHeight(int height){
     m_height = height;
 }
 
 
-Point BoundingRectangle::getCenterPoint(){
+Point Rectangle::getCenterPoint(){
     Point centerpoint;
     centerpoint.setX(m_x + (m_width/2));
     centerpoint.setY(m_y + (m_width/2));
@@ -73,7 +73,7 @@ Point BoundingRectangle::getCenterPoint(){
 }
 
 
-Point BoundingRectangle::getClosestPointTo(Point startPoint){
+Point Rectangle::getClosestPointTo(Point startPoint){
     int p_x = startPoint.getX();
     int p_y = startPoint.getY();
 
@@ -157,16 +157,16 @@ Point BoundingRectangle::getClosestPointTo(Point startPoint){
     return point;
 }
 
-void BoundingRectangle::print() const {
+void Rectangle::print() const {
     std::cout << "( x:" << m_x << ", y: " << m_y << ", w: "<< m_width << ", h: "<<m_height<< ")" << std::endl;
 }
 
 
-std::string BoundingRectangle::toString(){
+std::string Rectangle::toString(){
     return "( x:" + std::to_string(m_x) + ", y: " + std::to_string(m_y) + ", w: " + std::to_string(m_width) + ", h: " + std::to_string(m_height) + ")" ;
 }
 
-bool BoundingRectangle::surrounds(const BoundingRectangle& other) const{
+bool Rectangle::surrounds(const Rectangle& other) const{
     if (m_x <= other.getX() &&  other.getX() + other.getWidth() <= m_x+m_width &&
     m_y <= other.getY() &&  other.getY() + other.getHeight() <= m_y+m_height
     ){

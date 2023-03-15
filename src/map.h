@@ -7,7 +7,7 @@
 #include <utility>
 #include "room/room.h"
 
-#include "geometry/boundingrectangle.h"
+#include "geometry/rectangle.h"
 #include "corridor.h"
 
 class Map {
@@ -24,7 +24,7 @@ public:
     bool canEntityMove(int x, int y, std::shared_ptr<Entity> entity);
     std::pair<int,int> movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity);
     bool doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity);
-    BoundingRectangle getViewBox();
+    Rectangle getViewBox();
 
     void updateAllMovableEntityLocations(double time);
 
@@ -39,7 +39,7 @@ private:
     int max_width;
     int max_height;
     int randomInt(int min, int max);
-    BoundingRectangle generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin);
+    Rectangle generateRectangle(Rectangle bounds, std::vector<Rectangle>& rectangles, int margin);
     void generateCorridors(int corridorWidth);
 
 };

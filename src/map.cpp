@@ -31,7 +31,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
 
     // Generate starting room
     std::cout << "Generating rooms" << std::endl;
-    BoundingRectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
+    Rectangle startRect(MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone);
     std::shared_ptr<Room> room = RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect);
     m_rooms.push_back(room);
 
@@ -41,11 +41,11 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
 
     // Generate rest of dungeon
     // Set up the bounds of the larger rectangle
-    BoundingRectangle bounds = {0, 0, max_width, max_height};
-    BoundingRectangle existingRect = {MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone};
+    Rectangle bounds = {0, 0, max_width, max_height};
+    Rectangle existingRect = {MAX_MAP_WIDTH/2, MAX_MAP_HEIGHT/2, starting_zone, starting_zone};
     
     // Generate non-colliding rectangles within the larger rectangle
-    std::vector<BoundingRectangle> rectangles;
+    std::vector<Rectangle> rectangles;
     //add starting area
     rectangles.push_back(existingRect);
 
@@ -54,7 +54,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     int numRectangles = 0;
     int maxRectangles = numRooms;
     while (numRectangles < maxRectangles) {
-        BoundingRectangle rect = generateRectangle(bounds, rectangles, margin);
+        Rectangle rect = generateRectangle(bounds, rectangles, margin);
         if(rect.getHeight() == 0 || rect.getWidth() ==0){
             break;
         }
@@ -78,9 +78,9 @@ Map::~Map() {}
 
 
 // Function to generate a random non-colliding rectangle within a larger rectangle
-BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<BoundingRectangle>& rectangles, int margin) {
+Rectangle Map::generateRectangle(Rectangle bounds, std::vector<Rectangle>& rectangles, int margin) {
     
-    BoundingRectangle rect(0,0,0,0);
+    Rectangle rect(0,0,0,0);
     bool collides = false;
     int attempts = 0;
     do {
@@ -94,7 +94,7 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
         collides = false;
         for (const auto& r : rectangles) {
 
-            BoundingRectangle r_with_margin(r.getX()-margin,r.getY()-margin, r.getWidth()+ (2*margin), r.getHeight() + (2*margin));
+            Rectangle r_with_margin(r.getX()-margin,r.getY()-margin, r.getWidth()+ (2*margin), r.getHeight() + (2*margin));
             if (rect.isCollidingWith(r_with_margin)) {
                 collides = true;
                 break;
@@ -102,7 +102,7 @@ BoundingRectangle Map::generateRectangle(BoundingRectangle bounds, std::vector<B
         }
         if(attempts > 50)
         {
-            BoundingRectangle invalid(0,0,0,0);
+            Rectangle invalid(0,0,0,0);
             return invalid;
         }
     } while (collides);
@@ -132,7 +132,7 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 
     // std::cout << "CHECKING IF IT COLLIDES" <<std::endl;
     //Entity hit box
-    BoundingRectangle newRect = entity->getBoundingRectangle();
+    Rectangle newRect = entity->getRectangle();
     newRect.setX(x);
     newRect.setY(y);
     bool collidableEntityFound = false;
@@ -145,11 +145,11 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             continue;
         }
         // Check if either rectangle not overlapping
-        if (otherEntity->getBoundingRectangle().isCollidingWith(newRect)) {
+        if (otherEntity->getRectangle().isCollidingWith(newRect)) {
             //Collides
 
             // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
-            if(otherEntity->collidable() && otherEntity->getBoundingRectangle().surrounds(newRect)){
+            if(otherEntity->collidable() && otherEntity->getRectangle().surrounds(newRect)){
                 // check if it surrounds
                 collidableEntityFound = true;
                 // std::cout << collidableEntityFound <<std::endl;
@@ -345,7 +345,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
 }
 
 
-BoundingRectangle Map::getViewBox()
+Rectangle Map::getViewBox()
 {
     const int middlex = player->getX()+ (player->getSize()/2);
     const int middley = player->getY() + (player->getSize()/2);
@@ -353,7 +353,7 @@ BoundingRectangle Map::getViewBox()
     const int topleftx = middlex - (width/2);
     const int toplefty = middley - (height/2);
 
-    BoundingRectangle viewbox(topleftx,toplefty, width,height);
+    Rectangle viewbox(topleftx,toplefty, width,height);
     return viewbox;
 }
 
@@ -366,7 +366,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
     {
         for(const auto& wall : corridor->getEntities())
         {
-            if(wall->getBoundingRectangle().isCollidingWith(getViewBox()))
+            if(wall->getRectangle().isCollidingWith(getViewBox()))
             {
                 viewBoxEntities.push_back(wall);
             }
@@ -382,7 +382,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
 
             for(const auto& roomEntity : room->getNonMovingEntities())
             {
-                if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
+                if(roomEntity->getRectangle().isCollidingWith(getViewBox()))
                 {
                     viewBoxEntities.push_back(roomEntity);
                 }
@@ -408,7 +408,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
         // NOTE: Some entities will leave room, so we cannot render rooms that collide with viewbox
         for(const auto& roomEntity : room->getMovingEntities())
         {
-            if(roomEntity->getBoundingRectangle().isCollidingWith(getViewBox()))
+            if(roomEntity->getRectangle().isCollidingWith(getViewBox()))
             {
                 viewBoxEntities.push_back(roomEntity);
             }
@@ -420,7 +420,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
     //Render misc entities
     for(auto entity : entities)
     {
-        if(entity->getBoundingRectangle().isCollidingWith(getViewBox())){
+        if(entity->getRectangle().isCollidingWith(getViewBox())){
             viewBoxEntities.push_back(entity);
         }
     }

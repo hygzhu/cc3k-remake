@@ -6,7 +6,7 @@
 #include <deque>
 #include <algorithm>
 
-Room::Room(BoundingRectangle rect) :m_bounds(rect)
+Room::Room(Rectangle rect) :m_bounds(rect)
 {
     // generate floor
     std::shared_ptr<Entity> floor = EntityFactory::createRectangularEntity(EntityFactory::EntityType::FLOOR, rect); 
@@ -20,7 +20,7 @@ std::vector<std::shared_ptr<Entity> >& Room::getEntities(){
     return m_entities;
 }
 
-BoundingRectangle Room::getBounds()
+Rectangle Room::getBounds()
 {
     return m_bounds;
 }
@@ -40,7 +40,7 @@ void Room::generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::
     auto entityTouchesCorridor = [&](std::shared_ptr<Entity> entity) { 
         for(auto corridor: corridors){
             for(std::shared_ptr<Entity> corridorEntity: corridor->getEntities()){
-                if(entity->getBoundingRectangle().isCollidingWith(corridorEntity->getBoundingRectangle())){
+                if(entity->getRectangle().isCollidingWith(corridorEntity->getRectangle())){
                     return true;
                 }
             }   

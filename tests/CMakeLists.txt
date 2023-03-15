@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(CC3K_tests)
 
 add_executable( tests
-  boundingrectangle.t.cpp
+  Rectangle.t.cpp
 )
 
 target_link_libraries(

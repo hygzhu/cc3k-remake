@@ -5,7 +5,7 @@
 
 class CommonRoom : public Room {
 public:
-    CommonRoom(BoundingRectangle rect);
+    CommonRoom(Rectangle rect);
     
     std::vector<std::shared_ptr<Entity> > getAllEntities();
 

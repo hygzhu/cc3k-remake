@@ -13,7 +13,7 @@ Corridor::Corridor(std::vector<Point> points, int size)
 {
     for(int i = 0; i < points.size(); i++){
         Point curr = points[i];
-        BoundingRectangle rect(curr.getX()-size, curr.getY()-size, size*2, size*2);
+        Rectangle rect(curr.getX()-size, curr.getY()-size, size*2, size*2);
         addFloor(rect);
     }
 }
@@ -22,7 +22,7 @@ std::vector<std::shared_ptr<Entity> >& Corridor::getEntities(){
     return m_entities;
 }
 
-void Corridor::addFloor(BoundingRectangle rect){
+void Corridor::addFloor(Rectangle rect){
     std::shared_ptr<Entity> floor = EntityFactory::createRectangularEntity(EntityFactory::EntityType::FLOOR, rect); 
     m_entities.push_back(floor);
 }
@@ -33,7 +33,7 @@ void Corridor::removeEntitiesInRooms(std::vector<std::shared_ptr<Room>> rooms)
 
     auto isInRoom = [&](std::shared_ptr<Entity> entity) { 
         for(std::shared_ptr<Room> room : rooms){
-            if(room->getBounds().isCollidingWith(entity->getBoundingRectangle())){
+            if(room->getBounds().isCollidingWith(entity->getRectangle())){
                 return true;
             }
         }

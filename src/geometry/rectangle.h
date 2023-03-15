@@ -1,18 +1,18 @@
-// BoundingRectangle.h
-#ifndef BOUNDINGRECTANGLE_H
-#define BOUNDINGRECTANGLE_H
+// rectangle.h
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
 
 #include <utility>
 #include <string>
 #include "point.h"
 
-class BoundingRectangle {
+class Rectangle {
 public:
-    BoundingRectangle(int x, int y, int width, int height);
-    bool isCollidingWith(const BoundingRectangle& other) const;
-    bool surrounds(const BoundingRectangle& other) const;
+    Rectangle(int x, int y, int width, int height);
+    bool isCollidingWith(const Rectangle& other) const;
+    bool surrounds(const Rectangle& other) const;
     bool isCollidingWithPoint(const Point& point) const;
-    BoundingRectangle getIntersection(const BoundingRectangle& other) const;
+    Rectangle getIntersection(const Rectangle& other) const;
 
     int getX() const;
     int getY() const;
@@ -36,4 +36,4 @@ private:
     int m_height;
 };
 
-#endif // BOUNDINGRECTANGLE_H
+#endif // Rectangle_H

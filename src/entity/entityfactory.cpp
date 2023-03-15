@@ -26,7 +26,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x, i
 
 
 
-std::shared_ptr<Entity> EntityFactory::createRectangularEntity(EntityType entitytype, BoundingRectangle rect){
+std::shared_ptr<Entity> EntityFactory::createRectangularEntity(EntityType entitytype, Rectangle rect){
 
     if (entitytype == EntityType::FLOOR ) {
         return std::make_shared<Floor>(rect);

@@ -1,6 +1,6 @@
 #include "startingroom.h"
 
-StartingRoom::StartingRoom(BoundingRectangle rect): Room(rect){
+StartingRoom::StartingRoom(Rectangle rect): Room(rect){
     // Generate entities in room
 }
 

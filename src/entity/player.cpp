@@ -12,5 +12,5 @@ void Player::move(int dx, int dy) {
 }
 
 void Player::printEntityType(){
-    std::cout<<"Player " << getBoundingRectangle().toString() <<  std::endl;
+    std::cout<<"Player " << getRectangle().toString() <<  std::endl;
 }

@@ -3,7 +3,7 @@
 #include "../utils/random.h"
 #include <iostream>
 
-CommonRoom::CommonRoom(BoundingRectangle rect): Room(rect){
+CommonRoom::CommonRoom(Rectangle rect): Room(rect){
     // Generate entities in room
     const int room_size = rect.getHeight()*rect.getWidth();
     const int block_size_per_entity = 50000;

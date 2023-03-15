@@ -132,14 +132,14 @@ void Game::render()
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
 
-    BoundingRectangle viewbox = m_map->getViewBox();
+    Rectangle viewbox = m_map->getViewBox();
     const int realx = viewbox.getX();
     const int realy = viewbox.getY();
 
     // Render all entities in viewbox
     for (const auto& entity : m_map->getViewboxStaticEntities()) {
         // We need to render the part of the entity in the viewbox
-        BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
+        Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
 
         SDL_Rect rect = { 
         static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
@@ -154,7 +154,7 @@ void Game::render()
     std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
     for (const auto& entity : m_map->getViewboxMovingEntities()) {
         // We need to render the part of the entity in the viewbox
-        BoundingRectangle entityRect = entity->getBoundingRectangle().getIntersection(viewbox);
+        Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
 
         SDL_Rect rect = { 
         static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 

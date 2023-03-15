@@ -2,7 +2,7 @@
 #define ROOM_H
 
 #include "../corridor.h"
-#include "../geometry/boundingrectangle.h"
+#include "../geometry/rectangle.h"
 #include "../entity/entity.h"
 #include <vector>
 #include <memory>
@@ -12,8 +12,8 @@ class Corridor;
 
 class Room{
 public:
-    Room(BoundingRectangle rect);
-    BoundingRectangle getBounds();
+    Room(Rectangle rect);
+    Rectangle getBounds();
 
     virtual std::vector<std::shared_ptr<Entity> >& getEntities();
 
@@ -25,7 +25,7 @@ public:
     void generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters);
     void print();
 protected:
-    BoundingRectangle m_bounds;
+    Rectangle m_bounds;
     std::vector<std::shared_ptr<Entity> > m_entities;
 
 };
