@@ -174,3 +174,10 @@ bool Rectangle::surrounds(const Rectangle& other) const{
     }
     return false;
 }
+
+double Rectangle::getArea() const {
+    return m_width*m_height;
+}
+double Rectangle::getPerimeter() const {
+    return (m_height+m_width)*2;
+}

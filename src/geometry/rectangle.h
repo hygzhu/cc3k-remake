@@ -5,15 +5,19 @@
 #include <utility>
 #include <string>
 #include "point.h"
+#include "shape.h"
 
-class Rectangle {
+class Rectangle : public Shape {
 public:
     Rectangle(int x, int y, int width, int height);
+
     bool isCollidingWith(const Rectangle& other) const;
     bool surrounds(const Rectangle& other) const;
     bool isCollidingWithPoint(const Point& point) const;
     Rectangle getIntersection(const Rectangle& other) const;
 
+    virtual double getArea() const override;
+    virtual double getPerimeter() const override;
     int getX() const;
     int getY() const;
     int getWidth() const;

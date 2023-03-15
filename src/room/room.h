@@ -22,7 +22,6 @@ public:
 
     virtual std::vector<std::shared_ptr<Entity> > getAllEntities() = 0;
 
-    void generateDoors(std::vector<std::shared_ptr<Corridor>> corridors, std::vector<Point> doorCenters);
     void print();
 protected:
     Rectangle m_bounds;

@@ -26,15 +26,9 @@ public:
     void setX(int x) { m_x = x; }
     void setY(int y) { m_y = y; }
 
-    int getWidth() const { return m_width; }
-    int getHeight() const { return m_height; }
-    void setWidth(int x) { m_width = x; }
-    void setHeight(int y) { m_height = y; }
-    Rectangle getRectangle();
-
-
     int & getAccelX(){ return m_accelx;}
     int & getAccelY(){return m_accely;}
+    Rectangle getRectangle();
 
 
     int getSize() const {return m_width;}
