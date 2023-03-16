@@ -5,11 +5,6 @@
 
 Rat::Rat(int x, int y) : Entity(x, y, 10, { 70, 49, 4, 255 }), m_inMovement(0) {}
 
-void Rat::move(int dx, int dy) {
-    m_x = dx;
-    m_y = dy;
-}
-
 
 void Rat::printEntityType(){
     std::cout<<"Rat " << m_x << " " << m_y << std::endl;

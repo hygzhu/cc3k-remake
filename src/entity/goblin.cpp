@@ -5,11 +5,6 @@
 
 Goblin::Goblin(int x, int y) : Entity(x, y, 10, { 0, 128, 0, 255 }), m_inMovement(0) {}
 
-void Goblin::move(int dx, int dy) {
-    m_x = dx;
-    m_y = dy;
-}
-
 
 void Goblin::printEntityType(){
     std::cout<<"Goblin " << m_x << " " << m_y << std::endl;

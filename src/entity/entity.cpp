@@ -1,11 +1,14 @@
 #include "entity.h"
 
 Entity::Entity(int x, int y, int size, RGBA color) : m_x(x), 
-m_y(y), m_width(size), m_height(size), m_color(color), m_accelx(0), m_accely(0) {}
+m_y(y), m_width(size), m_height(size),
+ m_color(color), m_accelx(0), m_accely(0), m_hitbox(Hitbox(Rectangle(0,0,size,size), Point(x,y))) {}
 
 
 Entity::Entity(Rectangle rect, RGBA color): m_x(rect.getX()), 
-m_y(rect.getY()), m_width(rect.getWidth()), m_height(rect.getHeight()), m_color(color), m_accelx(0), m_accely(0){
+m_y(rect.getY()), m_width(rect.getWidth()),
+ m_height(rect.getHeight()), m_color(color),
+  m_accelx(0), m_accely(0), m_hitbox(Hitbox(Rectangle(0,0,rect.getWidth(), rect.getHeight()), Point(rect.getX(), rect.getY()))){
 }
 
 Rectangle Entity::getRectangle()
@@ -22,7 +25,28 @@ bool Entity::collidable(){
 }
 int Entity::getX() const{ return m_x;};
 int Entity::getY() const{return m_y;};
-void Entity::setX(int x) { m_x = x; }
-void Entity::setY(int y) { m_y =y;}
+
+void Entity::setX(int x) { 
+    m_x = x; 
+    m_hitbox.setPoint(Point(x, m_hitbox.getPoint().getY()));
+}
+void Entity::setY(int y) { 
+    m_y =y;
+    m_hitbox.setPoint(Point(m_hitbox.getPoint().getX(), y));
+}
+
 int & Entity::getAccelX(){ return m_accelx;}
 int & Entity::getAccelY(){return m_accely;}
+
+Hitbox Entity::getHitbox()
+{
+    return m_hitbox;
+}
+
+
+void Entity::move(int dx, int dy) {
+    m_x = dx;
+    m_y = dy;
+
+    m_hitbox.setPoint(Point(dx, dy));
+}

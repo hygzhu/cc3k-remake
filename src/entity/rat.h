@@ -6,7 +6,6 @@
 class Rat : public Entity {
 public:
     Rat(int x, int y);
-    virtual void move(int dx, int dy);
 
     void setMovement();
     virtual void printEntityType();

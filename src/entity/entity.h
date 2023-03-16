@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "../geometry/rectangle.h"
+#include "../geometry/hitbox.h"
 
 struct RGBA {
     unsigned char red;
@@ -15,7 +16,7 @@ public:
     Entity(int x, int y, int size,RGBA color);
     Entity(Rectangle rect,RGBA color);
     virtual ~Entity() {}
-    virtual void move(int x, int y) = 0;
+    void move(int x, int y);
     virtual void printEntityType() = 0;
 
     virtual bool collidable();
@@ -30,9 +31,10 @@ public:
     int & getAccelY();
     Rectangle getRectangle();
 
-
     int getSize() const {return m_width;}
     RGBA getColor() const { return m_color; }
+
+    Hitbox getHitbox();
 protected:
     int m_x;
     int m_y;
@@ -41,6 +43,7 @@ protected:
     int m_width;
     int m_height;
     RGBA m_color;
+    Hitbox m_hitbox;
 };
 
 #endif

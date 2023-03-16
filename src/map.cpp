@@ -145,7 +145,7 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             continue;
         }
         // Check if either rectangle not overlapping
-        if (otherEntity->getRectangle().isCollidingWith(newRect)) {
+        if (otherEntity->getHitbox().collidesWith(newRect)) {
             //Collides
 
             // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
@@ -364,11 +364,11 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
     // Render corridors first
     for(auto corridor : m_corridors)
     {
-        for(const auto& wall : corridor->getEntities())
+        for(const auto& floor : corridor->getEntities())
         {
-            if(wall->getRectangle().isCollidingWith(getViewBox()))
+            if(floor->getHitbox().collidesWith(getViewBox()))
             {
-                viewBoxEntities.push_back(wall);
+                viewBoxEntities.push_back(floor);
             }
         }
     }
@@ -382,7 +382,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
 
             for(const auto& roomEntity : room->getNonMovingEntities())
             {
-                if(roomEntity->getRectangle().isCollidingWith(getViewBox()))
+                if(roomEntity->getHitbox().collidesWith(getViewBox()))
                 {
                     viewBoxEntities.push_back(roomEntity);
                 }
@@ -402,13 +402,11 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
     //render moving entities in rooms
     for(auto room : m_rooms)
     {
-        //std::cout << "getEntitiesToBeRendered " << room->getEntitiesToBeRendered().size() << std::endl;
-        //std::cout << "total entities " << room->getEntities().size() << std::endl;
-
+        
         // NOTE: Some entities will leave room, so we cannot render rooms that collide with viewbox
         for(const auto& roomEntity : room->getMovingEntities())
         {
-            if(roomEntity->getRectangle().isCollidingWith(getViewBox()))
+            if(roomEntity->getHitbox().collidesWith(getViewBox()))
             {
                 viewBoxEntities.push_back(roomEntity);
             }
@@ -416,11 +414,13 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
         
     }
 
-    
     //Render misc entities
     for(auto entity : entities)
-    {
-        if(entity->getRectangle().isCollidingWith(getViewBox())){
+    {   
+        entity->printEntityType();
+        entity->getHitbox().printHitbox();
+        getViewBox().print();
+        if(entity->getHitbox().collidesWith(getViewBox())){
             viewBoxEntities.push_back(entity);
         }
     }
