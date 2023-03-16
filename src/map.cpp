@@ -177,8 +177,8 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 
 bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 {
-    int oldx = entity->getX();
-    int oldy = entity->getY();
+    int oldx = entity->getRectangle().getX();
+    int oldy = entity->getRectangle().getY();
 
 
     // non diagonal movements only
@@ -188,7 +188,7 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 
     }
     if(x!=0){
-        y = entity->getY();
+        y = entity->getRectangle().getY();
         for(int i =0; i<=std::abs(x); ++i){
             //std::cout <<"Checking if it collides at " << std::min(oldx+x, oldx)+i << " " << y << std::endl;
             if(doesEntityCollideAt(std::min(oldx+x, oldx)+i,y,entity))
@@ -197,7 +197,7 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
             }
         }
     } else if(y!=0){
-        x = entity->getX();
+        x = entity->getRectangle().getX();
         for(int i =0; i<=std::abs(y); ++i){
             //std::cout <<"Checking if it collides at " << x << " " << std::min(oldy+y, oldy)+i << std::endl;
             if(doesEntityCollideAt(x,std::min(oldy+y, oldy)+i,entity))
@@ -214,8 +214,8 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 
 std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity)
 {
-    int oldx = entity->getX();
-    int oldy = entity->getY();
+    int oldx = entity->getRectangle().getX();
+    int oldy = entity->getRectangle().getY();
 
     std::pair<int,int> moveable_location = std::make_pair(oldx, oldy);
     // non diagonal movements only
@@ -347,8 +347,8 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
 
 Rectangle Map::getViewBox()
 {
-    const int middlex = player->getX()+ (player->getSize()/2);
-    const int middley = player->getY() + (player->getSize()/2);
+    const int middlex = player->getRectangle().getX() + (player->getRectangle().getWidth()/2);
+    const int middley = player->getRectangle().getY() + (player->getRectangle().getWidth()/2);
 
     const int topleftx = middlex - (width/2);
     const int toplefty = middley - (height/2);
@@ -648,7 +648,7 @@ void Map::updateAllMovableEntityLocations(double time){
         if(entityVelX != 0 || entityVelY != 0 ){
 
 
-            // std::cout << "OLD LOCATION AT "<< movingEntity->getX() << " " <<  movingEntity->getY() << std::endl;
+            // std::cout << "OLD LOCATION AT "<< movingentity->getRectangle().getX() << " " <<  movingentity->getRectangle().getY() << std::endl;
             std::pair<int,int> new_location = movableLocationCloseTo(entityVelX,entityVelY,movingEntity);
 
             //  std::cout << "MOVING TO "<< new_location.first << " " <<  new_location.second << std::endl;

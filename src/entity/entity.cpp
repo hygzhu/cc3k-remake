@@ -20,3 +20,9 @@ void Entity::setMovement(){
 bool Entity::collidable(){
     return false;
 }
+int Entity::getX() const{ return m_x;};
+int Entity::getY() const{return m_y;};
+void Entity::setX(int x) { m_x = x; }
+void Entity::setY(int y) { m_y =y;}
+int & Entity::getAccelX(){ return m_accelx;}
+int & Entity::getAccelY(){return m_accely;}

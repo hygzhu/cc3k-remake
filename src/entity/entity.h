@@ -21,13 +21,13 @@ public:
     virtual bool collidable();
     virtual void setMovement();
 
-    int getX() const { return m_x; }
-    int getY() const { return m_y; }
-    void setX(int x) { m_x = x; }
-    void setY(int y) { m_y = y; }
+    int getX() const;
+    int getY() const;
+    void setX(int x);
+    void setY(int y);
 
-    int & getAccelX(){ return m_accelx;}
-    int & getAccelY(){return m_accely;}
+    int & getAccelX();
+    int & getAccelY();
     Rectangle getRectangle();
 
 

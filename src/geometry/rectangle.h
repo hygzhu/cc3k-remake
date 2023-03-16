@@ -10,6 +10,7 @@
 class Rectangle : public Shape {
 public:
     Rectangle(int x, int y, int width, int height);
+    
 
     bool isCollidingWith(const Rectangle& other) const;
     bool surrounds(const Rectangle& other) const;

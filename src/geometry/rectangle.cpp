@@ -12,7 +12,6 @@ bool Rectangle::isCollidingWith(const Rectangle& other) const {
             m_y + m_height > other.m_y && m_y < other.m_y + other.m_height);
 }
 
-
 bool Rectangle::isCollidingWithPoint(const Point& p) const{
     return (m_x + m_width  >= p.getX() && m_x <= p.getX() &&
             m_y + m_height >= p.getY() && m_y <= p.getY());
