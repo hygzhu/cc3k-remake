@@ -22,11 +22,6 @@ public:
     virtual bool collidable();
     virtual void setMovement();
 
-    int getX() const;
-    int getY() const;
-    void setX(int x);
-    void setY(int y);
-
     int & getAccelX();
     int & getAccelY();
     Rectangle getRectangle();

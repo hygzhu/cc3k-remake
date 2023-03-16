@@ -23,17 +23,6 @@ void Entity::setMovement(){
 bool Entity::collidable(){
     return false;
 }
-int Entity::getX() const{ return m_x;};
-int Entity::getY() const{return m_y;};
-
-void Entity::setX(int x) { 
-    m_x = x; 
-    m_hitbox.setPoint(Point(x, m_hitbox.getPoint().getY()));
-}
-void Entity::setY(int y) { 
-    m_y =y;
-    m_hitbox.setPoint(Point(m_hitbox.getPoint().getX(), y));
-}
 
 int & Entity::getAccelX(){ return m_accelx;}
 int & Entity::getAccelY(){return m_accely;}

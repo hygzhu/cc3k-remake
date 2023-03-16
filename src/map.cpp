@@ -35,8 +35,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
     std::shared_ptr<Room> room = RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect);
     m_rooms.push_back(room);
 
-    player->setX(MAX_MAP_WIDTH/2 + starting_zone/2);
-    player->setY(MAX_MAP_HEIGHT/2 + starting_zone/2);
+    player->move(MAX_MAP_WIDTH/2 + starting_zone/2,MAX_MAP_HEIGHT/2 + starting_zone/2);
     entities.push_back(player);
 
     // Generate rest of dungeon
@@ -414,12 +413,10 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
         
     }
 
-    //Render misc entities
+    //Render misc entities (only player is here)
     for(auto entity : entities)
     {   
-        entity->printEntityType();
-        entity->getHitbox().printHitbox();
-        getViewBox().print();
+
         if(entity->getHitbox().collidesWith(getViewBox())){
             viewBoxEntities.push_back(entity);
         }
