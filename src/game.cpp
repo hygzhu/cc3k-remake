@@ -137,7 +137,12 @@ void Game::render()
     const int realx = viewbox.getX();
     const int realy = viewbox.getY();
 
-    Renderer renderer(m_renderer);
+    Renderer renderer(
+        m_renderer, 
+        Rectangle(0,0, SCREEN_WIDTH, SCREEN_HEIGHT),
+        Rectangle(RENDER_X, RENDER_Y, RENDER_WIDTH, RENDER_HEIGHT),
+        viewbox
+    );
 
     //viewbox.print();
 
@@ -149,12 +154,7 @@ void Game::render()
         //entity->printEntityType();
         entity->getSprite()->render(
             renderer,
-            entity->getPoint(),
-            BLOCK_WIDTH, 
-            BLOCK_HEIGHT,
-            Point(realx, realy),
-            Point(RENDER_X, RENDER_Y),
-            viewbox);
+            entity->getPoint());
     }
     // std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
     for (const auto& entity : m_map->getViewboxMovingEntities()) {
@@ -163,12 +163,7 @@ void Game::render()
 
         entity->getSprite()->render(
             renderer,
-            entity->getPoint(),
-            BLOCK_WIDTH, 
-            BLOCK_HEIGHT,
-            Point(realx, realy),
-            Point(RENDER_X, RENDER_Y),
-            viewbox);
+            entity->getPoint());
         // entity->printEntityType();
     }
 
