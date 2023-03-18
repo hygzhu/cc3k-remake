@@ -8,7 +8,7 @@ class Sprite {
     
 public:
 
-    virtual void render(Renderer renderer, Point p, float xtrans, float ytrans, Point baseviewp, Point relativeviewp) = 0;
+    virtual void render(Renderer renderer, Point p, float xtrans, float ytrans, Point baseviewp, Point relativeviewp, Rectangle viewbox) = 0;
 };
 
 #endif

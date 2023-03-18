@@ -153,7 +153,8 @@ void Game::render()
             BLOCK_WIDTH, 
             BLOCK_HEIGHT,
             Point(realx, realy),
-            Point(RENDER_X, RENDER_Y));
+            Point(RENDER_X, RENDER_Y),
+            viewbox);
     }
     // std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
     for (const auto& entity : m_map->getViewboxMovingEntities()) {
@@ -166,7 +167,8 @@ void Game::render()
             BLOCK_WIDTH, 
             BLOCK_HEIGHT,
             Point(realx, realy),
-            Point(RENDER_X, RENDER_Y));
+            Point(RENDER_X, RENDER_Y),
+            viewbox);
         // entity->printEntityType();
     }
 
