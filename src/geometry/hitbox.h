@@ -4,6 +4,7 @@
 #include <vector>
 #include "rectangle.h"
 #include "point.h"
+#include <string>
 
 class Hitbox{
 public:
@@ -13,9 +14,12 @@ public:
     bool collidesWith(const Hitbox& other);
     bool collidesWith(const Rectangle& other);
     bool collidesWith(const Point& other);
+    bool surrounds(const Hitbox& other);
     void setPoint(Point p);
     Point getPoint();
-    void printHitbox();
+    Point getCenter();
+    void printHitbox() const;
+    std::string toString();
 
 private:
     Rectangle relativeRectangle(Rectangle rect) const;

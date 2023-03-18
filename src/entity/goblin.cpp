@@ -2,8 +2,10 @@
 #include <iostream>
 #include "../utils/random.h"
 #include <string>
+#include "../graphics/spritefactory.h"
 
-Goblin::Goblin(int x, int y) : Entity(x, y, 10, { 0, 128, 0, 255 }), m_inMovement(0) {}
+Goblin::Goblin(int x, int y) : Entity(Rectangle(x,y,10,10),  SpriteFactory::createRectangularSprite(
+    SpriteFactory::SpriteType::RECTANGULAR, Rectangle(0,0,10,10), { 0, 128, 0, 255})), m_inMovement(0) {}
 
 
 void Goblin::printEntityType(){

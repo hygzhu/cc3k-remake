@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <utility>
+#include "renderer.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
@@ -136,34 +137,36 @@ void Game::render()
     const int realx = viewbox.getX();
     const int realy = viewbox.getY();
 
+    Renderer renderer(m_renderer);
+
+    //viewbox.print();
+
     // Render all entities in viewbox
     for (const auto& entity : m_map->getViewboxStaticEntities()) {
         // We need to render the part of the entity in the viewbox
-        Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
+        // Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
 
-        SDL_Rect rect = { 
-        static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
-        static_cast<int>((entityRect.getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
-        static_cast<int>(entityRect.getWidth()*BLOCK_WIDTH), 
-        static_cast<int>(entityRect.getHeight()*BLOCK_HEIGHT)};
-        RGBA entityColor = entity->getColor();
-        SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
-        SDL_RenderFillRect(m_renderer, &rect);
-        // entity->printEntityType();
+        //entity->printEntityType();
+        entity->getSprite()->render(
+            renderer,
+            entity->getPoint(),
+            BLOCK_WIDTH, 
+            BLOCK_HEIGHT,
+            Point(realx, realy),
+            Point(RENDER_X, RENDER_Y));
     }
-    std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
+    // std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
     for (const auto& entity : m_map->getViewboxMovingEntities()) {
         // We need to render the part of the entity in the viewbox
-        Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
+        // Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
 
-        SDL_Rect rect = { 
-        static_cast<int>((entityRect.getX()-realx)*BLOCK_WIDTH) + RENDER_X, 
-        static_cast<int>((entityRect.getY()-realy)*BLOCK_HEIGHT) + RENDER_Y,
-        static_cast<int>(entityRect.getWidth()*BLOCK_WIDTH), 
-        static_cast<int>(entityRect.getHeight()*BLOCK_HEIGHT)};
-        RGBA entityColor = entity->getColor();
-        SDL_SetRenderDrawColor(m_renderer, entityColor.red, entityColor.green, entityColor.blue, entityColor.alpha);
-        SDL_RenderFillRect(m_renderer, &rect);
+        entity->getSprite()->render(
+            renderer,
+            entity->getPoint(),
+            BLOCK_WIDTH, 
+            BLOCK_HEIGHT,
+            Point(realx, realy),
+            Point(RENDER_X, RENDER_Y));
         // entity->printEntityType();
     }
 

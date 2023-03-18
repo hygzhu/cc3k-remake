@@ -129,11 +129,11 @@ int Map::getHeight()
 bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 {
 
-    // std::cout << "CHECKING IF IT COLLIDES" <<std::endl;
+    //  std::cout << "CHECKING IF IT COLLIDES " << entity->getPoint().toString() <<std::endl;
+    //  std::cout << "x y " <<  x << " " << y <<std::endl;
     //Entity hit box
-    Rectangle newRect = entity->getRectangle();
-    newRect.setX(x);
-    newRect.setY(y);
+    Hitbox hitbox = entity->getHitbox();
+    hitbox.setPoint(Point(x,y));
     bool collidableEntityFound = false;
 
     for(const auto& otherEntity : getAllEntities())
@@ -144,18 +144,18 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
             continue;
         }
         // Check if either rectangle not overlapping
-        if (otherEntity->getHitbox().collidesWith(newRect)) {
+        if (otherEntity->getHitbox().collidesWith(hitbox)) {
             //Collides
 
             // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
-            if(otherEntity->collidable() && otherEntity->getRectangle().surrounds(newRect)){
+            if(otherEntity->collidable() && otherEntity->getHitbox().surrounds(hitbox)){
                 // check if it surrounds
                 collidableEntityFound = true;
                 // std::cout << collidableEntityFound <<std::endl;
             }
             
             if(!otherEntity->collidable()){
-                // std::cout << "noncollidableEntityFound" << std::endl;
+                //std::cout << "non collidableEntityFound and collides -> tru" << std::endl;
                 // otherEntity->printEntityType();
                 return true;
             }
@@ -165,7 +165,7 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
     // std::cout << "THE END" << std::endl;
     //std::cout << collidableEntityFound <<std::endl;
     if(collidableEntityFound){
-        //std::cout << "can collid is true" << std::endl;
+        //std::cout << "can collid is true -> false" << std::endl;
         return false;
     }
     //std::cout << "cannot move" << std::endl;
@@ -176,8 +176,8 @@ bool Map::doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity)
 
 bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 {
-    int oldx = entity->getRectangle().getX();
-    int oldy = entity->getRectangle().getY();
+    int oldx = entity->getHitbox().getPoint().getX();
+    int oldy = entity->getHitbox().getPoint().getY();
 
 
     // non diagonal movements only
@@ -187,7 +187,7 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 
     }
     if(x!=0){
-        y = entity->getRectangle().getY();
+        y = entity->getHitbox().getPoint().getY();
         for(int i =0; i<=std::abs(x); ++i){
             //std::cout <<"Checking if it collides at " << std::min(oldx+x, oldx)+i << " " << y << std::endl;
             if(doesEntityCollideAt(std::min(oldx+x, oldx)+i,y,entity))
@@ -196,7 +196,7 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
             }
         }
     } else if(y!=0){
-        x = entity->getRectangle().getX();
+        x = entity->getHitbox().getPoint().getX();
         for(int i =0; i<=std::abs(y); ++i){
             //std::cout <<"Checking if it collides at " << x << " " << std::min(oldy+y, oldy)+i << std::endl;
             if(doesEntityCollideAt(x,std::min(oldy+y, oldy)+i,entity))
@@ -213,15 +213,15 @@ bool Map::canEntityMove(int x, int y, std::shared_ptr<Entity> entity)
 
 std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity)
 {
-    int oldx = entity->getRectangle().getX();
-    int oldy = entity->getRectangle().getY();
+    int oldx = entity->getPoint().getX();
+    int oldy = entity->getPoint().getY();
+
+    //entity->getPoint();
 
     std::pair<int,int> moveable_location = std::make_pair(oldx, oldy);
     // non diagonal movements only
-    //std::cout << x << " " << y << std::endl;
     if(x!=0 && y != 0)
     {   
-        //std::cout << "Try diag"<< std::endl;
         //even diagonal movements only
         if(std::abs(x) !=  std::abs(y)){
             return moveable_location;
@@ -285,6 +285,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
         //std::cout << "Try hor"<< std::endl;
         for(int i =0; i<=std::abs(x); ++i){
             if(x>0){
+
                 if(doesEntityCollideAt(oldx+i,oldy,entity))
                 {
                     // return moveable_location;
@@ -306,6 +307,7 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
 
     if(Point(oldx,oldy).distanceTo(Point(moveable_location.first, moveable_location.second))!=0){
         //std::cout << " hori Distance isnt zero" << std::endl;
+        //Point(moveable_location.first, moveable_location.second).print();
         return moveable_location;
     }
 
@@ -339,20 +341,20 @@ std::pair<int,int> Map::movableLocationCloseTo(int x, int y, std::shared_ptr<Ent
         }
     }
 
-    //std::cout << "Can move"<< std::endl;
     return moveable_location;
 }
 
 
 Rectangle Map::getViewBox()
 {
-    const int middlex = player->getRectangle().getX() + (player->getRectangle().getWidth()/2);
-    const int middley = player->getRectangle().getY() + (player->getRectangle().getWidth()/2);
+    const int middlex = player->getHitbox().getCenter().getX() + player->getHitbox().getPoint().getX();
+    const int middley = player->getHitbox().getCenter().getX() + player->getHitbox().getPoint().getY();
 
     const int topleftx = middlex - (width/2);
     const int toplefty = middley - (height/2);
 
     Rectangle viewbox(topleftx,toplefty, width,height);
+    //viewbox.print();
     return viewbox;
 }
 
@@ -368,6 +370,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
             if(floor->getHitbox().collidesWith(getViewBox()))
             {
                 viewBoxEntities.push_back(floor);
+
             }
         }
     }
@@ -388,7 +391,7 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxStaticEntities()
             }
         }
     }
-
+    //std::cout << "total entities " << viewBoxEntities.size() << std::endl;
     return viewBoxEntities;
 
 }
@@ -416,7 +419,6 @@ std::vector<std::shared_ptr<Entity> > Map::getViewboxMovingEntities()
     //Render misc entities (only player is here)
     for(auto entity : entities)
     {   
-
         if(entity->getHitbox().collidesWith(getViewBox())){
             viewBoxEntities.push_back(entity);
         }
@@ -645,7 +647,9 @@ void Map::updateAllMovableEntityLocations(double time){
         if(entityVelX != 0 || entityVelY != 0 ){
 
 
-            // std::cout << "OLD LOCATION AT "<< movingentity->getRectangle().getX() << " " <<  movingentity->getRectangle().getY() << std::endl;
+            //  std::cout << "OLD LOCATION AT "<< movingEntity->getPoint().getX() << " " <<  movingEntity->getPoint().getY() << std::endl;
+
+            //  std::cout << "x vel  "<< entityVelX << " y vel " <<  entityVelY << std::endl;
             std::pair<int,int> new_location = movableLocationCloseTo(entityVelX,entityVelY,movingEntity);
 
             //  std::cout << "MOVING TO "<< new_location.first << " " <<  new_location.second << std::endl;

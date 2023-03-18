@@ -3,42 +3,31 @@
 
 #include "../geometry/rectangle.h"
 #include "../geometry/hitbox.h"
+#include "../graphics/sprite.h"
+#include <memory>
 
-struct RGBA {
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-    unsigned char alpha;
-};
 
 class Entity {
 public:
-    Entity(int x, int y, int size,RGBA color);
-    Entity(Rectangle rect,RGBA color);
+    Entity(Rectangle rect, std::shared_ptr<Sprite> sprite);
     virtual ~Entity() {}
     void move(int x, int y);
     virtual void printEntityType() = 0;
-
     virtual bool collidable();
     virtual void setMovement();
 
     int & getAccelX();
     int & getAccelY();
-    Rectangle getRectangle();
-
-    int getSize() const {return m_width;}
-    RGBA getColor() const { return m_color; }
-
+    Point getPoint();
     Hitbox getHitbox();
+    std::shared_ptr<Sprite> getSprite();
 protected:
     int m_x;
     int m_y;
     int m_accelx;
     int m_accely;
-    int m_width;
-    int m_height;
-    RGBA m_color;
     Hitbox m_hitbox;
+    std::shared_ptr<Sprite> m_sprite;
 };
 
 #endif
