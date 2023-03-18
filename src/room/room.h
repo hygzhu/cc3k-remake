@@ -14,6 +14,7 @@ class Room{
 public:
     Room(Rectangle rect);
     Rectangle getBounds();
+    virtual ~Room(){}
 
     virtual std::vector<std::shared_ptr<Entity> >& getEntities();
 

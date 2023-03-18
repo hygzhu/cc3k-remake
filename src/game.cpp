@@ -127,8 +127,6 @@ void Game::render()
     const int RENDER_HEIGHT = 700;
     const int RENDER_X = (SCREEN_WIDTH/2)- (RENDER_WIDTH/2);
     const int RENDER_Y = (SCREEN_HEIGHT/2)- (RENDER_HEIGHT/2);
-    const float BLOCK_WIDTH = RENDER_WIDTH/ m_map->getWidth();
-    const float BLOCK_HEIGHT = RENDER_HEIGHT/ m_map->getHeight();
 
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);

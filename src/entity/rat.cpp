@@ -2,10 +2,8 @@
 #include <iostream>
 #include "../utils/random.h"
 #include <string>
-#include "../graphics/spritefactory.h"
 
-Rat::Rat(int x, int y) : Entity(Rectangle(x,y,10,10),  SpriteFactory::createRectangularSprite(
-    SpriteFactory::SpriteType::RECTANGULAR, Rectangle(0,0,10,10), { 79, 49, 4, 255})), m_inMovement(0)  {}
+Rat::Rat(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite) : Entity(p, hitbox, sprite), m_inMovement(0)  {}
 
 
 void Rat::printEntityType(){

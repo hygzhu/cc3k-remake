@@ -10,7 +10,9 @@
 class Entity {
 public:
     Entity(Rectangle rect, std::shared_ptr<Sprite> sprite);
+    Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
     virtual ~Entity() {}
+    
     void move(int x, int y);
     virtual void printEntityType() = 0;
     virtual bool collidable();

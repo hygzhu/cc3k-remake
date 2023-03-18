@@ -7,7 +7,7 @@
 class Sprite {
     
 public:
-
+    virtual ~Sprite(){}
     virtual void render(Renderer renderer, Point p) = 0;
 };
 

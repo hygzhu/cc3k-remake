@@ -7,6 +7,14 @@
 Rectangle::Rectangle(int x, int y, int width, int height) 
     : m_x(x), m_y(y), m_width(width), m_height(height) {}
 
+
+Rectangle::Rectangle(Point p, int width, int height):
+ m_x(p.getX()), m_y(p.getY()), m_width(width), m_height(height) {
+}
+
+
+Rectangle::~Rectangle(){}
+
 bool Rectangle::isCollidingWith(const Rectangle& other) const {
     return (m_x + m_width  > other.m_x && m_x < other.m_x + other.m_width &&
             m_y + m_height > other.m_y && m_y < other.m_y + other.m_height);
@@ -63,6 +71,11 @@ void Rectangle::setHeight(int height){
     m_height = height;
 }
 
+
+
+Point Rectangle::getCoordinates(){
+    return Point(m_x,m_y);
+}
 
 Point Rectangle::getCenterPoint(){
     Point centerpoint;

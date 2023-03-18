@@ -5,12 +5,13 @@
 
 class Goblin : public Entity {
 public:
-    Goblin(int x, int y);
+    Goblin(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
     
     void setMovement();
     virtual void printEntityType();
 private:
     int m_inMovement;
+    int m_restPoint;
 };
 
 #endif

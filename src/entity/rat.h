@@ -5,7 +5,7 @@
 
 class Rat : public Entity {
 public:
-    Rat(int x, int y);
+    Rat(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
 
     void setMovement();
     virtual void printEntityType();

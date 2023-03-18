@@ -26,6 +26,7 @@ CommonRoom::CommonRoom(Rectangle rect): Room(rect){
 
 
 
+
 std::vector<std::shared_ptr<Entity> > CommonRoom::getAllEntities(){
 
     std::vector<std::shared_ptr<Entity> > result;
