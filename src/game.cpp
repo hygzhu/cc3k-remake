@@ -134,35 +134,43 @@ void Game::render()
     const int realx = viewbox.getX();
     const int realy = viewbox.getY();
 
-    Renderer renderer(
+    Renderer game_window_renderer(
         m_renderer, 
         Rectangle(0,0, SCREEN_WIDTH, SCREEN_HEIGHT),
         Rectangle(RENDER_X, RENDER_Y, RENDER_WIDTH, RENDER_HEIGHT),
         viewbox
     );
 
-    //viewbox.print();
-
     // Render all entities in viewbox
     for (const auto& entity : m_map->getViewboxStaticEntities()) {
-        // We need to render the part of the entity in the viewbox
-        // Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
-
-        //entity->printEntityType();
         entity->getSprite()->render(
-            renderer,
+            game_window_renderer,
             entity->getPoint());
     }
-    // std::cout << "Moving Entities in viewbox: " << m_map->getViewboxMovingEntities().size() << std::endl;
     for (const auto& entity : m_map->getViewboxMovingEntities()) {
-        // We need to render the part of the entity in the viewbox
-        // Rectangle entityRect = entity->getRectangle().getIntersection(viewbox);
-
         entity->getSprite()->render(
-            renderer,
+            game_window_renderer,
             entity->getPoint());
-        // entity->printEntityType();
     }
+    // Render GUI
+    auto status = m_map->getPlayer()->getStatus();
+    SDL_Rect hpBar = { 
+        20,
+        20,
+        2*status.getCurrHp(),
+        20
+    };
+    SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(m_renderer, &hpBar);
+    SDL_Rect mpBar = { 
+        20,
+        50,
+        2*status.getCurrMp(),
+        20
+    };
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(m_renderer, &mpBar);
+    
 
     SDL_RenderPresent(m_renderer);
 }

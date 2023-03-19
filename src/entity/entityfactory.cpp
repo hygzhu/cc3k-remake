@@ -54,7 +54,7 @@ std::shared_ptr<Entity> EntityFactory::createPlayer(){
     Rectangle rect(0,0,10,10);
     std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(SpriteFactory::SpriteType::RECTANGULAR, rect, { 220, 220, 220, 255});
     Hitbox hitbox = Hitbox(rect, p);
-    Status stats(100,0,20,20,0,0,0,0,100,0);
+    Status stats(100,20,20,20,0,0,0,0,100,20);
     return std::make_shared<Player>(p, hitbox, sprite,stats);
 }
 
