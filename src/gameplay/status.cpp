@@ -37,7 +37,6 @@ double Status::getCurrentAttack(){
 void Status::defendFrom(Status& other){
 
     double damage = ceil((100/(100+m_base_def))*other.getCurrentAttack());
-    std::cout << damage <<  std::endl;
     m_curr_hp -= damage;
     if(m_curr_hp < 0){
         m_curr_hp = 0;

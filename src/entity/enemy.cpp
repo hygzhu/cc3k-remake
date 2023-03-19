@@ -27,10 +27,13 @@ void Enemy::setMovement(){
         }
         m_accely = base_acceleration*rand;
 
-        m_inMovement = 60;
-    }else{
-        m_inMovement -=1;
+        m_inMovement = 500;
+    }else if (m_inMovement < Random::randomInt(200,400)){
+         m_accelx = 0;
+         m_accely = 0;
     }
+
+    m_inMovement -=1;
 
 }
 
@@ -42,6 +45,10 @@ void Enemy::triggerCollisionSideEffect(std::shared_ptr<Entity> other){
         if(!other->isInvincible()){
             other->getStatus().defendFrom(m_status);
             other->setInvincible(true);
+        }
+        if(!m_isInvincible){
+            m_status.defendFrom(other->getStatus());
+            m_isInvincible = true;
         }
 
     }

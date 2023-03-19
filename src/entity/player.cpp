@@ -23,6 +23,10 @@ void Player::triggerCollisionSideEffect(std::shared_ptr<Entity> other){
             other->getStatus().defendFrom(m_status);
             other->setInvincible(true);
         }
+        if(!m_isInvincible){
+            m_status.defendFrom(other->getStatus());
+            m_isInvincible = true;
+        }
 
     }
 
