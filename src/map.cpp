@@ -18,8 +18,8 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin, int corri
 
     std::cout << "Generating map with at most " << numRooms << " Rooms" << std::endl;
 
-    const int VIEW_HEIGHT = 700;
-    const int VIEW_WIDTH = 700;
+    const int VIEW_HEIGHT = 720;
+    const int VIEW_WIDTH = 1280;
     const int MAX_MAP_HEIGHT = 2000;
     const int MAX_MAP_WIDTH = 2000;
     width = VIEW_WIDTH;

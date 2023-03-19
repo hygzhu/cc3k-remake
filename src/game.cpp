@@ -123,8 +123,8 @@ int Game::start()
 void Game::render()
 {
 
-    const int RENDER_WIDTH = 700;
-    const int RENDER_HEIGHT = 700;
+    const int RENDER_WIDTH = 1280;
+    const int RENDER_HEIGHT = 720;
     const int RENDER_X = (SCREEN_WIDTH/2)- (RENDER_WIDTH/2);
     const int RENDER_Y = (SCREEN_HEIGHT/2)- (RENDER_HEIGHT/2);
 

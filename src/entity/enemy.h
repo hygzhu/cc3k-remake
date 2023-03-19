@@ -1,11 +1,11 @@
-#ifndef RAT_H
-#define RAT_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include "entity.h"
 
-class Rat : public Entity {
+class Enemy : public Entity {
 public:
-    Rat(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
+    Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
 
     void setMovement();
     virtual void printEntityType();

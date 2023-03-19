@@ -13,16 +13,19 @@ public:
     Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
     virtual ~Entity() {}
     
-    void move(int x, int y);
     virtual void printEntityType() = 0;
+
+    //Movement items
     virtual bool collidable();
     virtual void setMovement();
-
     int & getAccelX();
     int & getAccelY();
+    void move(int x, int y);
+
     Point getPoint();
     Hitbox getHitbox();
     std::shared_ptr<Sprite> getSprite();
+
 protected:
     int m_x;
     int m_y;

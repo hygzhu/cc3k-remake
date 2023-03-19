@@ -1,17 +1,17 @@
-#include "rat.h"
+#include "enemy.h"
 #include <iostream>
 #include "../utils/random.h"
 #include <string>
 
-Rat::Rat(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite) : Entity(p, hitbox, sprite), m_inMovement(0)  {}
+Enemy::Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite) : Entity(p, hitbox, sprite), m_inMovement(0)  {}
 
 
-void Rat::printEntityType(){
-    std::cout<<"Rat " << m_x << " " << m_y << std::endl;
+void Enemy::printEntityType(){
+    std::cout<<"Enemy " << m_x << " " << m_y << std::endl;
 }
 
 
-void Rat::setMovement(){
+void Enemy::setMovement(){
 
     if(!m_inMovement){
         int base_acceleration = 100;

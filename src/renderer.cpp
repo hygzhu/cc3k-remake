@@ -25,12 +25,18 @@ void Renderer::renderRectangle(Rectangle rect, RGBA rgba){
     // rect_intersection.print();
     // std::cout << "-------" << std::endl;
 
+    float window_ratio_width = m_game_window.getWidth()*1.0/m_screen_window.getWidth();
+    float window_ratio_height = m_game_window.getHeight()*1.0/m_screen_window.getHeight();
+
+    // std::cout <<window_ratio_width << std::endl;
+    // std::cout <<window_ratio_height << std::endl;
+
     // Map the game window to the screen window
     Rectangle rectMapped(
-    static_cast<int>((rect_intersection.getX()-m_game_window.getX())) + m_screen_window.getX(), 
-    static_cast<int>((rect_intersection.getY()-m_game_window.getY())) + m_screen_window.getY(),
-    static_cast<int>(rect_intersection.getWidth()), 
-    static_cast<int>(rect_intersection.getHeight()));
+    static_cast<int>((rect_intersection.getX()-m_game_window.getX())/window_ratio_width) + m_screen_window.getX(), 
+    static_cast<int>((rect_intersection.getY()-m_game_window.getY())/window_ratio_height) + m_screen_window.getY(),
+    static_cast<int>(rect_intersection.getWidth()/window_ratio_width), 
+    static_cast<int>(rect_intersection.getHeight()/window_ratio_height));
 
     
 

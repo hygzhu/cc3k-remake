@@ -16,7 +16,6 @@ CommonRoom::CommonRoom(Rectangle rect): Room(rect){
     for(int i = 0; i<num_enemies; ++i){
 
         int entityType = Random::randomInt(EntityFactory::EnemyType::GOBLIN, EntityFactory::EnemyType::RAT);
-
         const int x = Random::randomInt(rect.getX()+wall_buffer, rect.getX() + rect.getWidth() - wall_buffer);
         const int y = Random::randomInt(rect.getY()+wall_buffer, rect.getY() + rect.getHeight() - wall_buffer);
         m_enemies.push_back(EntityFactory::createEnemy(static_cast<EntityFactory::EnemyType>(entityType), x, y));
