@@ -3,7 +3,7 @@
 #include "../utils/random.h"
 #include <string>
 
-Enemy::Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite) : Entity(p, hitbox, sprite), m_inMovement(0)  {}
+Enemy::Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats) : Entity(p, hitbox, sprite, stats), m_inMovement(0)  {}
 
 
 void Enemy::printEntityType(){

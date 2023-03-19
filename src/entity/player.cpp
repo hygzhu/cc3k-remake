@@ -3,12 +3,9 @@
 #include <iostream>
 
 
-Player::Player(int size, RGBA color): Entity(Rectangle(0,0,size,size),  
-SpriteFactory::createRectangularSprite(
-    SpriteFactory::SpriteType::RECTANGULAR, Rectangle(0,0,size,size), color)
-    ) {
-        
-    }
+Player::Player(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats): Entity(p, hitbox, sprite, stats)
+
+{}
 
 
 

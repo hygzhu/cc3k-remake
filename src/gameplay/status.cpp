@@ -1,12 +1,13 @@
 #include "status.h"
+#include <iostream>
 
 Status::Status() :
-        m_base_hp(100), m_base_mp(50), m_base_def(10), m_base_atk(20),
-        m_base_luck(5), m_base_int(15), m_base_spd(10), m_base_dex(10),
-        m_curr_hp(100), m_curr_mp(50)
+        m_base_hp(1), m_base_mp(0), m_base_def(0), m_base_atk(0),
+        m_base_luck(0), m_base_int(0), m_base_spd(0), m_base_dex(0),
+        m_curr_hp(1), m_curr_mp(0)
 {}
 
-Status::Status(int baseHp, int baseMp, int baseDef, int baseAtk,
+Status::Status(int baseHp, int baseMp, int baseAtk, int baseDef,
            int baseLuck, int baseInt, int baseSpd, int baseDex,
            int currHp, int currMp) :
         m_base_hp(baseHp), m_base_mp(baseMp), m_base_def(baseDef),

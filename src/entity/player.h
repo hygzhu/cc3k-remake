@@ -7,7 +7,7 @@
 
 class Player : public Entity {
 public:
-    Player(int size, RGBA color);
+    Player(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats);
     virtual void printEntityType();
 
 };

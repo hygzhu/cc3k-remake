@@ -5,16 +5,18 @@ Entity::Entity(Rectangle rect, std::shared_ptr<Sprite> sprite):
  m_y(rect.getY()), 
   m_accelx(0), m_accely(0), 
   m_hitbox(Hitbox(Rectangle(0,0,rect.getWidth(), rect.getHeight()), Point(rect.getX(), rect.getY()))),
-  m_sprite(sprite){
+  m_sprite(sprite),
+  m_status(Status()){
 }
 
 
-Entity::Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite):
+Entity::Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status status):
     m_x(p.getX()), 
     m_y(p.getY()), 
     m_accelx(0), m_accely(0), 
     m_hitbox(hitbox),
-    m_sprite(sprite){}
+    m_sprite(sprite),
+    m_status(status){}
 
 void Entity::setMovement(){
     //Do nothing if not overidden
@@ -41,6 +43,11 @@ void Entity::move(int dx, int dy) {
 
 std::shared_ptr<Sprite> Entity::getSprite(){
     return m_sprite;
+}
+
+
+Status Entity::getStatus(){
+    return m_status;
 }
 
 Point Entity::getPoint(){

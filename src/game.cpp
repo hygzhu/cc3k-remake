@@ -1,5 +1,5 @@
 #include "game.h"
-#include "entity/player.h"
+#include "entity/entityfactory.h"
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL_image.h>
 #include <stdio.h>
@@ -29,8 +29,7 @@ int Game::start()
 {
 
 
-    RGBA playerColor = { 255, 0, 0, 255 };
-    std::shared_ptr<Player> player = std::make_shared<Player>(10, playerColor);
+    auto player = EntityFactory::createPlayer();
     int max_rooms = 20;
     m_map = std::make_shared<Map>(player,max_rooms,40,35);
     bool quit = false;

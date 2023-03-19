@@ -20,6 +20,9 @@ public:
     static std::shared_ptr<Entity> createRectangularEntity(EntityType entitytype, Rectangle rect);
 
     static std::shared_ptr<Entity> createEnemy(EnemyType enemyType, int x, int y);
+
+
+    static std::shared_ptr<Entity> createPlayer();
 };
 
 #endif

@@ -5,7 +5,7 @@ class Status {
 
 public:
     Status();
-    Status(int baseHp, int baseMp, int baseDef, int baseAtk,
+    Status(int baseHp, int baseMp, int baseAtk, int baseDef,
            int baseLuck, int baseInt, int baseSpd, int baseDex,
            int currHp, int currMp);
     void printStatus();

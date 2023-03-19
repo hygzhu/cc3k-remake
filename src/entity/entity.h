@@ -4,13 +4,14 @@
 #include "../geometry/rectangle.h"
 #include "../geometry/hitbox.h"
 #include "../graphics/sprite.h"
+#include "../gameplay/status.h"
 #include <memory>
 
 
 class Entity {
 public:
     Entity(Rectangle rect, std::shared_ptr<Sprite> sprite);
-    Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite);
+    Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status status);
     virtual ~Entity() {}
     
     virtual void printEntityType() = 0;
@@ -25,6 +26,7 @@ public:
     Point getPoint();
     Hitbox getHitbox();
     std::shared_ptr<Sprite> getSprite();
+    Status getStatus();
 
 protected:
     int m_x;
@@ -33,6 +35,7 @@ protected:
     int m_accely;
     Hitbox m_hitbox;
     std::shared_ptr<Sprite> m_sprite;
+    Status m_status;
 };
 
 #endif
