@@ -22,9 +22,6 @@ public:
 
     int getWidth();
     int getHeight();
-    bool canEntityMove(int x, int y, std::shared_ptr<Entity> entity);
-    std::pair<int,int> movableLocationCloseTo(int x, int y, std::shared_ptr<Entity> entity);
-    bool doesEntityCollideAt(int x, int y, std::shared_ptr<Entity> entity);
     Rectangle getViewBox();
     std::shared_ptr<Entity> getPlayer() { return player; }
 

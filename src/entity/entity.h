@@ -22,11 +22,18 @@ public:
     int & getAccelX();
     int & getAccelY();
     void move(int x, int y);
+    
+
+    virtual void tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities);
+    Point closestMovablePoint(Point p, std::vector<std::shared_ptr<Entity> > otherEntities);
+    bool doesEntityCollideAt(Point p, std::vector<std::shared_ptr<Entity> > otherEntities);
 
     Point getPoint();
     Hitbox getHitbox();
     std::shared_ptr<Sprite> getSprite();
     Status getStatus();
+
+    
 
 protected:
     int m_x;
@@ -36,6 +43,7 @@ protected:
     Hitbox m_hitbox;
     std::shared_ptr<Sprite> m_sprite;
     Status m_status;
+
 };
 
 #endif
