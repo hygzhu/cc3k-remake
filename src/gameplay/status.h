@@ -5,23 +5,27 @@ class Status {
 
 public:
     Status();
-    Status(int baseHp, int baseMp, int baseAtk, int baseDef,
-           int baseLuck, int baseInt, int baseSpd, int baseDex,
-           int currHp, int currMp);
+    Status(double baseHp, double baseMp, double baseAtk, double baseDef,
+           double baseLuck, double baseInt, double baseSpd, double baseDex,
+           double currHp, double currMp);
     void printStatus();
 
+    // Combat
+    double getCurrentAttack();
+    void defendFrom(Status& other);
+    bool isAlive();
 
     // Getters
-    int getBaseHp() const { return m_base_hp; }
-    int getBaseMp() const { return m_base_mp; }
-    int getBaseDef() const { return m_base_def; }
-    int getBaseAtk() const { return m_base_atk; }
-    int getBaseLuck() const { return m_base_luck; }
-    int getBaseInt() const { return m_base_int; }
-    int getBaseSpd() const { return m_base_spd; }
-    int getBaseDex() const { return m_base_dex; }
-    int getCurrHp() const { return m_curr_hp; }
-    int getCurrMp() const { return m_curr_mp; }
+    double getBaseHp() const { return m_base_hp; }
+    double getBaseMp() const { return m_base_mp; }
+    double getBaseDef() const { return m_base_def; }
+    double getBaseAtk() const { return m_base_atk; }
+    double getBaseLuck() const { return m_base_luck; }
+    double getBaseInt() const { return m_base_int; }
+    double getBaseSpd() const { return m_base_spd; }
+    double getBaseDex() const { return m_base_dex; }
+    double getCurrHp() const { return m_curr_hp; }
+    double getCurrMp() const { return m_curr_mp; }
 
     // Setters
     void setBaseHp(int baseHp) { m_base_hp = baseHp; }
@@ -36,17 +40,17 @@ public:
     void setCurrMp(int currMp) { m_curr_mp = currMp; }
 
 private:
-    int m_base_hp;
-    int m_base_mp;
-    int m_base_def;
-    int m_base_atk;
-    int m_base_luck;
-    int m_base_int;
-    int m_base_spd;
-    int m_base_dex;
+    double m_base_hp;
+    double m_base_mp;
+    double m_base_def;
+    double m_base_atk;
+    double m_base_luck;
+    double m_base_int;
+    double m_base_spd;
+    double m_base_dex;
 
-    int m_curr_hp;
-    int m_curr_mp;
+    double m_curr_hp;
+    double m_curr_mp;
 
 
 

@@ -418,13 +418,14 @@ void Map::generateCorridors(int corridorWidth)
 }
 
 
-void Map::updateAllMovableEntityLocations(double time){
+void Map::updateAllMovableEntityLocations(double time){ 
 
     for(std::shared_ptr<Entity> movingEntity : getMovingEntities()){
 
         movingEntity->setMovement();
         movingEntity->tryToMove(time, getAllEntities());
     }
+
 }
 
 

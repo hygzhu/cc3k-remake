@@ -1,5 +1,6 @@
 #include "status.h"
 #include <iostream>
+#include <cmath>
 
 Status::Status() :
         m_base_hp(1), m_base_mp(0), m_base_def(0), m_base_atk(0),
@@ -7,9 +8,9 @@ Status::Status() :
         m_curr_hp(1), m_curr_mp(0)
 {}
 
-Status::Status(int baseHp, int baseMp, int baseAtk, int baseDef,
-           int baseLuck, int baseInt, int baseSpd, int baseDex,
-           int currHp, int currMp) :
+Status::Status(double baseHp, double baseMp, double baseAtk, double baseDef,
+           double baseLuck, double baseInt, double baseSpd, double baseDex,
+           double currHp, double currMp) :
         m_base_hp(baseHp), m_base_mp(baseMp), m_base_def(baseDef),
         m_base_atk(baseAtk), m_base_luck(baseLuck), m_base_int(baseInt),
         m_base_spd(baseSpd), m_base_dex(baseDex), m_curr_hp(currHp),
@@ -27,4 +28,24 @@ void Status::printStatus() {
     std::cout << "Base INT: " << m_base_int << std::endl;
     std::cout << "Base SPD: " << m_base_spd << std::endl;
     std::cout << "Base DEX: " << m_base_dex << std::endl;
+}
+
+double Status::getCurrentAttack(){
+    return m_base_atk;
+}
+
+void Status::defendFrom(Status& other){
+
+    double damage = ceil((100/(100+m_base_def))*other.getCurrentAttack());
+    std::cout << damage <<  std::endl;
+    m_curr_hp -= damage;
+    if(m_curr_hp < 0){
+        m_curr_hp = 0;
+    }
+
+}
+
+
+bool Status::isAlive(){
+    return m_curr_hp > 0;
 }

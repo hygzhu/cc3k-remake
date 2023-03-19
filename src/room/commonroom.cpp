@@ -39,6 +39,11 @@ std::vector<std::shared_ptr<Entity> > CommonRoom::getAllEntities(){
 }
 
 std::vector<std::shared_ptr<Entity> > CommonRoom::getMovingEntities(){
+    //filter enemies that are dead
+    m_enemies.erase(std::remove_if(m_enemies.begin(), m_enemies.end(), [](const std::shared_ptr<Entity>& entity) {
+        return !entity->getStatus().isAlive();
+    }), m_enemies.end());
+
     return m_enemies;
 }
 

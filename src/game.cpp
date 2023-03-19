@@ -100,6 +100,7 @@ int Game::start()
         double frame_delay = static_cast<double>(frameDelay) / 1000;
         m_map->updateAllMovableEntityLocations(frame_delay);
 
+        
         render();
 
         // Control game loop timing
@@ -157,7 +158,7 @@ void Game::render()
     SDL_Rect hpBar = { 
         20,
         20,
-        2*status.getCurrHp(),
+        static_cast<int>(2*status.getCurrHp()),
         20
     };
     SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
@@ -165,7 +166,7 @@ void Game::render()
     SDL_Rect mpBar = { 
         20,
         50,
-        2*status.getCurrMp(),
+        static_cast<int>(2*status.getCurrMp()),
         20
     };
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, 255);
