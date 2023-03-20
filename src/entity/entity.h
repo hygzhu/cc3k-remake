@@ -10,7 +10,6 @@
 
 class Entity {
 public:
-  Entity(Rectangle rect, std::shared_ptr<Sprite> sprite);
   Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status status);
   virtual ~Entity() {}
 
@@ -18,7 +17,7 @@ public:
 
   Point getPoint();
   void setPoint(Point p);
-  
+
   Hitbox getHitbox();
   std::shared_ptr<Sprite> getSprite();
   Status &getStatus();
@@ -30,6 +29,7 @@ public:
   void move(double x, double y);
 
 protected:
+  std::shared_ptr<Point> m_point;
   std::shared_ptr<Movement> m_movement;
   Hitbox m_hitbox;
   std::shared_ptr<Sprite> m_sprite;

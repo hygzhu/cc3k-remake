@@ -5,7 +5,7 @@
 
 class Floor : public Entity {
 public:
-  Floor(Rectangle rect);
+  Floor(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats);
 
   virtual bool collidable();
   virtual void printEntityType();

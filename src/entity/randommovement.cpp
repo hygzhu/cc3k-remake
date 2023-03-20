@@ -26,10 +26,6 @@ void RandomMovement::setMovement() {
     }
     m_accely = base_acceleration * rand;
   }
-  // else if (m_movement_counter + m_movement_period  % movement_end == 0){
-  //     m_accelx = 0;
-  //     m_accely = 0;
-  // }
 }
 
 void RandomMovement::triggerCollisionSideEffect(std::shared_ptr<Entity> other) {

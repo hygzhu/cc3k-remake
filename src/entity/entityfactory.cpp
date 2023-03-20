@@ -2,7 +2,6 @@
 #include <string>
 
 #include "enemy.h"
-#include "environment.h"
 #include "floor.h"
 #include "player.h"
 
@@ -89,9 +88,19 @@ std::shared_ptr<Entity>
 EntityFactory::createRectangularEntity(EntityType entitytype, Rectangle rect) {
 
   if (entitytype == EntityType::FLOOR) {
-    std::shared_ptr<Entity> entity = std::make_shared<Floor>(rect);
+    
+    Point p(rect.getCoordinates());
+    rect.setX(0);
+    rect.setY(0);
+
+    auto sprite = SpriteFactory::createRectangularSprite(
+        SpriteFactory::SpriteType::RECTANGULAR, rect, {128, 128, 128, 255});
+    Hitbox floorHitbox = Hitbox(rect, p);
+    Status stats;
+    std::shared_ptr<Entity> entity =
+        std::make_shared<Enemy>(p, floorHitbox, sprite, stats);
     std::shared_ptr<Movement> movement =
-        std::make_shared<Movement>(entity, rect.getCoordinates(), true);
+        std::make_shared<RandomMovement>(entity, p, true);
     entity->setMovement(movement);
     return entity;
   } else {

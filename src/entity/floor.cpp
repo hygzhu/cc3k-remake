@@ -2,11 +2,8 @@
 #include "../graphics/spritefactory.h"
 #include <iostream>
 
-Floor::Floor(Rectangle rect)
-    : Entity(rect, SpriteFactory::createRectangularSprite(
-                       SpriteFactory::SpriteType::RECTANGULAR,
-                       Rectangle(0, 0, rect.getWidth(), rect.getHeight()),
-                       {128, 128, 128, 255})) {}
+
+Floor::Floor(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats): Entity(p, hitbox, sprite, stats){}
 
 void Floor::move(int dx, int dy) {
   // Floors don't move, so do nothing

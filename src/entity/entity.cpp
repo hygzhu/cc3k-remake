@@ -1,10 +1,5 @@
 #include "entity.h"
 
-Entity::Entity(Rectangle rect, std::shared_ptr<Sprite> sprite)
-    : m_hitbox(Rectangle(0, 0, rect.getWidth(), rect.getHeight()),
-                      Point(rect.getX(), rect.getY())),
-      m_sprite(sprite), m_status(Status()) {}
-
 Entity::Entity(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite,
                Status status)
     : m_hitbox(hitbox), m_sprite(sprite), m_status(status) {}
