@@ -15,20 +15,7 @@ void Player::printEntityType(){
 }
 
 
-void Player::triggerCollisionSideEffect(std::shared_ptr<Entity> other){
-
-    auto enemy = std::dynamic_pointer_cast<Enemy>(other);
-    if(enemy != nullptr){
-        if(!other->isInvincible()){
-            other->getStatus().defendFrom(m_status);
-            other->setInvincible(true);
-        }
-        if(!m_isInvincible){
-            m_status.defendFrom(other->getStatus());
-            m_isInvincible = true;
-        }
-
-    }
 
 
-}
+
+// }

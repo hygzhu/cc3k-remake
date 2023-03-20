@@ -415,8 +415,8 @@ void Map::updateAllMovableEntityLocations(double time){
 
     for(std::shared_ptr<Entity> movingEntity : getMovingEntities()){
 
-        movingEntity->setMovement();
-        movingEntity->tryToMove(time, getAllEntities());
+        movingEntity->getMovement()->setMovement();
+        movingEntity->getMovement()->tryToMove(time, getAllEntities());
     }
 
 }

@@ -73,31 +73,31 @@ int Game::start()
 
         if (downKeys[SDL_SCANCODE_A])
         {
-            player->getAccelX() = -speed;
+            player->getMovement()->getAccelX() = -speed;
         }
         if (downKeys[SDL_SCANCODE_D])
         {
             
-            player->getAccelX() = speed;
+            player->getMovement()->getAccelX() = speed;
         }
         if((!downKeys[SDL_SCANCODE_D] && !downKeys[SDL_SCANCODE_A])
         || downKeys[SDL_SCANCODE_D] && downKeys[SDL_SCANCODE_A]){
-            player->getAccelX() = 0;
+            player->getMovement()->getAccelX() = 0;
         }
 
         if (downKeys[SDL_SCANCODE_W])
         {
-            player->getAccelY() = -speed;
+            player->getMovement()->getAccelY() = -speed;
         }
         if (downKeys[SDL_SCANCODE_S])
         {
             // Move player down
 
-            player->getAccelY() = speed;
+            player->getMovement()->getAccelY() = speed;
         }
         if((!downKeys[SDL_SCANCODE_W] && !downKeys[SDL_SCANCODE_S])
         ||downKeys[SDL_SCANCODE_W] && downKeys[SDL_SCANCODE_S]){
-            player->getAccelY() = 0;
+            player->getMovement()->getAccelY() = 0;
         }
 
         // Update all movable entity location

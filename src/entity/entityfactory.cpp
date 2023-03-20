@@ -8,6 +8,10 @@
 
 #include "../graphics/spritefactory.h"
 
+#include "movement.h"
+#include "playermovement.h"
+#include "randommovement.h"
+
 
 std::shared_ptr<Entity> EntityFactory::createEntity(EntityType entitytype, int x, int y) {
 
@@ -26,7 +30,10 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x, i
         auto goblinSprite = SpriteFactory::createRectangularSprite(SpriteFactory::SpriteType::RECTANGULAR, gobRect, { 0, 128, 0, 255});
         Hitbox gobHitbox = Hitbox(gobRect, p);
         Status stats(50,0,10,10,0,0,0,0,50,0);
-        return std::make_shared<Enemy>(p, gobHitbox, goblinSprite, stats);
+        std::shared_ptr<Entity> entity = std::make_shared<Enemy>(p, gobHitbox, goblinSprite, stats);
+        std::shared_ptr<Movement> movement = std::make_shared<RandomMovement>(entity, p, false);
+        entity->setMovement(movement);
+        return entity;
 
     } else if (enemyType == EnemyType::RAT ) {
 
@@ -34,7 +41,10 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x, i
         std::shared_ptr<Sprite> ratSprite = SpriteFactory::createRectangularSprite(SpriteFactory::SpriteType::RECTANGULAR, ratRect, { 79, 49, 4, 255});
         Hitbox ratHitbox = Hitbox(ratRect, p);
         Status stats(20,0,5,5,0,0,0,0,20,0);
-        return std::make_shared<Enemy>(p, ratHitbox, ratSprite, stats);
+        std::shared_ptr<Entity> entity = std::make_shared<Enemy>(p, ratHitbox, ratSprite, stats);
+        std::shared_ptr<Movement> movement = std::make_shared<RandomMovement>(entity, p, false);
+        entity->setMovement(movement);
+        return entity;
 
     }  else if (enemyType == EnemyType::DRAGON ) {
 
@@ -42,7 +52,10 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x, i
         std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(SpriteFactory::SpriteType::RECTANGULAR, rect, { 225, 20, 60, 255});
         Hitbox hitbox = Hitbox(rect, p);
         Status stats(500,0,40,40,0,0,0,0,500,0);
-        return std::make_shared<Enemy>(p, hitbox, sprite,stats);
+        std::shared_ptr<Entity> entity = std::make_shared<Enemy>(p, hitbox, sprite,stats);
+        std::shared_ptr<Movement> movement = std::make_shared<RandomMovement>(entity, p, false);
+        entity->setMovement(movement);
+        return entity;
 
     }else {
         return nullptr;
@@ -55,14 +68,20 @@ std::shared_ptr<Entity> EntityFactory::createPlayer(){
     std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(SpriteFactory::SpriteType::RECTANGULAR, rect, { 220, 220, 220, 255});
     Hitbox hitbox = Hitbox(rect, p);
     Status stats(100,20,20,20,0,0,0,0,100,20);
-    return std::make_shared<Player>(p, hitbox, sprite,stats);
+    std::shared_ptr<Entity> entity = std::make_shared<Player>(p, hitbox, sprite,stats);
+    std::shared_ptr<Movement> movement = std::make_shared<PlayerMovement>(entity, p, false);
+    entity->setMovement(movement);
+    return entity;
 }
 
 
 std::shared_ptr<Entity> EntityFactory::createRectangularEntity(EntityType entitytype, Rectangle rect){
 
     if (entitytype == EntityType::FLOOR ) {
-        return std::make_shared<Floor>(rect);
+        std::shared_ptr<Entity> entity =  std::make_shared<Floor>(rect);
+        std::shared_ptr<Movement> movement = std::make_shared<Movement>(entity, rect.getCoordinates(), true);    
+        entity->setMovement(movement);
+        return entity;
     } else {
         return nullptr;
     }

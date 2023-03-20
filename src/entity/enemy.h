@@ -7,10 +7,10 @@ class Enemy : public Entity {
 public:
     Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats);
 
-    void setMovement() override;
+    // void setMovement() override;
     virtual void printEntityType() override;
-    void triggerCollisionSideEffect(std::shared_ptr<Entity> other) override;
-    void tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities) override;
+    // void triggerCollisionSideEffect(std::shared_ptr<Entity> other) override;
+    // void tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities) override;
 
 private:
     int m_movement_counter = 0;
