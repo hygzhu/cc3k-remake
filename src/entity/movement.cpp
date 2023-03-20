@@ -14,8 +14,8 @@ void Movement::setMovement() {
   // Do nothing if not overidden
 }
 
-void Movement::move(double x, double y) {
-  m_entity->getHitbox().setPoint(Point(m_x, m_y));
+void Movement::move(int x, int y) {
+  m_entity->setPoint(Point(x,y));
   m_x = x;
   m_y = y;
 }
@@ -57,8 +57,8 @@ void Movement::tryToMove(double time,
 bool Movement::isThereCollisionAtDestinationPoint(
     Point p, std::vector<std::shared_ptr<Entity>> otherEntities) {
 
-  Hitbox hitbox = m_entity->getHitbox();
-  hitbox.setPoint(p);
+  Hitbox hitbox_copy = m_entity->getHitbox();
+  hitbox_copy.setPoint(p);
   bool collidableEntityFound = false;
 
   for (const auto &otherEntity : otherEntities) {
@@ -67,12 +67,12 @@ bool Movement::isThereCollisionAtDestinationPoint(
       continue;
     }
     // Check if either rectangle not overlapping
-    if (otherEntity->getHitbox().collidesWith(hitbox)) {
+    if (otherEntity->getHitbox().collidesWith(hitbox_copy)) {
       // Collides
 
       // TODO: DOES NOT CAPTURE THE CASE WHERE > 1 RECTANGLE SURROUNDS
       if (otherEntity->getMovement()->collidable() &&
-          otherEntity->getHitbox().surrounds(hitbox)) {
+          otherEntity->getHitbox().surrounds(hitbox_copy)) {
         // check if it surrounds
         collidableEntityFound = true;
         // std::cout << collidableEntityFound <<std::endl;

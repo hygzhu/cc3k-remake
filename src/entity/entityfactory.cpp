@@ -42,7 +42,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
     Rectangle ratRect(0, 0, 7, 5);
     std::shared_ptr<Sprite> ratSprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, ratRect, {79, 49, 4, 255});
-    Hitbox ratHitbox = Hitbox(ratRect, p);
+    Hitbox ratHitbox(ratRect, p);
     Status stats(20, 0, 5, 5, 0, 0, 0, 0, 20, 0);
     std::shared_ptr<Entity> entity =
         std::make_shared<Enemy>(p, ratHitbox, ratSprite, stats);
@@ -56,7 +56,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
     Rectangle rect(0, 0, 50, 50);
     std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, rect, {225, 20, 60, 255});
-    Hitbox hitbox = Hitbox(rect, p);
+    Hitbox hitbox(rect, p);
     Status stats(500, 0, 40, 40, 0, 0, 0, 0, 500, 0);
     std::shared_ptr<Entity> entity =
         std::make_shared<Enemy>(p, hitbox, sprite, stats);
@@ -75,7 +75,7 @@ std::shared_ptr<Entity> EntityFactory::createPlayer() {
   Rectangle rect(0, 0, 10, 10);
   std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(
       SpriteFactory::SpriteType::RECTANGULAR, rect, {220, 220, 220, 255});
-  Hitbox hitbox = Hitbox(rect, p);
+  Hitbox hitbox(rect, p);
   Status stats(100, 20, 20, 20, 0, 0, 0, 0, 100, 20);
   std::shared_ptr<Entity> entity =
       std::make_shared<Player>(p, hitbox, sprite, stats);

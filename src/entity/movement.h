@@ -17,7 +17,7 @@ public:
   virtual void setMovement();
   double &getAccelX();
   double &getAccelY();
-  void move(double x, double y);
+  void move(int x, int y);
   virtual void tryToMove(double time,
                          std::vector<std::shared_ptr<Entity>> otherEntities);
   Point closestMovablePoint(Point p,
@@ -39,8 +39,8 @@ protected:
   double m_time;
   bool m_isInvincible =
       false; // determines if we can trigger collision side effect
-  double m_x;
-  double m_y;
+  int m_x;
+  int m_y;
 };
 
 #endif

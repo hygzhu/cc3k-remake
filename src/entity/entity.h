@@ -17,7 +17,9 @@ public:
   virtual void printEntityType() = 0;
 
   Point getPoint();
-  Hitbox &getHitbox();
+  void setPoint(Point p);
+  
+  Hitbox getHitbox();
   std::shared_ptr<Sprite> getSprite();
   Status &getStatus();
 

@@ -3,6 +3,7 @@
 
 Hitbox::Hitbox() {}
 
+
 Hitbox::Hitbox(Rectangle rect, Point p) : m_point(p) {
   m_rectangles.push_back(rect);
 }
