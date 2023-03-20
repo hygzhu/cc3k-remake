@@ -9,10 +9,12 @@ public:
 
     void setMovement() override;
     virtual void printEntityType() override;
-
     void triggerCollisionSideEffect(std::shared_ptr<Entity> other) override;
+    void tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities) override;
+
 private:
-    int m_inMovement;
+    int m_movement_counter = 0;
+    int m_movement_period = 0;
 };
 
 #endif

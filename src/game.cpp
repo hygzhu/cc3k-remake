@@ -28,7 +28,6 @@ Game::Game(/* args */)
 int Game::start()
 {
 
-
     auto player = EntityFactory::createPlayer();
     int max_rooms = 20;
     m_map = std::make_shared<Map>(player,max_rooms,40,35);
@@ -43,6 +42,11 @@ int Game::start()
 
     bool downKeys[SDL_NUM_SCANCODES] = { false };
     while (!quit) {
+
+        if(!player->getStatus().isAlive()){
+            //player died
+            return 1;
+        }
 
         frameStart = SDL_GetTicks();
 
@@ -100,7 +104,6 @@ int Game::start()
         double frame_delay = static_cast<double>(frameDelay) / 1000;
         m_map->updateAllMovableEntityLocations(frame_delay);
 
-        
         render();
 
         // Control game loop timing

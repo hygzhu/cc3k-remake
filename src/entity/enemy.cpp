@@ -4,7 +4,8 @@
 #include <string>
 #include "player.h"
 
-Enemy::Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats) : Entity(p, hitbox, sprite, stats), m_inMovement(0)  {}
+Enemy::Enemy(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite, Status stats) : 
+Entity(p, hitbox, sprite, stats), m_movement_period(Random::randomInt(0, 20))  {}
 
 
 void Enemy::printEntityType(){
@@ -14,27 +15,26 @@ void Enemy::printEntityType(){
 
 void Enemy::setMovement(){
 
-    if(!m_inMovement){
-        int base_acceleration = 100;
-        int rand = Random::randomInt(0,1);
-        if(rand == 0){
+    //std::cout << m_movement_counter << std::endl;
+
+    if(m_movement_counter == 0){
+        int base_acceleration = 80;
+        // random direction
+        int rand = Random::randomInt(0,2);
+        if(rand == 2){
             rand = -1;
         }
         m_accelx = base_acceleration*rand;
-        rand = Random::randomInt(0,1);
-        if(rand == 0){
+        rand = Random::randomInt(0,2);
+        if(rand == 2){
             rand = -1;
         }
         m_accely = base_acceleration*rand;
-
-        m_inMovement = 500;
-    }else if (m_inMovement < Random::randomInt(200,400)){
-         m_accelx = 0;
-         m_accely = 0;
     }
-
-    m_inMovement -=1;
-
+    // else if (m_movement_counter + m_movement_period  % movement_end == 0){
+    //     m_accelx = 0;
+    //     m_accely = 0;
+    // }
 }
 
 
@@ -54,4 +54,20 @@ void Enemy::triggerCollisionSideEffect(std::shared_ptr<Entity> other){
     }
 
 
+}
+
+void Enemy::tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities){
+    tick(time);
+    m_movement_counter++;
+    m_movement_counter = m_movement_counter % 50;
+
+    if(m_movement_counter % 2 == 0){
+        int entityVelX = m_accelx * time;
+        int entityVelY = m_accely * time;
+        if(entityVelX != 0 || entityVelY != 0 ){
+            Point new_location = closestMovablePoint(Point(entityVelX, entityVelY), otherEntities);
+            move(new_location.getX(), new_location.getY());
+        }
+    }
+    
 }

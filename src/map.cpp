@@ -338,7 +338,6 @@ void Map::generateCorridors(int corridorWidth)
         // // start point in room1
         Point start = room1->getBounds().getClosestPointTo(room2->getBounds().getCenterPoint());
         Point end = room2->getBounds().getClosestPointTo(start);
-        //std::cout << "Start " << start<< " End "<< end << std::endl;
         allDoorCenters.push_back(start);
         allDoorCenters.push_back(end);
 
@@ -357,7 +356,6 @@ void Map::generateCorridors(int corridorWidth)
         while(!priority_queue.empty())
         {
             if(visitedBlocks > max_height*max_width){
-                //std::cout << "Could not find path" << std::endl;
                 break;
             }
 
@@ -394,15 +392,10 @@ void Map::generateCorridors(int corridorWidth)
                     priority_queue.push(neighbour);
                 }
             }
-
-            // }
         }
-        //std::cout << "Path len " << path.size() << std::endl;
-
 
         if(path.size()==0){
 
-            //std::cout << "Path len is 0, skipping"  << std::endl;
             break;
         }
 

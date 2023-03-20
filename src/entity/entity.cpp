@@ -25,8 +25,8 @@ bool Entity::collidable(){
     return false;
 }
 
-int & Entity::getAccelX(){ return m_accelx;}
-int & Entity::getAccelY(){return m_accely;}
+double & Entity::getAccelX(){ return m_accelx;}
+double & Entity::getAccelY(){return m_accely;}
 
 Hitbox Entity::getHitbox()
 {
@@ -38,7 +38,7 @@ void Entity::setMovement(){
     //Do nothing if not overidden
 }
 
-void Entity::move(int dx, int dy) {
+void Entity::move(double dx, double dy) {
     m_x = dx;
     m_y = dy;
     m_hitbox.setPoint(Point(dx, dy));
@@ -48,12 +48,16 @@ void Entity::move(int dx, int dy) {
 void Entity::tryToMove(double time, std::vector<std::shared_ptr<Entity> > otherEntities)
 {
     tick(time);
+
     int entityVelX = m_accelx * time;
     int entityVelY = m_accely * time;
     if(entityVelX != 0 || entityVelY != 0 ){
         Point new_location = closestMovablePoint(Point(entityVelX, entityVelY), otherEntities);
         move(new_location.getX(), new_location.getY());
     }
+    
+    
+
 }
 
 Point Entity::closestMovablePoint(Point p, std::vector<std::shared_ptr<Entity> > otherEntities){
