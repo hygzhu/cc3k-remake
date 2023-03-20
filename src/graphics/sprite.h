@@ -5,10 +5,10 @@
 #include "../renderer.h"
 
 class Sprite {
-    
+
 public:
-    virtual ~Sprite(){}
-    virtual void render(Renderer renderer, Point p) = 0;
+  virtual ~Sprite() {}
+  virtual void render(Renderer renderer, Point p) = 0;
 };
 
 #endif

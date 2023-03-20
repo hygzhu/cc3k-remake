@@ -1,18 +1,19 @@
 #include "floor.h"
-#include <iostream>
 #include "../graphics/spritefactory.h"
+#include <iostream>
 
-Floor::Floor(Rectangle rect) : Entity(rect, SpriteFactory::createRectangularSprite(
-    SpriteFactory::SpriteType::RECTANGULAR, Rectangle(0,0,rect.getWidth(), rect.getHeight()), { 128, 128, 128, 255 })) {}
+Floor::Floor(Rectangle rect)
+    : Entity(rect, SpriteFactory::createRectangularSprite(
+                       SpriteFactory::SpriteType::RECTANGULAR,
+                       Rectangle(0, 0, rect.getWidth(), rect.getHeight()),
+                       {128, 128, 128, 255})) {}
 
 void Floor::move(int dx, int dy) {
-    // Floors don't move, so do nothing
+  // Floors don't move, so do nothing
 }
 
-void Floor::printEntityType(){
-    std::cout<<"Floor " <<  getHitbox().toString() <<std::endl;
+void Floor::printEntityType() {
+  std::cout << "Floor " << getHitbox().toString() << std::endl;
 }
 
-bool Floor::collidable(){
-    return true;
-}
+bool Floor::collidable() { return true; }

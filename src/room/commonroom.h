@@ -5,15 +5,15 @@
 
 class CommonRoom : public Room {
 public:
-    CommonRoom(Rectangle rect);
-    
-    std::vector<std::shared_ptr<Entity> > getAllEntities();
+  CommonRoom(Rectangle rect);
 
-    std::vector<std::shared_ptr<Entity> > getMovingEntities();
-    std::vector<std::shared_ptr<Entity> > getNonMovingEntities();
+  std::vector<std::shared_ptr<Entity>> getAllEntities();
+
+  std::vector<std::shared_ptr<Entity>> getMovingEntities();
+  std::vector<std::shared_ptr<Entity>> getNonMovingEntities();
 
 private:
-    std::vector<std::shared_ptr<Entity> > m_enemies;
+  std::vector<std::shared_ptr<Entity>> m_enemies;
 };
 
 #endif

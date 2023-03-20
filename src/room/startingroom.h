@@ -5,8 +5,8 @@
 
 class StartingRoom : public Room {
 public:
-    StartingRoom(Rectangle rect);
-    std::vector<std::shared_ptr<Entity> > getAllEntities();
+  StartingRoom(Rectangle rect);
+  std::vector<std::shared_ptr<Entity>> getAllEntities();
 
 private:
 };

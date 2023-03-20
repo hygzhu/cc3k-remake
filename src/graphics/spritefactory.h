@@ -1,21 +1,18 @@
 #ifndef SPRITEFACTORY_H
 #define SPRITEFACTORY_H
 
-#include "sprite.h"
 #include "rgba.h"
+#include "sprite.h"
 
 #include "../geometry/rectangle.h"
 
-class SpriteFactory{
+class SpriteFactory {
 
 public:
+  enum SpriteType { RECTANGULAR = 1 };
 
-
-    enum SpriteType {
-        RECTANGULAR = 1
-    };
-
-    static std::shared_ptr<Sprite> createRectangularSprite(SpriteType type, Rectangle rect, RGBA rgba);
+  static std::shared_ptr<Sprite>
+  createRectangularSprite(SpriteType type, Rectangle rect, RGBA rgba);
 };
 
 #endif

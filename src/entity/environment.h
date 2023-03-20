@@ -5,8 +5,8 @@
 
 class Environment : public Entity {
 public:
-    Environment(int x, int y);
-    virtual void printEntityType() override;
+  Environment(int x, int y);
+  virtual void printEntityType() override;
 };
 
 #endif
