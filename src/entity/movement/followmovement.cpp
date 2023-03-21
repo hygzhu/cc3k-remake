@@ -15,7 +15,6 @@ void FollowMovement::setMovement() {
 
   if (m_movement_counter == 0) {
     if(m_target->getHitbox().getCenterCoordinate().distanceTo(m_entity->getHitbox().getCenterCoordinate()) <= m_range ){
-      std::cout << "Follow" << std::endl;
       // follow target
       int dx = m_target->getHitbox().getCenterCoordinate().getX() - m_entity->getHitbox().getCenterCoordinate().getX();
       int dy = m_target->getHitbox().getCenterCoordinate().getY() - m_entity->getHitbox().getCenterCoordinate().getY();
@@ -74,7 +73,7 @@ void FollowMovement::tryToMove(
   m_movement_counter++;
   m_movement_counter = m_movement_counter % 50;
 
-  if (m_movement_counter % 2 == 0) {
+  if (m_movement_counter % 3 == 0) {
     int entityVelX = m_accelx * time;
     int entityVelY = m_accely * time;
     if (entityVelX != 0 || entityVelY != 0) {
