@@ -5,7 +5,7 @@
 #include "../geometry/hitbox.h"
 #include "../geometry/rectangle.h"
 #include "../graphics/sprite.h"
-#include "movement.h"
+#include "movement/movement.h"
 #include <memory>
 
 class Entity {
@@ -23,7 +23,7 @@ public:
   Status &getStatus();
 
   void setMovement(std::shared_ptr<Movement> movement);
-  
+
   std::shared_ptr<Movement> getMovement();
   void move(double x, double y);
 

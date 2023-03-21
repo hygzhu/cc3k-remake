@@ -7,9 +7,9 @@
 
 #include "../graphics/spritefactory.h"
 
-#include "movement.h"
-#include "playermovement.h"
-#include "randommovement.h"
+#include "movement/movement.h"
+#include "movement/playermovement.h"
+#include "movement/randommovement.h"
 
 std::shared_ptr<Entity> EntityFactory::createEntity(EntityType entitytype,
                                                     int x, int y) {

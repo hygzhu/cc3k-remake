@@ -1,6 +1,6 @@
 #include "movement.h"
-#include "../geometry/point.h"
-#include "entity.h"
+#include "../../geometry/point.h"
+#include "../entity.h"
 
 Movement::Movement(std::shared_ptr<Entity> entity, Point p, bool collidable)
     : m_entity(entity), m_point(std::make_shared<Point>(p)), m_collidable(collidable),

@@ -1,7 +1,7 @@
 #include "playermovement.h"
-#include "../geometry/point.h"
-#include "enemy.h"
-#include "entity.h"
+#include "../../geometry/point.h"
+#include "../enemy.h"
+#include "../entity.h"
 
 PlayerMovement::PlayerMovement(std::shared_ptr<Entity> entity, Point p,
                                bool collidable)

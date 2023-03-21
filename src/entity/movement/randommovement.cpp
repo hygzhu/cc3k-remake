@@ -1,8 +1,8 @@
 #include "randommovement.h"
 
-#include "../geometry/point.h"
-#include "../utils/random.h"
-#include "player.h"
+#include "../../geometry/point.h"
+#include "../../utils/random.h"
+#include "../player.h"
 
 RandomMovement::RandomMovement(std::shared_ptr<Entity> entity, Point p,
                                bool collidable)
