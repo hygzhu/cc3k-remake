@@ -22,9 +22,8 @@ public:
   std::shared_ptr<Sprite> getSprite();
   Status &getStatus();
 
-  void setMovement(std::shared_ptr<Movement> movement) {
-    m_movement = movement;
-  }
+  void setMovement(std::shared_ptr<Movement> movement);
+  
   std::shared_ptr<Movement> getMovement();
   void move(double x, double y);
 

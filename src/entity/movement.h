@@ -13,6 +13,7 @@ public:
   ~Movement(){};
 
   Point getPoint();
+  void setPoint(std::shared_ptr<Point> p);
   bool collidable();
   virtual void setMovement();
   double &getAccelX();
@@ -39,8 +40,7 @@ protected:
   double m_time;
   bool m_isInvincible =
       false; // determines if we can trigger collision side effect
-  int m_x;
-  int m_y;
+  std::shared_ptr<Point> m_point;
 };
 
 #endif

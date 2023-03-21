@@ -3,10 +3,13 @@
 #include "entity.h"
 
 Movement::Movement(std::shared_ptr<Entity> entity, Point p, bool collidable)
-    : m_entity(entity), m_x(p.getX()), m_y(p.getY()), m_collidable(collidable),
+    : m_entity(entity), m_point(std::make_shared<Point>(p)), m_collidable(collidable),
       m_accelx(0), m_accely(0), m_time(0) {}
 
-Point Movement::getPoint() { return Point(m_x, m_y); }
+Point Movement::getPoint() { return Point(m_point->getX(), m_point->getY()); }
+
+
+void Movement::setPoint(std::shared_ptr<Point> p) {m_point = p; }
 
 bool Movement::collidable() { return m_collidable; }
 
@@ -15,9 +18,8 @@ void Movement::setMovement() {
 }
 
 void Movement::move(int x, int y) {
-  m_entity->setPoint(Point(x,y));
-  m_x = x;
-  m_y = y;
+  m_point->setX(x);
+  m_point->setY(y);
 }
 
 void Movement::tick(double time) {
@@ -58,7 +60,10 @@ bool Movement::isThereCollisionAtDestinationPoint(
     Point p, std::vector<std::shared_ptr<Entity>> otherEntities) {
 
   Hitbox hitbox_copy = m_entity->getHitbox();
-  hitbox_copy.setPoint(p);
+  auto hitbox_copy_point = hitbox_copy.getPoint();
+  hitbox_copy_point->setX(p.getX());
+  hitbox_copy_point->setY(p.getY());
+
   bool collidableEntityFound = false;
 
   for (const auto &otherEntity : otherEntities) {
@@ -100,8 +105,8 @@ bool Movement::isThereCollisionAtDestinationPoint(
 
 Point Movement::closestMovablePoint(
     Point p, std::vector<std::shared_ptr<Entity>> otherEntities) {
-  int oldx = m_x;
-  int oldy = m_y;
+  int oldx = m_point->getX();
+  int oldy = m_point->getY();
 
   int x = p.getX();
   int y = p.getY();

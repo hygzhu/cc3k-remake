@@ -38,8 +38,8 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
       RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect);
   m_rooms.push_back(room);
 
-  player->move(MAX_MAP_WIDTH / 2 + starting_zone / 2,
-               MAX_MAP_HEIGHT / 2 + starting_zone / 2);
+  player->setPoint(Point(MAX_MAP_WIDTH / 2 + starting_zone / 2,
+               MAX_MAP_HEIGHT / 2 + starting_zone / 2));
   entities.push_back(player);
 
   // Generate rest of dungeon
@@ -135,9 +135,9 @@ int Map::getHeight() { return height; }
 
 Rectangle Map::getViewBox() {
   const int middlex = player->getHitbox().getCenter().getX() +
-                      player->getHitbox().getPoint().getX();
+                      player->getHitbox().getPoint()->getX();
   const int middley = player->getHitbox().getCenter().getX() +
-                      player->getHitbox().getPoint().getY();
+                      player->getHitbox().getPoint()->getY();
 
   const int topleftx = middlex - (width / 2);
   const int toplefty = middley - (height / 2);
