@@ -20,6 +20,7 @@ public:
   void setPoint(std::shared_ptr<Point> p);
   std::shared_ptr<Point> getPoint();
   Point getCenter();
+  Point getCenterCoordinate();
   void printHitbox() const;
   std::string toString();
 

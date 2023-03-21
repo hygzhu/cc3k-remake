@@ -10,6 +10,7 @@
 #include "movement/movement.h"
 #include "movement/playermovement.h"
 #include "movement/randommovement.h"
+#include "movement/followmovement.h"
 
 std::shared_ptr<Entity> EntityFactory::createEntity(EntityType entitytype,
                                                     int x, int y) {
@@ -21,9 +22,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
                                                    int y) {
 
   Point p(x, y);
-
   if (enemyType == EnemyType::GOBLIN) {
-
     Rectangle gobRect(0, 0, 7, 7);
     auto goblinSprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, gobRect, {0, 128, 0, 255});
@@ -68,6 +67,27 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
     return nullptr;
   }
 }
+
+std::shared_ptr<Entity> EntityFactory::createFollowEnemy(EnemyType enemyType, int x, int y,  std::shared_ptr<Entity> target, int range){
+   Point p(x, y);
+  if (enemyType == EnemyType::GOBLIN) {
+    Rectangle gobRect(0, 0, 7, 7);
+    auto goblinSprite = SpriteFactory::createRectangularSprite(
+        SpriteFactory::SpriteType::RECTANGULAR, gobRect, {0, 128, 0, 255});
+    Hitbox gobHitbox = Hitbox(gobRect, p);
+    Status stats(50, 0, 10, 10, 0, 0, 0, 0, 50, 0);
+    std::shared_ptr<Entity> entity =
+        std::make_shared<Enemy>(p, gobHitbox, goblinSprite, stats);
+    std::shared_ptr<Movement> movement =
+        std::make_shared<FollowMovement>(entity, p, false, target, range);
+    entity->setMovement(movement);
+    return entity;
+
+  } else{
+    return nullptr;
+  }
+}
+
 
 std::shared_ptr<Entity> EntityFactory::createPlayer() {
 

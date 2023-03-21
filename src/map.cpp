@@ -35,7 +35,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
   Rectangle startRect(MAX_MAP_WIDTH / 2, MAX_MAP_HEIGHT / 2, starting_zone,
                       starting_zone);
   std::shared_ptr<Room> room =
-      RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect);
+      RoomFactory::createRoom(RoomFactory::RoomType::STARTING, startRect, player);
   m_rooms.push_back(room);
 
   player->setPoint(Point(MAX_MAP_WIDTH / 2 + starting_zone / 2,
@@ -65,7 +65,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
     }
 
     m_rooms.push_back(
-        RoomFactory::createRoom(RoomFactory::RoomType::COMMON, rect));
+        RoomFactory::createRoom(RoomFactory::RoomType::COMMON, rect, player));
 
     // std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ",
     // " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight()

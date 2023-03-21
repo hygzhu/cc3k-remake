@@ -16,6 +16,9 @@ Status &Entity::getStatus() { return m_status; }
 
 Point Entity::getPoint() { return Point(m_point->getX(), m_point->getY()); }
 
+std::shared_ptr<Point> Entity::getLivePoint(){
+  return m_point;
+}
 
 void Entity::setPoint(Point p) { 
   m_point->setX(p.getX()); 

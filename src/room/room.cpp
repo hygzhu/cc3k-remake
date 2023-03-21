@@ -6,7 +6,7 @@
 #include <string>
 #include <unordered_set>
 
-Room::Room(Rectangle rect) : m_bounds(rect) {
+Room::Room(Rectangle rect, std::shared_ptr<Entity> player) : m_bounds(rect), m_player(player) {
   // generate floor
   std::shared_ptr<Entity> floor = EntityFactory::createRectangularEntity(
       EntityFactory::EntityType::FLOOR, rect);

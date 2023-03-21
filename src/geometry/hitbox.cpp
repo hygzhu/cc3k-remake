@@ -120,3 +120,11 @@ Point Hitbox::getCenter() {
 
   return Point(averageCenterX, averageCenterY);
 }
+
+
+Point Hitbox::getCenterCoordinate(){
+  Point center = getCenter();
+  center.setX(center.getX() + m_point->getX());
+  center.setY(center.getY() + m_point->getY());
+  return center;
+}

@@ -3,7 +3,7 @@
 #include "../utils/random.h"
 #include <iostream>
 
-CommonRoom::CommonRoom(Rectangle rect) : Room(rect) {
+CommonRoom::CommonRoom(Rectangle rect, std::shared_ptr<Entity> player) : Room(rect, player) {
   // Generate entities in room
   const int room_size = rect.getHeight() * rect.getWidth();
   const int block_size_per_entity = 50000;
@@ -22,8 +22,14 @@ CommonRoom::CommonRoom(Rectangle rect) : Room(rect) {
     const int y =
         Random::randomInt(rect.getY() + wall_buffer,
                           rect.getY() + rect.getHeight() - wall_buffer);
-    m_enemies.push_back(EntityFactory::createEnemy(
-        static_cast<EntityFactory::EnemyType>(entityType), x, y));
+
+    auto realEntityType = static_cast<EntityFactory::EnemyType>(entityType);
+
+    if(realEntityType == EntityFactory::EnemyType::GOBLIN){
+      m_enemies.push_back(EntityFactory::createFollowEnemy(realEntityType, x, y, m_player, 300));
+    }else{
+      m_enemies.push_back(EntityFactory::createEnemy(realEntityType, x, y));
+    }
   }
   // std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
 }

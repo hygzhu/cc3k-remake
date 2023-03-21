@@ -16,6 +16,7 @@ public:
   virtual void printEntityType() = 0;
 
   Point getPoint();
+  std::shared_ptr<Point> getLivePoint();
   void setPoint(Point p);
 
   Hitbox getHitbox();

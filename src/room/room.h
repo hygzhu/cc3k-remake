@@ -12,7 +12,7 @@ class Corridor;
 
 class Room {
 public:
-  Room(Rectangle rect);
+  Room(Rectangle rect, std::shared_ptr<Entity> player);
   Rectangle getBounds();
   virtual ~Room() {}
 
@@ -28,6 +28,7 @@ public:
 protected:
   Rectangle m_bounds;
   std::vector<std::shared_ptr<Entity>> m_entities;
+  std::shared_ptr<Entity> m_player;
 };
 
 #endif

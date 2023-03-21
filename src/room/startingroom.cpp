@@ -1,6 +1,6 @@
 #include "startingroom.h"
 
-StartingRoom::StartingRoom(Rectangle rect) : Room(rect) {
+StartingRoom::StartingRoom(Rectangle rect, std::shared_ptr<Entity> player) : Room(rect, player) {
   // Generate entities in room
 }
 

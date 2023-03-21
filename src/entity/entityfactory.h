@@ -17,6 +17,8 @@ public:
 
   static std::shared_ptr<Entity> createEnemy(EnemyType enemyType, int x, int y);
 
+  static std::shared_ptr<Entity> createFollowEnemy(EnemyType enemyType, int x, int y,  std::shared_ptr<Entity> target, int range);
+
   static std::shared_ptr<Entity> createPlayer();
 };
 
