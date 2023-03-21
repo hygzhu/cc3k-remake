@@ -48,7 +48,6 @@ private:
   double m_base_int;
   double m_base_spd;
   double m_base_dex;
-
   double m_curr_hp;
   double m_curr_mp;
 };

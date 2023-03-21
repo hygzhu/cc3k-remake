@@ -23,7 +23,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
 
   Point p(x, y);
   if (enemyType == EnemyType::GOBLIN) {
-    Rectangle gobRect(0, 0, 7, 7);
+    Rectangle gobRect(0, 0, 20, 20);
     auto goblinSprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, gobRect, {0, 128, 0, 255});
     Hitbox gobHitbox = Hitbox(gobRect, p);
@@ -37,7 +37,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
 
   } else if (enemyType == EnemyType::RAT) {
 
-    Rectangle ratRect(0, 0, 7, 5);
+    Rectangle ratRect(0, 0, 15, 5);
     std::shared_ptr<Sprite> ratSprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, ratRect, {79, 49, 4, 255});
     Hitbox ratHitbox(ratRect, p);
@@ -71,7 +71,7 @@ std::shared_ptr<Entity> EntityFactory::createEnemy(EnemyType enemyType, int x,
 std::shared_ptr<Entity> EntityFactory::createFollowEnemy(EnemyType enemyType, int x, int y,  std::shared_ptr<Entity> target, int range){
    Point p(x, y);
   if (enemyType == EnemyType::GOBLIN) {
-    Rectangle gobRect(0, 0, 7, 7);
+    Rectangle gobRect(0, 0, 20, 20);
     auto goblinSprite = SpriteFactory::createRectangularSprite(
         SpriteFactory::SpriteType::RECTANGULAR, gobRect, {0, 128, 0, 255});
     Hitbox gobHitbox = Hitbox(gobRect, p);
@@ -92,7 +92,7 @@ std::shared_ptr<Entity> EntityFactory::createFollowEnemy(EnemyType enemyType, in
 std::shared_ptr<Entity> EntityFactory::createPlayer() {
 
   Point p(0, 0);
-  Rectangle rect(0, 0, 10, 10);
+  Rectangle rect(0, 0, 20, 20);
   std::shared_ptr<Sprite> sprite = SpriteFactory::createRectangularSprite(
       SpriteFactory::SpriteType::RECTANGULAR, rect, {220, 220, 220, 255});
   Hitbox hitbox(rect, p);
