@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 
 
 # Generate a list of all the source files in your project directory and its subdirectories

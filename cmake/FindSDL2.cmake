@@ -103,26 +103,26 @@ find_library(SDL2_LIBRARY_TEMP
 # which is derived from SDL2_LIBRARY_TEMP further below.
 set_property(CACHE SDL2_LIBRARY_TEMP PROPERTY TYPE INTERNAL)
 
-if(NOT SDL2_BUILDING_LIBRARY)
-  if(NOT SDL2_INCLUDE_DIR MATCHES ".framework")
-    # Non-OS X framework versions expect you to also dynamically link to
-    # SDL2main. This is mainly for Windows and OS X. Other (Unix) platforms
-    # seem to provide SDL2main for compatibility even though they don't
-    # necessarily need it.
-    find_library(SDL2MAIN_LIBRARY
-      NAMES SDL2main
-      HINTS
-        ENV SDL2DIR
-        ${SDL2_DIR}
-      PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
-      PATHS
-      /sw
-      /opt/local
-      /opt/csw
-      /opt
-    )
-  endif()
-endif()
+# if(NOT SDL2_BUILDING_LIBRARY)
+#   if(NOT SDL2_INCLUDE_DIR MATCHES ".framework")
+#     # Non-OS X framework versions expect you to also dynamically link to
+#     # SDL2main. This is mainly for Windows and OS X. Other (Unix) platforms
+#     # seem to provide SDL2main for compatibility even though they don't
+#     # necessarily need it.
+#     find_library(SDL2MAIN_LIBRARY
+#       NAMES SDL2main
+#       HINTS
+#         ENV SDL2DIR
+#         ${SDL2_DIR}
+#       PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
+#       PATHS
+#       /sw
+#       /opt/local
+#       /opt/csw
+#       /opt
+#     )
+#   endif()
+# endif()
 
 # SDL may require threads on your system.
 # The Apple build may not need an explicit flag because one of the
@@ -140,13 +140,13 @@ endif()
 
 if(SDL2_LIBRARY_TEMP)
   # For SDL2main
-  if(SDL2MAIN_LIBRARY AND NOT SDL2_BUILDING_LIBRARY)
-    list(FIND SDL2_LIBRARY_TEMP "${SDL2MAIN_LIBRARY}" _SDL2_MAIN_INDEX)
-    if(_SDL2_MAIN_INDEX EQUAL -1)
-      set(SDL2_LIBRARY_TEMP "${SDL2MAIN_LIBRARY}" ${SDL2_LIBRARY_TEMP})
-    endif()
-    unset(_SDL2_MAIN_INDEX)
-  endif()
+  # if(SDL2MAIN_LIBRARY AND NOT SDL2_BUILDING_LIBRARY)
+  #   list(FIND SDL2_LIBRARY_TEMP "${SDL2MAIN_LIBRARY}" _SDL2_MAIN_INDEX)
+  #   if(_SDL2_MAIN_INDEX EQUAL -1)
+  #     set(SDL2_LIBRARY_TEMP "${SDL2MAIN_LIBRARY}" ${SDL2_LIBRARY_TEMP})
+  #   endif()
+  #   unset(_SDL2_MAIN_INDEX)
+  # endif()
 
   # For OS X, SDL uses Cocoa as a backend so it must link to Cocoa.
   # CMake doesn't display the -framework Cocoa string in the UI even
@@ -190,7 +190,8 @@ if(SDL2_INCLUDE_DIR AND EXISTS "${SDL2_INCLUDE_DIR}/SDL2_version.h")
   unset(SDL2_VERSION_PATCH)
 endif()
 
-set(SDL2_LIBRARIES ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY})
+#set(SDL2_LIBRARIES ${SDL2_LIBRARY} ${SDL2MAIN_LIBRARY})
+set(SDL2_LIBRARIES ${SDL2_LIBRARY})
 set(SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)

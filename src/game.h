@@ -2,6 +2,8 @@
 #define GAME
 
 #include "map.h"
+
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <memory>
 

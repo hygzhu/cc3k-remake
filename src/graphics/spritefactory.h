@@ -3,7 +3,7 @@
 
 #include "rgba.h"
 #include "sprite.h"
-
+#include <memory>
 #include "../geometry/rectangle.h"
 
 class SpriteFactory {

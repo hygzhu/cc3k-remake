@@ -2,6 +2,7 @@
 #include "../entity/entityfactory.h"
 #include "../utils/random.h"
 #include <iostream>
+#include <algorithm>
 
 CommonRoom::CommonRoom(Rectangle rect, std::shared_ptr<Entity> player) : Room(rect, player) {
   // Generate entities in room

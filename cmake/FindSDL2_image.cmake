@@ -1,4 +1,4 @@
-# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+# Distributed under the OSI-approved BSD 3-Clause License. See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
 #.rst:
@@ -11,11 +11,11 @@
 #
 # ::
 #
-#   SDL2_IMAGE_LIBRARIES, the name of the library to link against
-#   SDL2_IMAGE_INCLUDE_DIRS, where to find the headers
-#   SDL2_IMAGE_FOUND, if false, do not try to link against
-#   SDL2_IMAGE_VERSION_STRING - human-readable string containing the
-#                              version of SDL2_image
+# SDL2_IMAGE_LIBRARIES, the name of the library to link against
+# SDL2_IMAGE_INCLUDE_DIRS, where to find the headers
+# SDL2_IMAGE_FOUND, if false, do not try to link against
+# SDL2_IMAGE_VERSION_STRING - human-readable string containing the
+# version of SDL2_image
 #
 #
 #
@@ -23,22 +23,21 @@
 #
 # ::
 #
-#   SDL2IMAGE_LIBRARY (same value as SDL2_IMAGE_LIBRARIES)
-#   SDL2IMAGE_INCLUDE_DIR (same value as SDL2_IMAGE_INCLUDE_DIRS)
-#   SDL2IMAGE_FOUND (same value as SDL2_IMAGE_FOUND)
+# SDL2IMAGE_LIBRARY (same value as SDL2_IMAGE_LIBRARIES)
+# SDL2IMAGE_INCLUDE_DIR (same value as SDL2_IMAGE_INCLUDE_DIRS)
+# SDL2IMAGE_FOUND (same value as SDL2_IMAGE_FOUND)
 #
 #
 #
 # $SDLDIR is an environment variable that would correspond to the
 # ./configure --prefix=$SDLDIR used in building SDL.
 #
-# Created by Eric Wing.  This was influenced by the FindSDL.cmake
+# Created by Eric Wing. This was influenced by the FindSDL.cmake
 # module, but with modifications to recognize OS X frameworks and
 # additional Unix paths (FreeBSD, etc).
 
 if(NOT SDL2_IMAGE_INCLUDE_DIR AND SDL2IMAGE_INCLUDE_DIR)
-  set(SDL2_IMAGE_INCLUDE_DIR ${SDL2IMAGE_INCLUDE_DIR} CACHE PATH "directory cache
-entry initialized from old variable name")
+  set(SDL2_IMAGE_INCLUDE_DIR ${SDL2IMAGE_INCLUDE_DIR} CACHE PATH "directory cache entry initialized from old variable name")
 endif()
 find_path(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
   HINTS
@@ -57,8 +56,7 @@ else()
 endif()
 
 if(NOT SDL2_IMAGE_LIBRARY AND SDL2IMAGE_LIBRARY)
-  set(SDL2_IMAGE_LIBRARY ${SDL2IMAGE_LIBRARY} CACHE FILEPATH "file cache entry
-initialized from old variable name")
+  set(SDL2_IMAGE_LIBRARY ${SDL2IMAGE_LIBRARY} CACHE FILEPATH "file cache entry initialized from old variable name")
 endif()
 find_library(SDL2_IMAGE_LIBRARY
   NAMES SDL2_image

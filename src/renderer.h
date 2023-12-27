@@ -3,6 +3,7 @@
 
 #include "geometry/rectangle.h"
 #include "graphics/rgba.h"
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 
 // Renders objects in a predefined area on the screen
