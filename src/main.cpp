@@ -1,12 +1,18 @@
 
 #include "game.h"
-#include <iostream>
+#include <Windows.h>
 int main(int argc, char *args[]) {
-  // Game game;
-  // bool play = true;
-  // while (play) {
-  //   play = game.start();
-  // }
-  std::cout << "sda" << std::endl;
+
+
+
+  AllocConsole();
+  freopen("CONOUT$", "w", stdout);
+
+
+  Game game;
+  bool play = true;
+  while (play) {
+    play = game.start();
+  }
   return 0;
 }

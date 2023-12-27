@@ -12,7 +12,7 @@ Room::Room(Rectangle rect, std::shared_ptr<Entity> player) : m_bounds(rect), m_p
       EntityFactory::EntityType::FLOOR, rect);
   m_entities.push_back(floor);
 
-  // std::cout << "Entities size " << m_entities.size() << std::endl;
+  // // std::cout << "Entities size " << m_entities.size() << std::endl;
 }
 
 std::vector<std::shared_ptr<Entity>> &Room::getEntities() { return m_entities; }

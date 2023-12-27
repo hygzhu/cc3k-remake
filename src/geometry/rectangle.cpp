@@ -142,8 +142,7 @@ Point Rectangle::getClosestPointTo(Point startPoint) {
 }
 
 void Rectangle::print() const {
-  std::cout << "( x:" << m_x << ", y: " << m_y << ", w: " << m_width
-            << ", h: " << m_height << ")" << std::endl;
+  // std::cout << "( x:" << m_x << ", y: " << m_y << ", w: " << m_width  << ", h: " << m_height << ")" << std::endl;
 }
 
 std::string Rectangle::toString() {

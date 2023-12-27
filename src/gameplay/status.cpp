@@ -15,16 +15,16 @@ Status::Status(double baseHp, double baseMp, double baseAtk, double baseDef,
       m_curr_mp(currMp) {}
 
 void Status::printStatus() {
-  std::cout << "Current HP: " << m_curr_hp << std::endl;
-  std::cout << "Current MP: " << m_curr_mp << std::endl;
-  std::cout << "Base HP: " << m_base_hp << std::endl;
-  std::cout << "Base MP: " << m_base_mp << std::endl;
-  std::cout << "Base DEF: " << m_base_def << std::endl;
-  std::cout << "Base ATK: " << m_base_atk << std::endl;
-  std::cout << "Base LUCK: " << m_base_luck << std::endl;
-  std::cout << "Base INT: " << m_base_int << std::endl;
-  std::cout << "Base SPD: " << m_base_spd << std::endl;
-  std::cout << "Base DEX: " << m_base_dex << std::endl;
+  // std::cout << "Current HP: " << m_curr_hp << std::endl;
+  // std::cout << "Current MP: " << m_curr_mp << std::endl;
+  // std::cout << "Base HP: " << m_base_hp << std::endl;
+  // std::cout << "Base MP: " << m_base_mp << std::endl;
+  // std::cout << "Base DEF: " << m_base_def << std::endl;
+  // std::cout << "Base ATK: " << m_base_atk << std::endl;
+  // std::cout << "Base LUCK: " << m_base_luck << std::endl;
+  // std::cout << "Base INT: " << m_base_int << std::endl;
+  // std::cout << "Base SPD: " << m_base_spd << std::endl;
+  // std::cout << "Base DEX: " << m_base_dex << std::endl;
 }
 
 double Status::getCurrentAttack() { return m_base_atk; }

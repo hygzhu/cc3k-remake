@@ -10,7 +10,7 @@ RandomMovement::RandomMovement(std::shared_ptr<Entity> entity, Point p,
 
 void RandomMovement::setMovement() {
 
-  // std::cout << m_movement_counter << std::endl;
+  // // std::cout << m_movement_counter << std::endl;
 
   if (m_movement_counter == 0) {
     int base_acceleration = 80;

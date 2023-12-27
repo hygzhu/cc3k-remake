@@ -32,7 +32,7 @@ CommonRoom::CommonRoom(Rectangle rect, std::shared_ptr<Entity> player) : Room(re
       m_enemies.push_back(EntityFactory::createEnemy(realEntityType, x, y));
     }
   }
-  // std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
+  // // std::cout << "Enemies generated: "<<  m_enemies.size() << std::endl;
 }
 
 std::vector<std::shared_ptr<Entity>> CommonRoom::getAllEntities() {

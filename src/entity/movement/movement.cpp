@@ -80,11 +80,11 @@ bool Movement::isThereCollisionAtDestinationPoint(
           otherEntity->getHitbox().surrounds(hitbox_copy)) {
         // check if it surrounds
         collidableEntityFound = true;
-        // std::cout << collidableEntityFound <<std::endl;
+        // // std::cout << collidableEntityFound <<std::endl;
       }
 
       if (!otherEntity->getMovement()->collidable()) {
-        // std::cout << "non collidableEntityFound and collides -> tru" <<
+        // // std::cout << "non collidableEntityFound and collides -> tru" <<
         // std::endl;
         //  otherEntity->printEntityType();
         //  Invoke collision
@@ -94,10 +94,10 @@ bool Movement::isThereCollisionAtDestinationPoint(
     }
   }
 
-  // std::cout << "THE END" << std::endl;
-  // std::cout << collidableEntityFound <<std::endl;
+  // // std::cout << "THE END" << std::endl;
+  // // std::cout << collidableEntityFound <<std::endl;
   if (collidableEntityFound) {
-    // std::cout << "can collid is true -> false" << std::endl;
+    // // std::cout << "can collid is true -> false" << std::endl;
     return false;
   }
   return true;
@@ -166,7 +166,7 @@ Point Movement::closestMovablePoint(
   if (Point(oldx, oldy)
           .distanceTo(
               Point(moveable_location.getX(), moveable_location.getY())) != 0) {
-    // std::cout << "Distance isnt zero" << std::endl;
+    // // std::cout << "Distance isnt zero" << std::endl;
     return moveable_location;
   }
 
@@ -175,7 +175,7 @@ Point Movement::closestMovablePoint(
   // Try horizontal if diagonal dont work
 
   if ((x != 0 && y == 0) || (x != 0 && y != 0)) {
-    // std::cout << "Try hor"<< std::endl;
+    // // std::cout << "Try hor"<< std::endl;
     for (int i = 0; i <= std::abs(x); ++i) {
       if (x > 0) {
 
@@ -201,7 +201,7 @@ Point Movement::closestMovablePoint(
   if (Point(oldx, oldy)
           .distanceTo(
               Point(moveable_location.getX(), moveable_location.getY())) != 0) {
-    // std::cout << " hori Distance isnt zero" << std::endl;
+    // // std::cout << " hori Distance isnt zero" << std::endl;
     // Point(moveable_location.getX(), moveable_location.getY()).print();
     return moveable_location;
   }
@@ -210,7 +210,7 @@ Point Movement::closestMovablePoint(
 
   // Try vertical if diagonal dont work
   if ((y != 0 && x == 0) || (x != 0 && y != 0)) {
-    // std::cout << "Try vert"<< std::endl;
+    // // std::cout << "Try vert"<< std::endl;
     for (int i = 0; i <= std::abs(y); ++i) {
       if (y > 0) {
         if (isThereCollisionAtDestinationPoint(Point(oldx, oldy + i),

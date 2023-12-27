@@ -30,7 +30,7 @@ std::ostream &operator<<(std::ostream &os, const Point &point) {
 }
 
 void Point::print() const {
-  std::cout << "(" << m_x << ", " << m_y << ")" << std::endl;
+  // std::cout << "(" << m_x << ", " << m_y << ")" << std::endl;
 }
 
 double Point::distanceTo(const Point &other) const {
@@ -84,6 +84,13 @@ std::vector<Point> Point::allPointsInEuclidianDistanceAway(int n) {
 }
 
 bool Point::doLinesIntersect(Point p1, Point p2, Point q1, Point q2) {
+
+  // Catch case where division by zero
+  if((p2.getX() - p1.getX() == 0 )|| (q2.getX() - q1.getX() == 0)){
+    //lines are vertical
+    return p2.getX() - q2.getX() != 0;
+  }
+
   // Calculate slopes and y-intercepts of the two lines
   double m1 = (p2.getY() - p1.getY()) / (p2.getX() - p1.getX());
   double b1 = p1.getY() - m1 * p1.getX();
@@ -116,8 +123,19 @@ bool Point::doLinesIntersect(Point p1, Point p2, Point q1, Point q2) {
 
 void Point::getSlopeIntercept(Point p1, Point p2, double &slope,
                               double &y_intercept) {
+
+  
+  // Catch case where division by zero
+  if(p2.getX() - p1.getX() == 0){
+    //lines are vertical
+    slope = 0;
+    y_intercept = 0;
+  }else{
+
   slope = (p2.getY() - p1.getY()) / (p2.getX() - p1.getX());
   y_intercept = p1.getY() - slope * p1.getX();
+  }
+
 }
 
 // Function to find the point of intersection between two lines given their
@@ -133,7 +151,7 @@ Point Point::findIntersection(Point p1, Point p2, Point p3, Point p4) {
   } else {
     double x_int = (y_intercept2 - y_intercept1) / (slope1 - slope2);
     double y_int = slope1 * x_int + y_intercept1;
-    // std::cout << x_int << " AND " << y_int << std::endl;
+    // // std::cout << x_int << " AND " << y_int << std::endl;
     return Point(x_int, y_int);
   }
 }

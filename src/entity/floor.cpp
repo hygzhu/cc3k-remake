@@ -10,7 +10,7 @@ void Floor::move(int dx, int dy) {
 }
 
 void Floor::printEntityType() {
-  std::cout << "Floor " << getHitbox().toString() << std::endl;
+  // std::cout << "Floor " << getHitbox().toString() << std::endl;
 }
 
 bool Floor::collidable() { return true; }

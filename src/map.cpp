@@ -16,8 +16,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
          int corridorWidth)
     : player(player) {
 
-  std::cout << "Generating map with at most " << numRooms << " Rooms"
-            << std::endl;
+  // std::cout << "Generating map with at most " << numRooms << " Rooms"  << std::endl;
 
   const int VIEW_HEIGHT = 720;
   const int VIEW_WIDTH = 1280;
@@ -31,7 +30,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
   const int starting_zone = 100;
 
   // Generate starting room
-  std::cout << "Generating rooms" << std::endl;
+  // std::cout << "Generating rooms" << std::endl;
   Rectangle startRect(MAX_MAP_WIDTH / 2, MAX_MAP_HEIGHT / 2, starting_zone,
                       starting_zone);
   std::shared_ptr<Room> room =
@@ -67,7 +66,7 @@ Map::Map(std::shared_ptr<Entity> player, int numRooms, int roomMargin,
     m_rooms.push_back(
         RoomFactory::createRoom(RoomFactory::RoomType::COMMON, rect, player));
 
-    // std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ",
+    // // std::cout << "Rectangle " << numRectangles << ": (" << rect.getX() << ",
     // " << rect.getY() << ", " << rect.getWidth() << ", " << rect.getHeight()
     // << ")" << std::endl;
     if (numRectangles >= maxAttempts) {
@@ -161,8 +160,8 @@ std::vector<std::shared_ptr<Entity>> Map::getViewboxStaticEntities() {
 
   // Render rooms
   for (auto room : m_rooms) {
-    // std::cout << "getEntitiesToBeRendered " <<
-    // room->getEntitiesToBeRendered().size() << std::endl; std::cout << "total
+    // // std::cout << "getEntitiesToBeRendered " <<
+    // room->getEntitiesToBeRendered().size() << std::endl; // std::cout << "total
     // entities " << room->getEntities().size() << std::endl;
     if (room->getBounds().isCollidingWith(getViewBox())) {
 
@@ -173,7 +172,7 @@ std::vector<std::shared_ptr<Entity>> Map::getViewboxStaticEntities() {
       }
     }
   }
-  // std::cout << "total entities " << viewBoxEntities.size() << std::endl;
+  // // std::cout << "total entities " << viewBoxEntities.size() << std::endl;
   return viewBoxEntities;
 }
 
@@ -204,7 +203,7 @@ std::vector<std::shared_ptr<Entity>> Map::getViewboxMovingEntities() {
 
 void Map::generateCorridors(int corridorWidth) {
 
-  std::cout << "Generating corridors" << std::endl;
+  // std::cout << "Generating corridors" << std::endl;
   if (m_rooms.size() < 2) {
     return;
   }
@@ -261,7 +260,7 @@ void Map::generateCorridors(int corridorWidth) {
       std::vector<std::pair<int, int>> edge;
       edge.push_back(coordinates[node]);
       edge.push_back(coordinates[neighbour]);
-      // std::cout << node << " LOL " << curr_node << " "<< mst.size() <<
+      // // std::cout << node << " LOL " << curr_node << " "<< mst.size() <<
       // std::endl;
       mst.push_back(edge);
       visited[neighbour] = true;
@@ -290,7 +289,7 @@ void Map::generateCorridors(int corridorWidth) {
           break;
         }
       }
-      // std::cout <<"neighbour_index " << neighbour_index << "
+      // // std::cout <<"neighbour_index " << neighbour_index << "
       // !visited[neighbour_index] " << !visited[neighbour_index]  <<" !overlaps
       // " <<!overlaps << std::endl;
       if (!visited[neighbour_index] and !overlaps) {
@@ -325,7 +324,7 @@ void Map::generateCorridors(int corridorWidth) {
         });
     if (iter != m_rooms.end()) {
       room1 = *iter;
-      // std::cout << "Found room 1 " << std::endl;
+      // // std::cout << "Found room 1 " << std::endl;
     }
     iter = std::find_if(m_rooms.begin(), m_rooms.end(),
                         [point2](std::shared_ptr<Room> room) {
@@ -333,7 +332,7 @@ void Map::generateCorridors(int corridorWidth) {
                         });
     if (iter != m_rooms.end()) {
       room2 = *iter;
-      // std::cout << "Found room 2" << std::endl;
+      // // std::cout << "Found room 2" << std::endl;
     }
 
     // // Construct path from room1 to room2
@@ -388,7 +387,7 @@ void Map::generateCorridors(int corridorWidth) {
       for (Point neighbour : neighbours) {
         auto search = seen.find(neighbour.toString());
         if (search == seen.end()) {
-          // std::cout << neighbour.toString();
+          // // std::cout << neighbour.toString();
 
           seen.emplace(neighbour.toString(), neighbour.toString());
           priority_queue.push(neighbour);

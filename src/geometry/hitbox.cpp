@@ -58,7 +58,7 @@ bool Hitbox::collidesWith(const Point &other) {
 // others
 bool Hitbox::surrounds(const Hitbox &other) {
 
-  // std::cout << "Surrounds?" << std::endl;
+  // // std::cout << "Surrounds?" << std::endl;
   // this->m_point.print();
   // printHitbox();
   // other.m_point.print();
@@ -70,13 +70,13 @@ bool Hitbox::surrounds(const Hitbox &other) {
       if (!this->relativeRectangle(thisRect).surrounds(
               other.relativeRectangle(otherRect))) {
 
-        // std::cout << "Nope" << std::endl;
+        // // std::cout << "Nope" << std::endl;
         return false;
       }
     }
   }
 
-  // std::cout << "Yes" << std::endl;
+  // // std::cout << "Yes" << std::endl;
   return true;
 }
 
@@ -84,11 +84,11 @@ void Hitbox::setPoint(std::shared_ptr<Point> p) { m_point = p; }
 
 void Hitbox::printHitbox() const {
 
-  std::cout << "Hitbox: \n";
+  // std::cout << "Hitbox: \n";
   for (const auto thisRect : m_rectangles) {
-    std::cout << relativeRectangle(thisRect).toString() << " \n";
+    // std::cout << relativeRectangle(thisRect).toString() << " \n";
   }
-  std::cout << std::endl;
+  // std::cout << std::endl;
 }
 
 std::string Hitbox::toString() {

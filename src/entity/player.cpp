@@ -10,7 +10,7 @@ Player::Player(Point p, Hitbox hitbox, std::shared_ptr<Sprite> sprite,
 {}
 
 void Player::printEntityType() {
-  std::cout << "Player " << getHitbox().toString() << std::endl;
+  // std::cout << "Player " << getHitbox().toString() << std::endl;
 }
 
 // }

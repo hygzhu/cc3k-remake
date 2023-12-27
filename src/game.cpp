@@ -26,7 +26,7 @@ Game::Game(/* args */) {
 
 int Game::start() {
 
-  std::cout << "Game start" << std::endl;
+  // std::cout << "Game start" << std::endl;
   auto player = EntityFactory::createPlayer();
   int max_rooms = 20;
   m_map = std::make_shared<Map>(player, max_rooms, 40, 35);
@@ -110,8 +110,7 @@ int Game::start() {
 
     if (ticks == fps) {
       ticks = 0;
-      std::cout << "Map entities " << m_map->getAllEntities().size()
-                << std::endl;
+      // std::cout << "Map entities " << m_map->getAllEntities().size() << std::endl;
     }
   }
   return 0;
